@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scripts/FlatLighting/Occluder.gd" type="Script" id=1]
+[ext_resource path="res://Objects/FlatLighting/Occluder.tres" type="Material" id=2]
+
+[node name="OccluderMesh" type="MeshInstance"]
+material_override = ExtResource( 2 )
+cast_shadow = 0
+script = ExtResource( 1 )

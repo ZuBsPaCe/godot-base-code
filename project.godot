@@ -23,11 +23,17 @@ _global_script_classes=[ {
 "class": "Map",
 "language": "GDScript",
 "path": "res://Scripts/Tools/Map.gd"
+}, {
+"base": "MeshInstance",
+"class": "Occluder",
+"language": "GDScript",
+"path": "res://Scripts/Lighting/Occluder.gd"
 } ]
 _global_script_class_icons={
 "Cooldown": "",
 "Coord": "",
-"Map": ""
+"Map": "",
+"Occluder": ""
 }
 
 [application]
