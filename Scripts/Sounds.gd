@@ -11,6 +11,8 @@ class SampleInfo:
 
 
 
+
+
 var _sample_dict := {}
 
 var _positional_players := []
@@ -64,6 +66,7 @@ func _play(stream: AudioStreamSample, volume: float, pos = null) -> void:
 
 	if player == null:
 		player = AudioStreamPlayer2D.new()
+		player.pause_mode = Node.PAUSE_MODE_PROCESS
 
 		if pos != null:
 			player.attenuation = 6.0
@@ -77,6 +80,8 @@ func _play(stream: AudioStreamSample, volume: float, pos = null) -> void:
 
 	if pos != null:
 		player.position = pos - global_position
-		player.pitch_scale = 0.9 + randf() * 0.2
+		player.pitch_scale = 0.95 + randf() * 0.1
+#	else:
+#		player_pos = Vector2(240, 135)
 
 	player.play()
