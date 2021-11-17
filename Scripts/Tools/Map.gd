@@ -2,12 +2,13 @@ class_name Map
 extends Reference
 
 var width : int setget ,_get_width
-var height : int setget ,_get_width
+var height : int setget ,_get_height
 var size : int setget ,_get_size
 
 
 var _map := []
 var _marked_indexes := []
+
 
 func _init(p_width : int, p_height : int) -> void:
 	width = p_width
@@ -15,19 +16,57 @@ func _init(p_width : int, p_height : int) -> void:
 	size = width * height
 	_map.resize(size)
 
+
+func set_all(item) -> void:
+	for index in size:
+		_map[index] = item
+
+
 func is_valid(x : int, y : int) -> bool:
 	return x >= 0 && y >= 0 && x < width && y < height
+
+
+func is_index_valid(index: int) -> bool:
+	return index >= 0 && index < size
+
+
+func get_index(x: int, y: int) -> int:
+	return y * width + x
+
+
+func get_coord(index: int) -> Array:
+	var y = int(floor(index / width))
+	var x = index - y * width
+	return [x, y]
+
 
 func set_item(x : int, y : int, item) -> void:
 	_map[y * width + x] = item
 
+
+func set_indexed_item(index: int, item) -> void:
+	_map[index] = item
+
+
 func get_item(x : int, y : int):
 	return _map[y * width + x]
+
 
 func get_item_if_valid(x : int, y : int):
 	if !is_valid(x, y):
 		return null
 	return get_item(x, y)
+
+
+func get_indexed_item(index: int):
+	return _map[index]
+
+
+func get_indexed_item_if_valid(index: int):
+	if !is_index_valid(index):
+		return null
+	return _map[index]
+
 
 func get_neighbour_count(x: int, y: int, value) -> int:
 	var count := 0
@@ -39,6 +78,7 @@ func get_neighbour_count(x: int, y: int, value) -> int:
 				count += 1
 
 	return count
+
 
 func get_direct_neighbour_count(x: int, y: int, value) -> int:
 	var count := 0
@@ -61,18 +101,23 @@ func get_direct_neighbour_count(x: int, y: int, value) -> int:
 func clear_marks() -> void:
 	_marked_indexes.clear()
 
+
 func mark_item(x : int, y : int) -> void:
 	_marked_indexes.append(y * width + x)
+
 
 func set_marked_items(item) -> void:
 	for index in _marked_indexes:
 		_map[index] = item
 
+
 func _get_width() -> int:
 	return width
 
+
 func _get_height() -> int:
 	return height
+
 
 func _get_size() -> int:
 	return size
