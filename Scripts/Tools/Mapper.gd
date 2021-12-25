@@ -1,5 +1,5 @@
 class_name Mapper
-extends Reference
+extends RefCounted
 
 
 
@@ -63,8 +63,8 @@ class Proxy:
 		# 1.415 => Add tile diagonal which is sqrt(1 + 1)
 		quiet_radius = ceil(radius) + 1.415
 
-	func get_indexes(map: Map) -> PoolIntArray:
-		var indexes := PoolIntArray()
+	func get_indexes(map: Map) -> PackedInt32Array:
+		var indexes := PackedInt32Array()
 		if is_rectangle:
 			for y in range(min_y, min_y + height):
 				for x in range(min_x, min_x + width):
@@ -299,7 +299,6 @@ func get_separate_areas(proxy: Proxy) -> Array:
 	var areas := []
 	
 	var seen_indexes := {}
-	var count := 0
 	
 	for y in range(proxy.min_y, proxy.min_y + proxy.height):
 		for x in range(proxy.min_x, proxy.min_x + proxy.width):
@@ -308,8 +307,6 @@ func get_separate_areas(proxy: Proxy) -> Array:
 				continue
 			
 			if _map.get_item(x, y) > 1:
-				count += 1
-				
 				var area_indexes := []
 				_flood_fill_count(proxy, x, y, seen_indexes, area_indexes)
 				areas.append(area_indexes)
@@ -327,7 +324,7 @@ func _flood_fill_count(proxy: Proxy, start_x, start_y, seen_indexes: Dictionary,
 	seen_indexes[start_index] = true
 	area_indexes.append(start_index)
 	
-	while !heads.empty():
+	while !heads.is_empty():
 		var head = heads.pop_front()
 		var x: int = head[0]
 		var y: int = head[1]
@@ -392,9 +389,9 @@ func _circle_intersects_rect(center_x: int, center_y: int, radius: float, rect: 
 	var real_center_x: float = center_x + 0.5
 	var real_center_y: float = center_y + 0.5
 	
-	var dist_x := abs(real_center_x - rect_center.x)
-	var dist_y := abs(real_center_y - rect_center.y)
-	 
+	var dist_x : float = abs(real_center_x - rect_center.x)
+	var dist_y : float = abs(real_center_y - rect_center.y)
+	
 	if dist_x > rect.size.x / 2.0 + radius:
 		return false
 	

@@ -2,9 +2,9 @@ extends Camera2D
 
 #warning-ignore-all:RETURN_VALUE_DISCARDED
 
-var _bounce_tween := Tween.new()
+var _bounce_tween : Tween
 
-var _intensity_tween := Tween.new()
+var _intensity_tween : Tween
 var _intensity: float
 
 var _bounce_time: float
@@ -12,13 +12,12 @@ var _direction: Vector2
 
 
 func _ready():
-	add_child(_intensity_tween)
+	_intensity_tween = create_tween()
+	_bounce_tween = create_tween()
+	_bounce_tween.finished.connect(_on_bounce_finished)
 
-	_bounce_tween.connect("tween_all_completed", self, "_on_bounce_completed")
-	add_child(_bounce_tween)
 
-
-func _on_bounce_completed():
+func _on_bounce_finished():
 	_bounce(false)
 
 func start_shake(direction: Vector2, intensity: float, frequency: float, duration: float):
@@ -31,8 +30,8 @@ func start_shake(direction: Vector2, intensity: float, frequency: float, duratio
 		# Workaround: Does not work well, if we call remove_all() and start() in the same frame for tweens, which are currently active...
 		_intensity_tween.remove_all()	
 		_bounce_tween.remove_all()
-		yield(get_tree(), "idle_frame")
-
+		await get_tree().process_frame
+		
 	_intensity = intensity
 	_intensity_tween.interpolate_property(self, "_intensity", _intensity, 0.0, duration, Tween.TRANS_QUAD, Tween.EASE_OUT)
 	_intensity_tween.start()

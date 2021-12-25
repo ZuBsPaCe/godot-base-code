@@ -2,12 +2,13 @@
 
 importer="image"
 type="Image"
-path="res://.import/zubspace_banner.png-251fb96afd81106d3eb5547be4551d3e.image"
+uid="uid://8og534pyibce"
+path="res://.godot/imported/zubspace_banner.png-251fb96afd81106d3eb5547be4551d3e.image"
 
 [deps]
 
 source_file="res://Sprites/BootSplash/zubspace_banner.png"
-dest_files=[ "res://.import/zubspace_banner.png-251fb96afd81106d3eb5547be4551d3e.image" ]
+dest_files=["res://.godot/imported/zubspace_banner.png-251fb96afd81106d3eb5547be4551d3e.image"]
 
 [params]
 

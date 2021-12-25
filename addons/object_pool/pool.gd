@@ -25,7 +25,7 @@ var _scenes := []
 
 
 func _ready():
-	enum_name = name.replace("Pool", "").capitalize().replace(" ", "")
+	enum_name = str(name).replace("Pool", "").capitalize().replace(" ", "")
 	
 	_helper = Helper.new()
 	

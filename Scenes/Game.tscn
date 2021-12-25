@@ -1,23 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://dgmwbjml8hvft"]
 
-[ext_resource path="res://Scripts/Game.gd" type="Script" id=1]
-[ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
-[ext_resource path="res://Lighting/OccluderBlit.tres" type="Material" id=3]
-
-[sub_resource type="ViewportTexture" id=1]
-viewport_path = NodePath("ShadowViewport")
+[ext_resource type="Script" path="res://Scripts/Game.gd" id="1"]
+[ext_resource type="Script" path="res://Scripts/Tools/CameraShake.gd" id="2"]
 
 [node name="Game" type="Node2D"]
-script = ExtResource( 1 )
-
-[node name="ShadowViewport" type="Viewport" parent="."]
-size = Vector2( 1024, 1024 )
-render_target_update_mode = 3
-
-[node name="ShadowCamera" type="Camera" parent="ShadowViewport"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2 )
-projection = 1
-size = 960.0
+script = ExtResource( "1" )
 
 [node name="MainMenu" type="CanvasLayer" parent="."]
 
@@ -26,8 +13,4 @@ size = 960.0
 [node name="EntityContainer" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-script = ExtResource( 2 )
-
-[node name="ShadowOverlay" type="Sprite" parent="."]
-material = ExtResource( 3 )
-texture = SubResource( 1 )
+script = ExtResource( "2" )

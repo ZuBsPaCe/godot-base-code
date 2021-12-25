@@ -45,12 +45,12 @@ func play(key, pos = null):
 
 
 func play_delayed(key, delay: float, play_while_paused: bool, pos = null):
-	yield(get_tree().create_timer(delay, play_while_paused), "timeout")
+	await get_tree().create_timer(delay, play_while_paused).timeout
 
-	_play(key, pos)
+	play(key, pos)
 
 
-func _play(stream: AudioStreamSample, volume: float, pos = null) -> void:
+func _play(stream: AudioStreamSample, volume: float, pos = Vector2.ZERO) -> void:
 
 	var players:= _positional_players if pos != null else _center_players
 
@@ -78,7 +78,7 @@ func _play(stream: AudioStreamSample, volume: float, pos = null) -> void:
 	player.stream = stream
 	player.volume_db = volume
 
-	if pos != null:
+	if pos != Vector2.ZERO:
 		player.position = pos - global_position
 		player.pitch_scale = 0.95 + randf() * 0.1
 #	else:

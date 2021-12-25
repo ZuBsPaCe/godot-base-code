@@ -1,9 +1,9 @@
 class_name Map
-extends Reference
+extends RefCounted
 
-var width : int setget ,_get_width
-var height : int setget ,_get_height
-var size : int setget ,_get_size
+var width : int
+var height : int
+var size : int
 
 
 var _map := []
@@ -109,15 +109,3 @@ func mark_item(x : int, y : int) -> void:
 func set_marked_items(item) -> void:
 	for index in _marked_indexes:
 		_map[index] = item
-
-
-func _get_width() -> int:
-	return width
-
-
-func _get_height() -> int:
-	return height
-
-
-func _get_size() -> int:
-	return size

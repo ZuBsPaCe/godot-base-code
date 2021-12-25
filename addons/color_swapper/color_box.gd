@@ -1,4 +1,4 @@
-tool
+@tool
 extends Button
 
 onready var _color_rect := $ColorRect

@@ -1,4 +1,4 @@
-tool
+@tool
 extends WindowDialog
 
 onready var _color_picker := $MarginContainer/VBoxContainer/ColorPicker

@@ -373,7 +373,7 @@ _UpgradeReport_Files*/
 *.user
 .vs/
 .import/
-
+.godot/
 *.leo
 
 

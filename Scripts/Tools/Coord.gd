@@ -1,5 +1,5 @@
 class_name Coord
-extends Reference
+extends RefCounted
 
 
 const TILE_SIZE := 16.0

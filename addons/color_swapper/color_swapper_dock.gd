@@ -1,4 +1,4 @@
-tool
+@tool
 extends VBoxContainer
 
 export(PackedScene) var color_box_scene

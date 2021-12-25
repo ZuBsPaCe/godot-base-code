@@ -1,4 +1,4 @@
-tool
+@tool
 extends VBoxContainer
 
 const EnumItem := preload("res://addons/object_pool/enum_item.gd")
@@ -10,7 +10,7 @@ const config_path = "res://pool.json"
 
 var test : EnumValue
 
-onready var _enum_tree := $EnumTree
+@onready var _enum_tree := $EnumTree
 
 var _helper
 
@@ -70,9 +70,9 @@ func _on_EnumTree_button_pressed(item, column, id):
 		var dlg := ConfirmationDialog.new()
 		dlg.dialog_text = "Really unregister enum %s and all values?" % metadata.name
 		add_child(dlg)
-		dlg.connect("confirmed", self, "_on_EnumItem_delete_confirmed", [metadata])
+		dlg.confirmed.connect(_on_EnumItem_delete_confirmed.bind(metadata))
 		dlg.popup_centered()
-		yield(dlg, "popup_hide")
+		await dlg.popup_hide
 		remove_child(dlg)
 
 func _on_EnumItem_delete_confirmed(enum_item: EnumItem):
@@ -83,7 +83,7 @@ func _on_EnumItem_delete_confirmed(enum_item: EnumItem):
 
 func _get_enum_name_from_path(path : String) -> String:
 	var name := path.get_file()
-	var dot_index := name.find_last(".")
+	var dot_index := name.rfind(".")
 	if dot_index > 0:
 		name = name.substr(0, dot_index)
 	
@@ -126,7 +126,7 @@ func _update_enum_items():
 		var tree_node: TreeItem = _enum_tree.create_item(root)
 		tree_node.set_text(0, enum_item.name)
 		tree_node.set_metadata(0, enum_item)
-		tree_node.add_button(0, get_icon("Remove", "EditorIcons"))
+		tree_node.add_button(0, theme.get_icon("Remove", "EditorIcons"))
 		
 		var enum_dict = _get_enum_dict(enum_item.path, enum_item.name)
 		for value_name in enum_dict.keys():
@@ -140,7 +140,7 @@ func _update_enum_items():
 			
 			if enum_value == null:
 				enum_value = EnumValue.new(value_name, enum_dict[value_name])
-				enum_value.connect("enum_value_changed", self, "_on_enum_value_changed")
+				enum_value.enum_value_changed.connect(_on_enum_value_changed)
 				enum_item.enum_values.append(enum_value)
 			
 			var value_node: TreeItem = _enum_tree.create_item(tree_node)

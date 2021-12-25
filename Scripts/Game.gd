@@ -7,7 +7,7 @@ enum GameState {
 }
 
 
-export var player_scene:PackedScene
+@export var player_scene:PackedScene
 
 
 func _ready():
@@ -30,4 +30,4 @@ func switch_game_state(new_state) -> void:
 			pass
 
 		_:
-			assert(false, "Unknown game state %s" % new_state)
+			assert(false, "Unknown game state")

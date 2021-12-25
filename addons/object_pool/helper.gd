@@ -1,4 +1,4 @@
-tool
+@tool
 extends Node
 
 const EnumItem := preload("res://addons/object_pool/enum_item.gd")
@@ -54,25 +54,32 @@ func load_config(path: String) -> Array:
 		print("Pool: Loading [%s]" % path)
 		
 		file.open(path, File.READ)
-		var config : Dictionary = parse_json(file.get_as_text())
-		file.close()
 		
-		var serialized_enum_items : Array = config["enum_items"]
-		for item in serialized_enum_items:
-			
-			var enum_values := []
-			
-			var serialized_enum_values : Array = item["enum_values"]
-			for value_item in serialized_enum_values:
-				var enum_value := EnumValue.new(value_item["name"], value_item["value"])
-				var rpath = value_item["resource_path"]
-				if rpath != null:
-					enum_value.scene = load(value_item["resource_path"])
-					assert(enum_value.scene is PackedScene)
+		var json = JSON.new()
+		var ret = json.parse(file.get_as_text())
+		
+		if ret == OK:
+			var config : Dictionary = json.get_data()
+		
+			var serialized_enum_items : Array = config["enum_items"]
+			for item in serialized_enum_items:
 				
-				enum_values.append(enum_value)
-			
-			enum_items.append(EnumItem.new(item["path"], item["name"], enum_values))
+				var enum_values := []
+				
+				var serialized_enum_values : Array = item["enum_values"]
+				for value_item in serialized_enum_values:
+					var enum_value := EnumValue.new(value_item["name"], value_item["value"])
+					var rpath = value_item["resource_path"]
+					if rpath != null:
+						enum_value.scene = load(value_item["resource_path"])
+						assert(enum_value.scene is PackedScene)
+					
+					enum_values.append(enum_value)
+				
+				enum_items.append(EnumItem.new(item["path"], item["name"], enum_values))
+		else:
+			print("Pool: Failed to parse file [%s]." % path)
+		file.close()
 	else:
 		print("Pool: Config file [%s] does not exist yet." % path)
 
