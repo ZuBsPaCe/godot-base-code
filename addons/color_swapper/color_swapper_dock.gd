@@ -1,8 +1,8 @@
 @tool
 extends VBoxContainer
 
-export(PackedScene) var color_box_scene
-export(PackedScene) var color_selector_scene
+@export var color_box_scene : PackedScene
+@export var color_selector_scene : PackedScene
 
 
 const config_file = "res://color_swapper.json"

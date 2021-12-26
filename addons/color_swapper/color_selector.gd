@@ -1,9 +1,13 @@
 @tool
-extends WindowDialog
+extends Window
 
-onready var _color_picker := $MarginContainer/VBoxContainer/ColorPicker
+@onready var _color_picker := $MarginContainer/VBoxContainer/ColorPicker
 
-var color : Color setget _set_color, _get_color
+var color : Color:
+	get:
+		return _color_picker.color
+	set(value):
+		_color_picker.color = value
 
 signal unset_color()
 signal apply_color(color)
@@ -11,13 +15,6 @@ signal apply_color(color)
 func _ready():
 	pass
 
-
-func _set_color(value):
-	_color_picker.color = value
-
-
-func _get_color():
-	return _color_picker.color
 
 func _on_ColorSelectorCloseButton_pressed():
 	hide()

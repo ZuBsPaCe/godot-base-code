@@ -1,15 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://bp6lsa7yg0glj"]
 
-[ext_resource path="res://addons/color_swapper/color_swapper_dock.gd" type="Script" id=1]
-[ext_resource path="res://addons/color_swapper/color_box.tscn" type="PackedScene" id=2]
-[ext_resource path="res://addons/color_swapper/color_selector.tscn" type="PackedScene" id=3]
+[ext_resource type="Script" path="res://addons/color_swapper/color_swapper_dock.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://tlbjdm6gaqi8" path="res://addons/color_swapper/color_box.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://dt6b50d30wiyr" path="res://addons/color_swapper/color_selector.tscn" id="3"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
 
 uniform bool cycle_enabled = false;
 uniform vec4 selected_col = vec4(1.0, 1.0, 1.0, 1.0);
-const float PI = 3.14159265358979323846;
 
 // https://gist.github.com/mairod/a75e7b44f68110e1576d77419d608786#gistcomment-3195243
 vec3 hue_shift(vec3 color, float hue) {
@@ -40,234 +39,188 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+[sub_resource type="ShaderMaterial" id="2"]
+shader = SubResource( "1" )
 shader_param/cycle_enabled = false
-shader_param/selected_col = Color( 0.4, 0.4, 0.4, 1 )
+shader_param/selected_col = Color(0.4, 0.4, 0.4, 1)
 
 [node name="Colors" type="VBoxContainer"]
-rect_min_size = Vector2( 0, 100 )
+rect_min_size = Vector2(0, 100)
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource( 1 )
+script = ExtResource( "1" )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-color_box_scene = ExtResource( 2 )
-color_selector_scene = ExtResource( 3 )
+color_box_scene = ExtResource( "2" )
+color_selector_scene = ExtResource( "3" )
 
 [node name="ModeToolbar" type="HBoxContainer" parent="."]
-margin_right = 216.0
-margin_bottom = 22.0
+offset_right = 246.0
+offset_bottom = 29.0
 
 [node name="Filler" type="Control" parent="ModeToolbar"]
-margin_bottom = 22.0
+offset_bottom = 29.0
 size_flags_horizontal = 3
 
-[node name="PartModeButton" type="ToolButton" parent="ModeToolbar"]
-margin_left = 4.0
-margin_right = 48.0
-margin_bottom = 22.0
+[node name="PartModeButton" type="Button" parent="ModeToolbar"]
+offset_left = 4.0
+offset_right = 56.0
+offset_bottom = 29.0
 toggle_mode = true
 pressed = true
 text = "Parts"
 
-[node name="PaletteModeButton" type="ToolButton" parent="ModeToolbar"]
-margin_left = 52.0
-margin_right = 109.0
-margin_bottom = 22.0
+[node name="PaletteModeButton" type="Button" parent="ModeToolbar"]
+offset_left = 60.0
+offset_right = 125.0
+offset_bottom = 29.0
 toggle_mode = true
 text = "Palette"
 
-[node name="ImageModeButton" type="ToolButton" parent="ModeToolbar"]
-margin_left = 113.0
-margin_right = 172.0
-margin_bottom = 22.0
+[node name="ImageModeButton" type="Button" parent="ModeToolbar"]
+offset_left = 129.0
+offset_right = 196.0
+offset_bottom = 29.0
 toggle_mode = true
 text = "Images"
 
-[node name="RunModeButton" type="ToolButton" parent="ModeToolbar"]
-margin_left = 176.0
-margin_right = 212.0
-margin_bottom = 22.0
+[node name="RunModeButton" type="Button" parent="ModeToolbar"]
+offset_left = 200.0
+offset_right = 242.0
+offset_bottom = 29.0
 toggle_mode = true
 text = "Run"
 
 [node name="Filler2" type="Control" parent="ModeToolbar"]
-margin_left = 216.0
-margin_right = 216.0
-margin_bottom = 22.0
+offset_left = 246.0
+offset_right = 246.0
+offset_bottom = 29.0
 size_flags_horizontal = 3
 
 [node name="PartModeControls" type="VBoxContainer" parent="."]
 visible = false
-margin_top = 26.0
-margin_right = 176.0
-margin_bottom = 100.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PartModeControls"]
-margin_right = 176.0
-margin_bottom = 24.0
 
 [node name="PartAddInput" type="LineEdit" parent="PartModeControls/HBoxContainer"]
-margin_right = 135.0
-margin_bottom = 24.0
 size_flags_horizontal = 3
 caret_blink = true
 caret_blink_speed = 0.5
 
 [node name="PartAddButton" type="Button" parent="PartModeControls/HBoxContainer"]
-margin_left = 139.0
-margin_right = 176.0
-margin_bottom = 24.0
 disabled = true
 text = "Add"
 
 [node name="PartTree" type="Tree" parent="PartModeControls"]
-margin_top = 28.0
-margin_right = 176.0
-margin_bottom = 74.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 hide_root = true
 
 [node name="PaletteModeControls" type="VBoxContainer" parent="."]
 visible = false
-margin_top = 26.0
-margin_right = 213.0
-margin_bottom = 406.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PaletteModeControls"]
-margin_right = 213.0
-margin_bottom = 24.0
 
 [node name="Label" type="Label" parent="PaletteModeControls/HBoxContainer"]
-margin_top = 5.0
-margin_right = 57.0
-margin_bottom = 19.0
 text = "Grid size"
 
 [node name="PaletteWidth" type="SpinBox" parent="PaletteModeControls/HBoxContainer"]
-margin_left = 61.0
-margin_right = 135.0
-margin_bottom = 24.0
 min_value = 1.0
 max_value = 64.0
 value = 8.0
-align = 2
 
 [node name="PaletteHeight" type="SpinBox" parent="PaletteModeControls/HBoxContainer"]
-margin_left = 139.0
-margin_right = 213.0
-margin_bottom = 24.0
 min_value = 1.0
 max_value = 64.0
 value = 8.0
-align = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PaletteModeControls"]
-margin_top = 28.0
-margin_right = 213.0
-margin_bottom = 128.0
-rect_min_size = Vector2( 0, 100 )
+rect_min_size = Vector2(0, 100)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PaletteGrid" type="GridContainer" parent="PaletteModeControls/ScrollContainer"]
-margin_bottom = 64.0
-rect_min_size = Vector2( 0, 64 )
+offset_bottom = 64.0
+rect_min_size = Vector2(0, 64)
 size_flags_horizontal = 5
 columns = 8
 
 [node name="PaletteEditColorButton" type="Button" parent="PaletteModeControls"]
-margin_top = 132.0
-margin_right = 213.0
-margin_bottom = 152.0
 disabled = true
 text = "Edit color"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="PaletteModeControls"]
-margin_top = 156.0
-margin_right = 213.0
-margin_bottom = 176.0
 
 [node name="PalettePartOptions" type="OptionButton" parent="PaletteModeControls/HBoxContainer2"]
-margin_right = 172.0
-margin_bottom = 20.0
 size_flags_horizontal = 3
 disabled = true
 clip_text = true
 
 [node name="PalettePartAddButton" type="Button" parent="PaletteModeControls/HBoxContainer2"]
-margin_left = 176.0
-margin_right = 213.0
-margin_bottom = 20.0
 disabled = true
 text = "Add"
 
 [node name="PalettePartTree" type="Tree" parent="PaletteModeControls"]
-margin_top = 180.0
-margin_right = 213.0
-margin_bottom = 380.0
-rect_min_size = Vector2( 0, 200 )
+rect_min_size = Vector2(0, 200)
 size_flags_horizontal = 3
 hide_root = true
 
 [node name="ImageModeControls" type="VBoxContainer" parent="."]
-margin_top = 26.0
-margin_right = 216.0
-margin_bottom = 162.0
+offset_top = 33.0
+offset_right = 246.0
+offset_bottom = 194.0
 size_flags_vertical = 3
 
 [node name="ImagePathAddButton" type="Button" parent="ImageModeControls"]
-margin_right = 216.0
-margin_bottom = 20.0
+offset_right = 246.0
+offset_bottom = 29.0
 text = "Add"
 
 [node name="ImageTree" type="Tree" parent="ImageModeControls"]
-margin_top = 24.0
-margin_right = 216.0
-margin_bottom = 25.0
+offset_top = 33.0
+offset_right = 246.0
+offset_bottom = 33.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 hide_root = true
 select_mode = 1
 
 [node name="ImagePreview" type="TextureRect" parent="ImageModeControls"]
-material = SubResource( 2 )
-margin_top = 29.0
-margin_right = 216.0
-margin_bottom = 79.0
-rect_min_size = Vector2( 0, 50 )
+material = SubResource( "2" )
+offset_top = 37.0
+offset_right = 246.0
+offset_bottom = 87.0
+rect_min_size = Vector2(0, 50)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 expand = true
 stretch_mode = 6
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ImageModeControls"]
-margin_top = 83.0
-margin_right = 216.0
-margin_bottom = 107.0
+offset_top = 91.0
+offset_right = 246.0
+offset_bottom = 124.0
 
 [node name="ImageTargetInput" type="LineEdit" parent="ImageModeControls/HBoxContainer"]
-margin_right = 153.0
-margin_bottom = 24.0
+offset_right = 172.0
+offset_bottom = 33.0
 size_flags_horizontal = 3
 editable = false
 
 [node name="ImageTargetBrowseButton" type="Button" parent="ImageModeControls/HBoxContainer"]
-margin_left = 157.0
-margin_right = 216.0
-margin_bottom = 24.0
+offset_left = 176.0
+offset_right = 246.0
+offset_bottom = 33.0
 disabled = true
 text = "Browse"
 
 [node name="ImageColorTree" type="Tree" parent="ImageModeControls"]
-margin_top = 111.0
-margin_right = 216.0
-margin_bottom = 112.0
+offset_top = 128.0
+offset_right = 246.0
+offset_bottom = 128.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 6
@@ -275,27 +228,27 @@ hide_root = true
 select_mode = 1
 
 [node name="ImagePartOptions" type="OptionButton" parent="ImageModeControls"]
-margin_top = 116.0
-margin_right = 216.0
-margin_bottom = 136.0
+offset_top = 132.0
+offset_right = 246.0
+offset_bottom = 161.0
 size_flags_horizontal = 3
 clip_text = true
 
 [node name="RunModeControls" type="VBoxContainer" parent="."]
-margin_top = 166.0
-margin_right = 216.0
-margin_bottom = 214.0
+offset_top = 198.0
+offset_right = 246.0
+offset_bottom = 262.0
 size_flags_vertical = 3
 
 [node name="RunButton" type="Button" parent="RunModeControls"]
-margin_right = 216.0
-margin_bottom = 20.0
+offset_right = 246.0
+offset_bottom = 29.0
 text = "Run"
 
 [node name="AutoRunCheckbox" type="CheckBox" parent="RunModeControls"]
-margin_top = 24.0
-margin_right = 216.0
-margin_bottom = 48.0
+offset_top = 33.0
+offset_right = 246.0
+offset_bottom = 64.0
 text = "Autorun"
 
 [connection signal="pressed" from="ModeToolbar/PartModeButton" to="." method="_on_PartModeButton_pressed"]
