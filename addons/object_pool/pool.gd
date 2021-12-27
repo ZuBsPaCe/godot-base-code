@@ -49,7 +49,7 @@ func create(enum_value) -> Node2D:
 	if pool.size() > 0:
 		instance = pool.pop_back()
 	else:
-		instance = _scenes[enum_value].instance()
+		instance = _scenes[enum_value].instantiate()
 	get_tree().root.add_child(instance)
 	return instance
 

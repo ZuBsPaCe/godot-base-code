@@ -29,7 +29,7 @@ func setup(p_editor_interface: EditorInterface):
 	_enum_items = _helper.load_config(config_path)
 	for enum_item in _enum_items:
 		for enum_value in enum_item.enum_values:
-			enum_value.connect("enum_value_changed", self, "_on_enum_value_changed")
+			enum_value.enum_value_changed.connect(_on_enum_value_changed)
 	
 	_update_enum_items()
 
@@ -126,7 +126,7 @@ func _update_enum_items():
 		var tree_node: TreeItem = _enum_tree.create_item(root)
 		tree_node.set_text(0, enum_item.name)
 		tree_node.set_metadata(0, enum_item)
-		tree_node.add_button(0, theme.get_icon("Remove", "EditorIcons"))
+		tree_node.add_button(0, get_theme_icon("Remove", "EditorIcons"))
 		
 		var enum_dict = _get_enum_dict(enum_item.path, enum_item.name)
 		for value_name in enum_dict.keys():

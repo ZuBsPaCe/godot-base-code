@@ -6,7 +6,7 @@ var dock
 func _enter_tree():
 	print("Pool editor starting")
 	
-	dock = preload("res://addons/object_pool/pool_dock.tscn").instance()
+	dock = preload("res://addons/object_pool/pool_dock.tscn").instantiate()
 	
 	add_control_to_dock(DOCK_SLOT_RIGHT_UR, dock)
 	

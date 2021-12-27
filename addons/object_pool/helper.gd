@@ -40,7 +40,8 @@ func save_config(path: String, enum_items: Array):
 	
 	config["enum_items"] = serialized_enum_items
 	
-	file.store_line(JSON.print(config, "\t"))
+	var json = JSON.new()
+	file.store_line(json.stringify(config, "\t"))
 
 	file.close()
 

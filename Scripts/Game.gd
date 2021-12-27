@@ -18,7 +18,7 @@ func _ready():
 		player_scene
 	)
 	
-	switch_game_state(GameState.MAIN_MENU)
+	call_deferred("switch_game_state", GameState.ART1)
 
 
 func switch_game_state(new_state) -> void:

@@ -19,7 +19,7 @@ class PaletteItem:
 		part_ids = p_part_ids
 	
 	func empty() -> bool:
-		return !initialized && color.to_html() == "ff000000" && part_ids.empty()
+		return !initialized && color.to_html() == "ff000000" && part_ids.is_empty()
 
 
 class ImageItem:
@@ -42,36 +42,36 @@ class PathItem:
 		target_dir = p_target_dir
 
 
-onready var _part_mode_button := $ModeToolbar/PartModeButton
-onready var _palette_mode_button := $ModeToolbar/PaletteModeButton
-onready var _image_mode_button := $ModeToolbar/ImageModeButton
-onready var _run_mode_button := $ModeToolbar/RunModeButton
+@onready var _part_mode_button := $ModeToolbar/PartModeButton
+@onready var _palette_mode_button := $ModeToolbar/PaletteModeButton
+@onready var _image_mode_button := $ModeToolbar/ImageModeButton
+@onready var _run_mode_button := $ModeToolbar/RunModeButton
 
-onready var _part_mode_controls := $PartModeControls
-onready var _palette_mode_controls := $PaletteModeControls
-onready var _image_mode_controls := $ImageModeControls
-onready var _run_mode_controls := $RunModeControls
+@onready var _part_mode_controls := $PartModeControls
+@onready var _palette_mode_controls := $PaletteModeControls
+@onready var _image_mode_controls := $ImageModeControls
+@onready var _run_mode_controls := $RunModeControls
 
-onready var _part_add_input := $PartModeControls/HBoxContainer/PartAddInput
-onready var _part_add_button := $PartModeControls/HBoxContainer/PartAddButton
-onready var _part_tree := $PartModeControls/PartTree
+@onready var _part_add_input := $PartModeControls/HBoxContainer/PartAddInput
+@onready var _part_add_button := $PartModeControls/HBoxContainer/PartAddButton
+@onready var _part_tree := $PartModeControls/PartTree
 
-onready var _palette_grid := $PaletteModeControls/ScrollContainer/PaletteGrid
-onready var _palette_grid_width := $PaletteModeControls/HBoxContainer/PaletteWidth
-onready var _palette_grid_height := $PaletteModeControls/HBoxContainer/PaletteHeight
-onready var _palette_part_options := $PaletteModeControls/HBoxContainer2/PalettePartOptions
-onready var _palette_part_add_button := $PaletteModeControls/HBoxContainer2/PalettePartAddButton
-onready var _palette_part_tree := $PaletteModeControls/PalettePartTree
-onready var _palette_edit_color_button := $PaletteModeControls/PaletteEditColorButton
+@onready var _palette_grid := $PaletteModeControls/ScrollContainer/PaletteGrid
+@onready var _palette_grid_width := $PaletteModeControls/HBoxContainer/PaletteWidth
+@onready var _palette_grid_height := $PaletteModeControls/HBoxContainer/PaletteHeight
+@onready var _palette_part_options := $PaletteModeControls/HBoxContainer2/PalettePartOptions
+@onready var _palette_part_add_button := $PaletteModeControls/HBoxContainer2/PalettePartAddButton
+@onready var _palette_part_tree := $PaletteModeControls/PalettePartTree
+@onready var _palette_edit_color_button := $PaletteModeControls/PaletteEditColorButton
 
-onready var _image_preview := $ImageModeControls/ImagePreview
-onready var _image_tree := $ImageModeControls/ImageTree
-onready var _image_target_input := $ImageModeControls/HBoxContainer/ImageTargetInput
-onready var _image_target_browse_button := $ImageModeControls/HBoxContainer/ImageTargetBrowseButton
-onready var _image_color_tree := $ImageModeControls/ImageColorTree
-onready var _image_part_options := $ImageModeControls/ImagePartOptions
+@onready var _image_preview := $ImageModeControls/ImagePreview
+@onready var _image_tree := $ImageModeControls/ImageTree
+@onready var _image_target_input := $ImageModeControls/HBoxContainer/ImageTargetInput
+@onready var _image_target_browse_button := $ImageModeControls/HBoxContainer/ImageTargetBrowseButton
+@onready var _image_color_tree := $ImageModeControls/ImageColorTree
+@onready var _image_part_options := $ImageModeControls/ImagePartOptions
 
-onready var _run_autorun_checkbox := $RunModeControls/AutoRunCheckbox
+@onready var _run_autorun_checkbox := $RunModeControls/AutoRunCheckbox
 
 var editor_interface : EditorInterface
 
@@ -83,7 +83,7 @@ var _parts_items := {}
 var _palette_index := -1
 var _palette_items := []
 var _palette_color_boxes := []
-var _palette_color_selector : WindowDialog
+var _palette_color_selector : Window
 var _palette_part_options_hovered := false
 
 
@@ -97,8 +97,8 @@ var _folder_dialog : FileDialog
 
 func _ready():
 	_palette_color_selector = color_selector_scene.instance()
-	_palette_color_selector.connect("unset_color", self, "_on_palette_color_selector_unset_color")
-	_palette_color_selector.connect("apply_color", self, "_on_palette_color_selector_apply_color")
+	_palette_color_selector.unset_color.connect(_on_palette_color_selector_unset_color)
+	_palette_color_selector.apply_color.connect(_on_palette_color_selector_apply_color)
 	_palette_color_selector.set_position(get_viewport().size / 2.0 - _palette_color_selector.rect_size / 2.0)
 	editor_interface.add_child(_palette_color_selector)
 	
@@ -108,7 +108,7 @@ func _ready():
 	_folder_dialog.popup_exclusive = true
 	_folder_dialog.rect_min_size.y = 500
 	_folder_dialog.resizable = true
-	_folder_dialog.filters = PoolStringArray(["*.png ; PNG Images", "*.bmp ; Bitmap Images"])
+	_folder_dialog.filters = PackedStringArray(["*.png ; PNG Images", "*.bmp ; Bitmap Images"])
 	editor_interface.add_child(_folder_dialog)
 	
 	_on_PartModeButton_pressed()
@@ -117,7 +117,7 @@ func _ready():
 
 
 func _notification(what: int):
-	if what == NOTIFICATION_WM_FOCUS_IN:
+	if what == NOTIFICATION_WM_WINDOW_FOCUS_IN:
 		if _autorun:
 			var perform_autorun := false
 			
@@ -143,15 +143,15 @@ func _notification(what: int):
 func show_folder_dialog(access, callback_func):
 	_folder_dialog.access = access
 	
-	if _folder_dialog.is_connected("dir_selected", self, "_on_ImageTargetBrowseButton_selected"):
-		_folder_dialog.disconnect("dir_selected", self, "_on_ImageTargetBrowseButton_selected")
+	if _folder_dialog.dir_selected.is_connected(_on_ImageTargetBrowseButton_selected):
+		_folder_dialog.dir_selected.disconnect(_on_ImageTargetBrowseButton_selected)
 	
-	if _folder_dialog.is_connected("dir_selected", self, "_on_ImagePathAddButton_selected"):
-		_folder_dialog.disconnect("dir_selected", self, "_on_ImagePathAddButton_selected")
+	if _folder_dialog.dir_selected.is_connected(_on_ImagePathAddButton_selected):
+		_folder_dialog.dir_selected.disconnect(_on_ImagePathAddButton_selected)
 	
 	assert(["_on_ImageTargetBrowseButton_selected", "_on_ImagePathAddButton_selected"].has(callback_func))
 	
-	_folder_dialog.connect("dir_selected", self, callback_func)
+	_folder_dialog.dir_selected.connect(callback_func)
 	
 	_folder_dialog.popup_centered()
 
@@ -244,7 +244,7 @@ func _add_part(part_id: int, part_name: String):
 		_parts_root_item = _part_tree.create_item()
 	
 	# See: https://github.com/godotengine/godot/tree/master/editor/icons
-	var remove_icon = get_icon("Remove", "EditorIcons")
+	var remove_icon = get_theme_icon("Remove", "EditorIcons")
 	
 	var item : TreeItem = _part_tree.create_item(_parts_root_item)
 	item.set_text(0, part_name)
@@ -292,7 +292,7 @@ func _update_palette_grid():
 	
 	var item_count : int = _palette_grid_width.value * _palette_grid_height.value
 	while _palette_items.size() < item_count:
-		_palette_items.append(PaletteItem.new(false, Color.black, []))
+		_palette_items.append(PaletteItem.new(false, Color.BLACK, []))
 	
 	_palette_grid.columns = _palette_grid_width.value
 	
@@ -368,7 +368,7 @@ func _update_selected_palette_item():
 	var root_item = _palette_part_tree.create_item()
 	for part_id in palette_item.part_ids:
 		# See: https://github.com/godotengine/godot/tree/master/editor/icons
-		var remove_icon = get_icon("Remove", "EditorIcons")
+		var remove_icon = get_theme_icon("Remove", "EditorIcons")
 		
 		var item : TreeItem = _palette_part_tree.create_item(root_item)
 		
@@ -383,7 +383,7 @@ func _update_selected_palette_item():
 
 func _update_selected_palette_part():
 	for color_box in _palette_color_boxes:
-		color_box.self_modulate = Color.white
+		color_box.self_modulate = Color.WHITE
 	
 	if !_palette_part_options_hovered:
 		return
@@ -469,7 +469,7 @@ func _on_palette_color_selector_apply_color(color):
 #		_parts_root_item = _part_tree.create_item()
 #
 #	# See: https://github.com/godotengine/godot/tree/master/editor/icons
-#	var remove_icon = get_icon("Remove", "EditorIcons")
+#	var remove_icon = get_theme_icon("Remove", "EditorIcons")
 #
 #	var item : TreeItem = _part_tree.create_item(_parts_root_item)
 #	item.set_text(0, part_name)
@@ -540,7 +540,8 @@ func _save_config():
 	config["paths"] = serialized_paths
 	config["autorun"] = _autorun
 	
-	file.store_line(JSON.print(config, "\t"))
+	var json = JSON.new()
+	file.store_line(json.stringify(config, "\t"))
 
 	file.close()
 	
@@ -555,41 +556,48 @@ func _load_config():
 	
 	if file.file_exists(config_file):
 		file.open(config_file, File.READ)
-		var config : Dictionary = parse_json(file.get_as_text())
+		var json := JSON.new()
+		
+		var res = json.parse(file.get_as_text())
 		file.close()
 		
-		_autorun = config["autorun"]
-		_run_autorun_checkbox.pressed = _autorun
-		
-		var serialized_parts : Array = config["parts"]
-		for part in serialized_parts:
-			_add_part(part["id"], part["name"])
-		
-		if config.has("palette_items"):
-			var serialized_palette_items : Array = config["palette_items"]
-			for palette_item in serialized_palette_items:
-				var part_ids := []
-				for part_id in palette_item["part_ids"]:
-					part_ids.append(int(part_id))
-				_palette_items.append(PaletteItem.new(palette_item["initialized"], Color(palette_item["color"]), part_ids))
-		
-		_palette_grid_width.value = config["grid_width"]
-		_palette_grid_height.value = config["grid_height"]
-		
-		var serialized_paths : Array = config["paths"]
-		for serialized_path in serialized_paths:
-			var path_item := PathItem.new(serialized_path["path"], serialized_path["target_dir"])
+		if res == OK:
+			var config : Dictionary = json.get_data()
 			
-			for serialized_image in serialized_path["images"]:
-				var image_item := ImageItem.new(serialized_image["path"], serialized_image["filename"])
-				
-				for serialized_colored_parts in serialized_image["colored_parts"]:
-					var col = serialized_colored_parts["color"]
-					image_item.col_to_part_id[col] = int(serialized_colored_parts["part_id"])
-				
-				path_item.image_items.append(image_item)
+			_autorun = config["autorun"]
+			_run_autorun_checkbox.pressed = _autorun
 			
-			_image_path_items.append(path_item)
+			var serialized_parts : Array = config["parts"]
+			for part in serialized_parts:
+				_add_part(part["id"], part["name"])
+			
+			if config.has("palette_items"):
+				var serialized_palette_items : Array = config["palette_items"]
+				for palette_item in serialized_palette_items:
+					var part_ids := []
+					for part_id in palette_item["part_ids"]:
+						part_ids.append(int(part_id))
+					_palette_items.append(PaletteItem.new(palette_item["initialized"], Color(palette_item["color"]), part_ids))
+			
+			_palette_grid_width.value = config["grid_width"]
+			_palette_grid_height.value = config["grid_height"]
+			
+			var serialized_paths : Array = config["paths"]
+			for serialized_path in serialized_paths:
+				var path_item := PathItem.new(serialized_path["path"], serialized_path["target_dir"])
+				
+				for serialized_image in serialized_path["images"]:
+					var image_item := ImageItem.new(serialized_image["path"], serialized_image["filename"])
+					
+					for serialized_colored_parts in serialized_image["colored_parts"]:
+						var col = serialized_colored_parts["color"]
+						image_item.col_to_part_id[col] = int(serialized_colored_parts["part_id"])
+					
+					path_item.image_items.append(image_item)
+				
+				_image_path_items.append(path_item)
+	else:
+		printerr("Color Swapper: Failed to parse configuration.")
 	
 	_update_palette_grid()
 	_update_selected_palette_item()
@@ -655,11 +663,11 @@ func _update_image_tree():
 		
 		var display_name := path_item.path
 		if common_prefix != null && common_prefix.length() > 0:
-			display_name.erase(0, common_prefix.length() + 1)
+			display_name = display_name.substr(common_prefix.length() + 1)
 		
 		var section_item : TreeItem = _image_tree.create_item(root_item)
 		section_item.set_text(0, display_name)
-		section_item.add_button(0, get_icon("Remove", "EditorIcons"))
+		section_item.add_button(0, get_theme_icon("Remove", "EditorIcons"))
 		section_item.set_metadata(0, path_item)
 		
 		var dir = Directory.new()
@@ -710,7 +718,7 @@ func get_base_dir(path: String) -> String:
 	# THIS IS BUGGY: print("C:/test".get_base_dir())
 	# Returns "C:/t"
 	
-	var idx := path.find_last("/")
+	var idx := path.rfind("/")
 	if idx > 0:
 		return path.substr(0, idx)
 	return ""
@@ -755,7 +763,7 @@ func _update_image_preview():
 			image.load(image_item.path)
 		
 		var texture := ImageTexture.new()
-		texture.create_from_image(image, 0)
+		texture.create_from_image(image)
 		
 		_image_preview.texture = texture
 		
@@ -778,7 +786,7 @@ func _update_image_preview():
 				else:
 					_image_color_counts[col] += 1
 		
-		color_array.sort_custom(self, "sort_colors")
+		color_array.sort_custom(sort_colors)
 		
 		image.unlock()
 		
