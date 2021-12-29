@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://ciqidpgerjqkm"]
+
+[ext_resource type="Script" path="res://addons/object_pool/PathLineEdit.gd" id="1_u6f6u"]
+
+[node name="PathLineEdit" type="LineEdit"]
+offset_right = 70.0
+offset_bottom = 33.0
+script = ExtResource( "1_u6f6u" )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="text_changed" from="." to="." method="_on_PathLineEdit_text_changed"]

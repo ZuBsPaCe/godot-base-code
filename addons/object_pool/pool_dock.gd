@@ -11,6 +11,9 @@ const config_path = "res://pool.json"
 var test : EnumValue
 
 @onready var _enum_tree := $EnumTree
+@onready var _enum_item_inspector := $EnumItemInspector
+@onready var _enum_value_inspector := $EnumValueInspector
+@onready var _enum_value_scene := $EnumValueInspector/HBoxContainer/EnumValueScene
 
 var _helper
 
@@ -27,11 +30,12 @@ func setup(p_editor_interface: EditorInterface):
 	_helper = Helper.new()
 	
 	_enum_items = _helper.load_config(config_path)
-	for enum_item in _enum_items:
-		for enum_value in enum_item.enum_values:
-			enum_value.enum_value_changed.connect(_on_enum_value_changed)
+#	for enum_item in _enum_items:
+#		for enum_value in enum_item.enum_values:
+#			enum_value.enum_value_changed.connect(_on_enum_value_changed)
 	
 	_update_enum_items()
+	_update_inspector()
 
 
 func _on_AddEnumButton_pressed():
@@ -56,12 +60,7 @@ func _on_RefreshButton_pressed():
 
 
 func _on_EnumTree_item_selected():
-	var selected_node: TreeItem = _enum_tree.get_selected()
-	if selected_node == null:
-		editor_interface.get_selection().clear()
-		return
-	
-	editor_interface.inspect_object(selected_node.get_metadata(0))
+	_update_inspector()
 
 
 func _on_EnumTree_button_pressed(item, column, id):
@@ -82,6 +81,9 @@ func _on_EnumItem_delete_confirmed(enum_item: EnumItem):
 
 
 func _get_enum_name_from_path(path : String) -> String:
+	if path == null or !path.begins_with("res://"):
+		return ""
+	
 	var name := path.get_file()
 	var dot_index := name.rfind(".")
 	if dot_index > 0:
@@ -105,17 +107,17 @@ func _add_enum_item(path: String, name: String, enum_values = []) -> EnumItem:
 	var enum_item := EnumItem.new(path, name, enum_values)
 	_enum_items.append(enum_item)
 	
-	for enum_value in enum_item.enum_values:
-		enum_value.connect("enum_value_changed", self, "_on_enum_value_changed")
+#	for enum_value in enum_item.enum_values:
+#		enum_value.connect("enum_value_changed", self, "_on_enum_value_changed")
 	
 	_update_enum_items()
 	
 	return enum_item
 
 
-func _on_enum_value_changed():
-	_update_enum_items()
-	_helper.save_config(config_path, _enum_items)
+#func _on_enum_value_changed():
+#	_update_enum_items()
+#	_helper.save_config(config_path, _enum_items)
 
 
 func _update_enum_items():
@@ -130,8 +132,7 @@ func _update_enum_items():
 		
 		var enum_dict = _get_enum_dict(enum_item.path, enum_item.name)
 		for value_name in enum_dict.keys():
-			
-			var enum_value : EnumValue
+			var enum_value : EnumValue = null
 			
 			for search_enum_value in enum_item.enum_values:
 				if search_enum_value.name == value_name:
@@ -139,13 +140,41 @@ func _update_enum_items():
 					break
 			
 			if enum_value == null:
-				enum_value = EnumValue.new(value_name, enum_dict[value_name])
-				enum_value.enum_value_changed.connect(_on_enum_value_changed)
+				enum_value = EnumValue.new(value_name, enum_dict[value_name], "")
+#				enum_value.enum_value_changed.connect(_on_enum_value_changed)
 				enum_item.enum_values.append(enum_value)
 			
 			var value_node: TreeItem = _enum_tree.create_item(tree_node)
 			value_node.set_text(0, value_name)
 			value_node.set_metadata(0, enum_value)
 			
-			if enum_value.scene != null:
-				value_node.set_text(1, "=> " + _get_enum_name_from_path(enum_value.scene.resource_path))
+			value_node.set_text(1, "=> " + _get_enum_name_from_path(enum_value.scene_path))
+
+
+func _update_inspector():
+	var selected_node: TreeItem = _enum_tree.get_selected()
+	if selected_node == null:
+		_enum_item_inspector.visible = false
+		_enum_value_inspector.visible = false
+	else:
+		var metadata = selected_node.get_metadata(0)
+		if metadata is EnumItem:
+			_enum_item_inspector.visible = true
+			_enum_value_inspector.visible = false
+		elif metadata is EnumValue:
+			_enum_item_inspector.visible = false
+			_enum_value_inspector.visible = true
+			_enum_value_scene.text = metadata.scene_path
+			_enum_value_scene.update_error_highlight()
+
+
+func _on_EnumValueScene_text_changed(new_text):
+	var selected_node: TreeItem = _enum_tree.get_selected()
+	if selected_node != null:
+		var metadata = selected_node.get_metadata(0)
+		if metadata is EnumValue:
+			metadata.scene_path = new_text
+			
+			selected_node.set_text(1, "=> " + _get_enum_name_from_path(new_text))
+			
+			_helper.save_config(config_path, _enum_items)

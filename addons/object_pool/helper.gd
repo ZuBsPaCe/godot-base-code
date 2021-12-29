@@ -19,14 +19,11 @@ func save_config(path: String, enum_items: Array):
 	for enum_item in enum_items:
 		var serialized_enum_values := []
 		for enum_value in enum_item.enum_values:
-			var rpath = null
-			if enum_value.scene != null:
-				rpath = enum_value.scene.resource_path
 			serialized_enum_values.append(
 				{
 					"name": enum_value.name,
 					"value": enum_value.value,
-					"resource_path": rpath
+					"resource_path": enum_value.scene_path
 				})
 				
 		serialized_enum_items.append(
@@ -69,11 +66,7 @@ func load_config(path: String) -> Array:
 				
 				var serialized_enum_values : Array = item["enum_values"]
 				for value_item in serialized_enum_values:
-					var enum_value := EnumValue.new(value_item["name"], value_item["value"])
-					var rpath = value_item["resource_path"]
-					if rpath != null:
-						enum_value.scene = load(value_item["resource_path"])
-						assert(enum_value.scene is PackedScene)
+					var enum_value := EnumValue.new(value_item["name"], value_item["value"], value_item["resource_path"])
 					
 					enum_values.append(enum_value)
 				

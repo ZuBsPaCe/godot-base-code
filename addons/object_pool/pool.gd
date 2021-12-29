@@ -20,9 +20,14 @@ const config_path = "res://pool.json"
 var enum_name : String
 
 var _helper
-var _pools := []
-var _scenes := []
 
+# These arrays contain an element for each enum value.
+# Each element of _dead_pool is an array of instances, which are not alive.
+# Each element of _alive_pool is an array of instances, which are alive.
+# Each element of _packed_scenes is a loaded scene which will be instantiated.
+var _dead_pools := []
+var _alive_pools := []
+var _packed_scenes := []
 
 func _ready():
 	enum_name = str(name).replace("Pool", "").capitalize().replace(" ", "")
@@ -34,26 +39,43 @@ func _ready():
 	for enum_item in enum_items:
 		if enum_item.name == enum_name:
 			for enum_value in enum_item.enum_values:
-				_pools.append([])
-				_scenes.append(enum_value.scene)
+				_dead_pools.append([])
+				_alive_pools.append([])
+				
+				var scene = load(enum_value.scene_path)
+				assert(scene is PackedScene)
+						
+				_packed_scenes.append(scene)
 	
-	if _pools.size() > 0:
-		print("Autoloaded %s Pool with %d different types." % [enum_name, _pools.size()])
+	if _dead_pools.size() > 0:
+		print("Autoloaded %s Pool with %d different types." % [enum_name, _dead_pools.size()])
 	else:
 		print("Autoloaded %s Pool failed." % enum_name)
 
 
-func create(enum_value) -> Node2D:
-	var pool: Array = _pools[enum_value]
+func create(enum_value, parent: Node2D) -> Node2D:
+	var dead_pool: Array = _dead_pools[enum_value]
+	
 	var instance: Node2D
-	if pool.size() > 0:
-		instance = pool.pop_back()
+	if dead_pool.size() > 0:
+		instance = dead_pool.pop_back()
 	else:
-		instance = _scenes[enum_value].instantiate()
-	get_tree().root.add_child(instance)
+		instance = _packed_scenes[enum_value].instantiate()
+	parent.add_child(instance)
+	
+	_alive_pools[enum_value].append(instance)
+	
 	return instance
 
 func destroy(enum_value, instance: Node2D):
-	instance.get_parent().remove_child(instance)
-	_pools[enum_value].append(instance)
+	_alive_pools[enum_value].erase(instance)
 	
+	instance.get_parent().remove_child(instance)
+	_dead_pools[enum_value].append(instance)
+	
+
+func destroy_all():
+	for enum_value in _alive_pools.size():
+		var alive_pool: Array = _alive_pools[enum_value]
+		while !alive_pool.is_empty():
+			destroy(enum_value, alive_pool[0])
