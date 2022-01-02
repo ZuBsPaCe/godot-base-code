@@ -61,6 +61,9 @@ func create(enum_value, parent: Node2D) -> Node2D:
 		instance = dead_pool.pop_back()
 	else:
 		instance = _packed_scenes[enum_value].instantiate()
+	
+	instance.request_ready()
+	
 	parent.add_child(instance)
 	
 	_alive_pools[enum_value].append(instance)
