@@ -28,12 +28,24 @@ _global_script_classes=[{
 "class": &"Mapper",
 "language": &"GDScript",
 "path": "res://Scripts/Tools/Mapper.gd"
+}, {
+"base": "Node",
+"class": &"MultiStateMachine",
+"language": &"GDScript",
+"path": "res://Scripts/Tools/MultiStateMachine.gd"
+}, {
+"base": "Node",
+"class": &"StateMachine",
+"language": &"GDScript",
+"path": "res://Scripts/Tools/StateMachine.gd"
 }]
 _global_script_class_icons={
 "Cooldown": "",
 "Coord": "",
 "Map": "",
-"Mapper": ""
+"Mapper": "",
+"MultiStateMachine": "",
+"StateMachine": ""
 }
 
 [application]

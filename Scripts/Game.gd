@@ -9,6 +9,8 @@ enum GameState {
 
 @export var player_scene:PackedScene
 
+@onready var _game_state := $GameStateMachine
+
 
 func _ready():
 
@@ -18,11 +20,11 @@ func _ready():
 		player_scene
 	)
 	
-	call_deferred("switch_game_state", GameState.ART1)
+	_game_state.set_state(GameState.MAIN_MENU)
 
 
-func switch_game_state(new_state) -> void:
-	match new_state:
+func _on_GameStateMachine_enter_state(p_state):
+	match p_state:
 		GameState.MAIN_MENU:
 			pass
 
