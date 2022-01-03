@@ -38,16 +38,16 @@ func wait(p_secs: float) -> void:
 	_wait_secs = p_secs
 
 func _process(delta):
-	if _wait_secs > 0.0:
-		_wait_secs -= delta
-		if _wait_secs > 0.0:
-			return
-		_wait_secs = 0.0
-	
 	if current_state != next_state:
 		if current_state >= 0:
 			emit_signal("leave_state", current_state)
 		current_state = next_state
 		emit_signal("enter_state", current_state)
+	
+	if _wait_secs > 0.0:
+		_wait_secs -= delta
+		if _wait_secs > 0.0:
+			return
+		_wait_secs = 0.0
 	
 	emit_signal("process_state", current_state)
