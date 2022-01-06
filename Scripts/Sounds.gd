@@ -50,9 +50,11 @@ func play_delayed(key, delay: float, play_while_paused: bool, pos = null):
 	play(key, pos)
 
 
-func _play(stream: AudioStreamSample, volume: float, pos = Vector2.ZERO) -> void:
-
-	var players:= _positional_players if pos != null else _center_players
+func _play(stream: AudioStreamSample, volume: float, pos = null) -> void:
+	
+	var pos_valid := typeof(pos) == TYPE_VECTOR2
+	
+	var players := _positional_players if pos_valid else _center_players
 
 	var player: AudioStreamPlayer2D
 
@@ -66,9 +68,9 @@ func _play(stream: AudioStreamSample, volume: float, pos = Vector2.ZERO) -> void
 
 	if player == null:
 		player = AudioStreamPlayer2D.new()
-		player.pause_mode = Node.PAUSE_MODE_PROCESS
+		player.process_mode = ProcessMode.PROCESS_MODE_ALWAYS
 
-		if pos != null:
+		if pos_valid:
 			player.attenuation = 6.0
 
 		player.bus = "Sounds"
@@ -78,8 +80,9 @@ func _play(stream: AudioStreamSample, volume: float, pos = Vector2.ZERO) -> void
 	player.stream = stream
 	player.volume_db = volume
 
-	if pos != Vector2.ZERO:
-		player.position = pos - global_position
+	if pos_valid:
+		var pos_vec:Vector2 = pos
+		player.position = pos_vec - global_position
 		player.pitch_scale = 0.95 + randf() * 0.1
 #	else:
 #		player_pos = Vector2(240, 135)
