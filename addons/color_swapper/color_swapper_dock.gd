@@ -306,7 +306,7 @@ func _update_palette_grid():
 			_palette_color_boxes.append(color_box)
 			
 			color_box.connect("pressed", self, "_color_box_selected", [index])
-			color_box.connect("gui_input", self, "_color_box_gui_input")
+			color_box.gui_input.connect(_color_box_gui_input)
 			
 			index += 1
 	

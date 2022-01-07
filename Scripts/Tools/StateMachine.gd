@@ -1,20 +1,6 @@
 class_name StateMachine
 extends Node
 
-# Why a state machine?
-#
-# This line has a huge problem:
-# await get_tree().create_timer(1.0).timeout
-#
-# Currently it is not possible to stop the async method
-# from continuing. This is a problem for instances managed
-# by our object_pool addon. The instance can be destroyed and
-# reused immediately, but we don't want the code to continue
-# after the await.
-#
-# This problem can be solved by using StateMachine.wait() instead
-# and used StateMachine.setup() after creating a pooled object.
-
 
 var current_state: int = -1
 var next_state: int = -1
