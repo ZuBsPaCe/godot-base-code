@@ -97,8 +97,8 @@ var _folder_dialog : FileDialog
 
 func _ready():
 	_palette_color_selector = color_selector_scene.instance()
-	_palette_color_selector.unset_color.connect(_on_palette_color_selector_unset_color)
-	_palette_color_selector.apply_color.connect(_on_palette_color_selector_apply_color)
+	_palette_color_selector.unset_color.CONNECT(_on_palette_color_selector_unset_color)
+	_palette_color_selector.apply_color.CONNECT(_on_palette_color_selector_apply_color)
 	_palette_color_selector.set_position(get_viewport().size / 2.0 - _palette_color_selector.rect_size / 2.0)
 	editor_interface.add_child(_palette_color_selector)
 	
@@ -500,7 +500,7 @@ func _save_config():
 		serialized_palette_items.append(
 			{
 				"initialized": palette_item.initialized,
-				"color": palette_item.color.to_html(),
+				"color": palette_item.color.TO_HTML(),
 				"part_ids": palette_item.part_ids
 			})
 	

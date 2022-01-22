@@ -34,22 +34,33 @@ func setup(p_parent_node: Node, p_secs: float, p_done: bool, auto_start = AUTO_S
 	
 	p_parent_node.add_child(_timer)
 
+
 func restart():
 	done = false
 	_timer.start(secs)
-	
+
+
+func restart_with(p_secs: float):
+	secs = p_secs
+	done = false
+	_timer.start(secs)
+
+
 func reset():
 	done = false
 	_timer.stop()
+
 
 func stop():
 	if _timer == null:
 		return
 	_timer.stop()
-	
+
+
 func set_done():
 	stop()
 	done = true
+
 
 func _timeout():
 	done = true

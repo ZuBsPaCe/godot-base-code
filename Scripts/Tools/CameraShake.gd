@@ -1,7 +1,5 @@
 extends Camera2D
 
-#warning-ignore-all:RETURN_VALUE_DISCARDED
-
 var _bounce_tween := Tween.new()
 
 var _intensity_tween := Tween.new()
@@ -9,11 +7,6 @@ var _intensity: float
 
 var _bounce_time: float
 var _direction: Vector2
-
-
-func _ready():
-	_intensity_tween = create_tween()
-	_bounce_tween = create_tween()
 
 
 func start_shake(direction: Vector2, intensity: float, frequency: float, duration: float):
