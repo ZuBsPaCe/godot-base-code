@@ -1,5 +1,8 @@
 extends Node2D
 
+const TILE_SIZE := 16.0
+const HALF_TILE_SIZE := TILE_SIZE / 2.0
+
 
 const Direction4 := preload("res://Scripts/Tools/Direction4.gd").Direction4
 
@@ -14,14 +17,40 @@ func _ready():
 
 # Map Helpers
 
+func to_coord(pos: Vector2) -> Vector2i:
+	return Vector2i(
+		int(pos.x / TILE_SIZE),
+		int(pos.y / TILE_SIZE))
+
+
+func to_pos(coord: Vector2i) -> Vector2:
+	return Vector2(
+		coord.x * TILE_SIZE,
+		coord.y * TILE_SIZE)
+
+func to_random_pos(coord: Vector2i) -> Vector2:
+	return Vector2(
+		coord.x * TILE_SIZE + randf() * TILE_SIZE,
+		coord.y * TILE_SIZE + randf() * TILE_SIZE)
+
+func to_center_pos(coord: Vector2i) -> Vector2:
+	return Vector2(
+		coord.x * TILE_SIZE + HALF_TILE_SIZE,
+		coord.y * TILE_SIZE + HALF_TILE_SIZE)
+
+
+func manhattan_distance(from: Vector2i, to: Vector2i) -> float:
+	return abs(to.x - from.x) + abs(to.y - from.y)
+
+
 # Array of Arrays: Radius => List of coord offsets
-var _coord_offsets_in_circle := [[Coord.new(0, 0)]]
+var _coord_offsets_in_circle := [[Vector2i()]]
 var _distances_in_circle := [[0.0]]
 
 var map_coords_in_circle := []
 var map_distances_in_circle := []
 
-func get_map_coords_in_circle(map:Map, x:int, y:int, tile_radius:int) -> void:	
+func get_map_coords_in_circle(map:Map, x:int, y:int, tile_radius:int) -> void:
 	if _coord_offsets_in_circle.size() < tile_radius:
 		for r in range(_coord_offsets_in_circle.size(), tile_radius + 1):
 			var coord_offsets : Array = _coord_offsets_in_circle[r - 1].duplicate()
@@ -36,7 +65,7 @@ func get_map_coords_in_circle(map:Map, x:int, y:int, tile_radius:int) -> void:
 					if distance > r or distance <= r - 1:
 						continue
 						
-					coord_offsets.append(Coord.new(offset_x, offset_y))
+					coord_offsets.append(Vector2i(offset_x, offset_y))
 					distances.append(distance)
 			
 			_coord_offsets_in_circle.append(coord_offsets)
@@ -50,37 +79,37 @@ func get_map_coords_in_circle(map:Map, x:int, y:int, tile_radius:int) -> void:
 	var current_distances : Array = _distances_in_circle[tile_radius]
 	
 	for i in current_coord_offsets.size():
-		var coord_offset : Coord = current_coord_offsets[i]
+		var coord_offset : Vector2i = current_coord_offsets[i]
 		var real_x : int = x + coord_offset.x
 		var real_y : int = y + coord_offset.y
 		if map.is_valid(real_x, real_y):
-			map_coords_in_circle.append(Coord.new(real_x, real_y))
+			map_coords_in_circle.append(Vector2i(real_x, real_y))
 			map_distances_in_circle.append(current_distances[i])
 
 
-func step_dir(coord:Coord, dir) -> Coord:
+func step_dir(coord:Vector2i, dir) -> Vector2i:
 	match dir:
 		Direction4.N:
-			return Coord.new(coord.x, coord.y - 1)
+			return Vector2i(coord.x, coord.y - 1)
 		Direction4.E:
-			return Coord.new(coord.x + 1, coord.y)
+			return Vector2i(coord.x + 1, coord.y)
 		Direction4.S:
-			return Coord.new(coord.x, coord.y + 1)
+			return Vector2i(coord.x, coord.y + 1)
 		Direction4.W:
-			return Coord.new(coord.x - 1, coord.y)
+			return Vector2i(coord.x - 1, coord.y)
 		_:
 			assert(false)
-			return null
+			return coord
 			
-func step_diagonal(coord:Coord, dir1, dir2) -> Coord:
+func step_diagonal(coord:Vector2i, dir1, dir2) -> Vector2i:
 	if dir1 == Direction4.N && dir2 == Direction4.E || dir1 == Direction4.E && dir2 == Direction4.N:
-		return Coord.new(coord.x + 1, coord.y - 1)
+		return Vector2i(coord.x + 1, coord.y - 1)
 	elif dir1 == Direction4.E && dir2 == Direction4.S || dir1 == Direction4.S && dir2 == Direction4.E:
-		return Coord.new(coord.x + 1, coord.y + 1)
+		return Vector2i(coord.x + 1, coord.y + 1)
 	elif dir1 == Direction4.S && dir2 == Direction4.W || dir1 == Direction4.W && dir2 == Direction4.S:
-		return Coord.new(coord.x - 1, coord.y + 1)
+		return Vector2i(coord.x - 1, coord.y + 1)
 	else:
-		return Coord.new(coord.x - 1, coord.y - 1)
+		return Vector2i(coord.x - 1, coord.y - 1)
 	
 
 func is_reverse(dir1, dir2) -> bool:
