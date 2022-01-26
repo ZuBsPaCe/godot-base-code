@@ -56,46 +56,46 @@ color_box_scene = ExtResource( "2" )
 color_selector_scene = ExtResource( "3" )
 
 [node name="ModeToolbar" type="HBoxContainer" parent="."]
-offset_right = 246.0
-offset_bottom = 29.0
+offset_right = 230.0
+offset_bottom = 31.0
 
 [node name="Filler" type="Control" parent="ModeToolbar"]
-offset_bottom = 29.0
+offset_bottom = 31.0
 size_flags_horizontal = 3
 
 [node name="PartModeButton" type="Button" parent="ModeToolbar"]
 offset_left = 4.0
-offset_right = 56.0
-offset_bottom = 29.0
+offset_right = 52.0
+offset_bottom = 31.0
 toggle_mode = true
 pressed = true
 text = "Parts"
 
 [node name="PaletteModeButton" type="Button" parent="ModeToolbar"]
-offset_left = 60.0
-offset_right = 125.0
-offset_bottom = 29.0
+offset_left = 56.0
+offset_right = 117.0
+offset_bottom = 31.0
 toggle_mode = true
 text = "Palette"
 
 [node name="ImageModeButton" type="Button" parent="ModeToolbar"]
-offset_left = 129.0
-offset_right = 196.0
-offset_bottom = 29.0
+offset_left = 121.0
+offset_right = 184.0
+offset_bottom = 31.0
 toggle_mode = true
 text = "Images"
 
 [node name="RunModeButton" type="Button" parent="ModeToolbar"]
-offset_left = 200.0
-offset_right = 242.0
-offset_bottom = 29.0
+offset_left = 188.0
+offset_right = 226.0
+offset_bottom = 31.0
 toggle_mode = true
 text = "Run"
 
 [node name="Filler2" type="Control" parent="ModeToolbar"]
-offset_left = 246.0
-offset_right = 246.0
-offset_bottom = 29.0
+offset_left = 230.0
+offset_right = 230.0
+offset_bottom = 31.0
 size_flags_horizontal = 3
 
 [node name="PartModeControls" type="VBoxContainer" parent="."]
@@ -169,20 +169,20 @@ size_flags_horizontal = 3
 hide_root = true
 
 [node name="ImageModeControls" type="VBoxContainer" parent="."]
-offset_top = 33.0
-offset_right = 246.0
-offset_bottom = 194.0
+offset_top = 35.0
+offset_right = 230.0
+offset_bottom = 198.0
 size_flags_vertical = 3
 
 [node name="ImagePathAddButton" type="Button" parent="ImageModeControls"]
-offset_right = 246.0
-offset_bottom = 29.0
+offset_right = 230.0
+offset_bottom = 31.0
 text = "Add"
 
 [node name="ImageTree" type="Tree" parent="ImageModeControls"]
-offset_top = 33.0
-offset_right = 246.0
-offset_bottom = 33.0
+offset_top = 35.0
+offset_right = 230.0
+offset_bottom = 35.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 hide_root = true
@@ -190,36 +190,35 @@ select_mode = 1
 
 [node name="ImagePreview" type="TextureRect" parent="ImageModeControls"]
 material = SubResource( "2" )
-offset_top = 37.0
-offset_right = 246.0
-offset_bottom = 87.0
+offset_top = 39.0
+offset_right = 230.0
+offset_bottom = 89.0
 rect_min_size = Vector2(0, 50)
 size_flags_horizontal = 3
 size_flags_vertical = 3
-expand = true
 stretch_mode = 6
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ImageModeControls"]
-offset_top = 91.0
-offset_right = 246.0
+offset_top = 93.0
+offset_right = 230.0
 offset_bottom = 124.0
 
 [node name="ImageTargetInput" type="LineEdit" parent="ImageModeControls/HBoxContainer"]
-offset_right = 172.0
-offset_bottom = 33.0
+offset_right = 160.0
+offset_bottom = 31.0
 size_flags_horizontal = 3
 editable = false
 
 [node name="ImageTargetBrowseButton" type="Button" parent="ImageModeControls/HBoxContainer"]
-offset_left = 176.0
-offset_right = 246.0
-offset_bottom = 33.0
+offset_left = 164.0
+offset_right = 230.0
+offset_bottom = 31.0
 disabled = true
 text = "Browse"
 
 [node name="ImageColorTree" type="Tree" parent="ImageModeControls"]
 offset_top = 128.0
-offset_right = 246.0
+offset_right = 230.0
 offset_bottom = 128.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -229,26 +228,26 @@ select_mode = 1
 
 [node name="ImagePartOptions" type="OptionButton" parent="ImageModeControls"]
 offset_top = 132.0
-offset_right = 246.0
-offset_bottom = 161.0
+offset_right = 230.0
+offset_bottom = 163.0
 size_flags_horizontal = 3
 clip_text = true
 
 [node name="RunModeControls" type="VBoxContainer" parent="."]
-offset_top = 198.0
-offset_right = 246.0
-offset_bottom = 262.0
+offset_top = 202.0
+offset_right = 230.0
+offset_bottom = 268.0
 size_flags_vertical = 3
 
 [node name="RunButton" type="Button" parent="RunModeControls"]
-offset_right = 246.0
-offset_bottom = 29.0
+offset_right = 230.0
+offset_bottom = 31.0
 text = "Run"
 
 [node name="AutoRunCheckbox" type="CheckBox" parent="RunModeControls"]
-offset_top = 33.0
-offset_right = 246.0
-offset_bottom = 64.0
+offset_top = 35.0
+offset_right = 230.0
+offset_bottom = 66.0
 text = "Autorun"
 
 [connection signal="pressed" from="ModeToolbar/PartModeButton" to="." method="_on_PartModeButton_pressed"]

@@ -6,7 +6,7 @@ var dock
 func _enter_tree():
 	print("ColorSwapper editor starting")
 	
-	dock = preload("res://addons/color_swapper/color_swapper_dock.tscn").instance()
+	dock = preload("res://addons/color_swapper/color_swapper_dock.tscn").instantiate()
 	dock.editor_interface = get_editor_interface()
 	
 	add_control_to_dock(DOCK_SLOT_LEFT_UR, dock)

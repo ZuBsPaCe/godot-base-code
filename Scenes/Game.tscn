@@ -18,5 +18,3 @@ script = ExtResource( "3_nf4ml" )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource( "2" )
-
-[connection signal="enter_state" from="GameStateMachine" to="." method="_on_GameStateMachine_enter_state"]

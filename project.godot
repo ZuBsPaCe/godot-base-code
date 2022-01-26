@@ -15,11 +15,6 @@ _global_script_classes=[{
 "path": "res://Scripts/Tools/Cooldown.gd"
 }, {
 "base": "RefCounted",
-"class": &"Coord",
-"language": &"GDScript",
-"path": "res://Scripts/Tools/Coord.gd"
-}, {
-"base": "RefCounted",
 "class": &"Map",
 "language": &"GDScript",
 "path": "res://Scripts/Tools/Map.gd"
@@ -41,7 +36,6 @@ _global_script_classes=[{
 }]
 _global_script_class_icons={
 "Cooldown": "",
-"Coord": "",
 "Map": "",
 "Mapper": "",
 "MultiStateMachine": "",
@@ -65,14 +59,14 @@ Globals="*res://Scripts/Globals.gd"
 
 [display]
 
+window/stretch/mode="viewport"
 window/size/width=960
 window/size/height=540
-window/stretch/mode="viewport"
 window/vsync/use_vsync=false
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/inkscape_importer/plugin.cfg")
 
 [importer_defaults]
 

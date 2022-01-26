@@ -1,0 +1,218 @@
+[gd_scene load_steps=2 format=3 uid="uid://bp6lsa7yg0glj"]
+
+[ext_resource type="Script" path="res://addons/inkscape_importer/inkscape_importer_dock.gd" id="1_2nwmp"]
+
+[node name="Inkscape Importer" type="VBoxContainer"]
+rect_min_size = Vector2(0, 100)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( "1_2nwmp" )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ModeToolbar" type="HBoxContainer" parent="."]
+offset_right = 271.0
+offset_bottom = 31.0
+
+[node name="Filler" type="Control" parent="ModeToolbar"]
+offset_bottom = 31.0
+size_flags_horizontal = 3
+
+[node name="SvgModeButton" type="Button" parent="ModeToolbar"]
+offset_left = 4.0
+offset_right = 100.0
+offset_bottom = 31.0
+toggle_mode = true
+text = "SVG Import"
+
+[node name="InstanceModeButton" type="Button" parent="ModeToolbar"]
+offset_left = 104.0
+offset_right = 194.0
+offset_bottom = 31.0
+toggle_mode = true
+text = "Instantiate"
+
+[node name="SettingsModeButton" type="Button" parent="ModeToolbar"]
+offset_left = 198.0
+offset_right = 267.0
+offset_bottom = 31.0
+toggle_mode = true
+text = "Settings"
+
+[node name="Filler2" type="Control" parent="ModeToolbar"]
+offset_left = 271.0
+offset_right = 271.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+
+[node name="SvgModeControls" type="VBoxContainer" parent="."]
+offset_top = 35.0
+offset_right = 271.0
+offset_bottom = 245.0
+size_flags_vertical = 3
+
+[node name="SvgPathAddButton" type="Button" parent="SvgModeControls"]
+offset_right = 271.0
+offset_bottom = 31.0
+text = "Add"
+
+[node name="SvgTree" type="Tree" parent="SvgModeControls"]
+offset_top = 35.0
+offset_right = 271.0
+offset_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+hide_root = true
+select_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SvgModeControls"]
+offset_top = 39.0
+offset_right = 271.0
+offset_bottom = 70.0
+
+[node name="TargetDirLabel" type="Label" parent="SvgModeControls/HBoxContainer"]
+offset_top = 2.0
+offset_right = 76.0
+offset_bottom = 28.0
+text = "Target Dir"
+
+[node name="TargetDirInput" type="LineEdit" parent="SvgModeControls/HBoxContainer"]
+offset_left = 80.0
+offset_right = 201.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+editable = false
+
+[node name="TargetDirBrowseButton" type="Button" parent="SvgModeControls/HBoxContainer"]
+offset_left = 205.0
+offset_right = 271.0
+offset_bottom = 31.0
+disabled = true
+text = "Browse"
+
+[node name="SplitOptions" type="OptionButton" parent="SvgModeControls"]
+offset_top = 74.0
+offset_right = 271.0
+offset_bottom = 105.0
+size_flags_horizontal = 3
+clip_text = true
+item_count = 3
+popup/item_0/text = "Disabled"
+popup/item_0/id = 0
+popup/item_1/text = "Split Layers"
+popup/item_1/id = 2
+popup/item_2/text = "Split Groups"
+popup/item_2/id = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SvgModeControls"]
+offset_top = 109.0
+offset_right = 271.0
+offset_bottom = 175.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SvgModeControls/HBoxContainer2"]
+offset_right = 124.0
+offset_bottom = 66.0
+
+[node name="TargetDpiLabel" type="Label" parent="SvgModeControls/HBoxContainer2/VBoxContainer"]
+offset_right = 124.0
+offset_bottom = 26.0
+text = "Target DPI"
+
+[node name="TransformScaleLabel" type="Label" parent="SvgModeControls/HBoxContainer2/VBoxContainer"]
+offset_top = 30.0
+offset_right = 124.0
+offset_bottom = 56.0
+text = "Transform Scale"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SvgModeControls/HBoxContainer2"]
+offset_left = 128.0
+offset_right = 271.0
+offset_bottom = 66.0
+size_flags_horizontal = 3
+
+[node name="TargetDpi" type="SpinBox" parent="SvgModeControls/HBoxContainer2/VBoxContainer2"]
+offset_right = 143.0
+offset_bottom = 31.0
+min_value = 1.0
+max_value = 1200.0
+value = 96.0
+rounded = true
+update_on_text_changed = true
+
+[node name="TransformScale" type="SpinBox" parent="SvgModeControls/HBoxContainer2/VBoxContainer2"]
+offset_top = 35.0
+offset_right = 143.0
+offset_bottom = 66.0
+step = 0.0
+value = 1.0
+update_on_text_changed = true
+
+[node name="ImportButton" type="Button" parent="SvgModeControls"]
+offset_top = 179.0
+offset_right = 271.0
+offset_bottom = 210.0
+text = "Import"
+
+[node name="InstanceModeControls" type="VBoxContainer" parent="."]
+visible = false
+offset_top = 214.0
+offset_right = 148.0
+offset_bottom = 214.0
+size_flags_vertical = 3
+
+[node name="ApplyButton" type="Button" parent="InstanceModeControls"]
+offset_right = 148.0
+offset_bottom = 31.0
+text = "Add to current scene"
+
+[node name="SettingsModeControls" type="VBoxContainer" parent="."]
+visible = false
+offset_top = 249.0
+offset_right = 271.0
+offset_bottom = 280.0
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsModeControls"]
+offset_right = 271.0
+offset_bottom = 31.0
+
+[node name="InkscapePathLabel" type="Label" parent="SettingsModeControls/HBoxContainer"]
+offset_top = 2.0
+offset_right = 107.0
+offset_bottom = 28.0
+text = "Inkscape Path"
+
+[node name="InkscapePathInput" type="LineEdit" parent="SettingsModeControls/HBoxContainer"]
+offset_left = 111.0
+offset_right = 201.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+
+[node name="InkscapePathBrowseButton" type="Button" parent="SettingsModeControls/HBoxContainer"]
+offset_left = 205.0
+offset_right = 271.0
+offset_bottom = 31.0
+text = "Browse"
+
+[connection signal="pressed" from="ModeToolbar/SvgModeButton" to="." method="_on_svg_mode_button_pressed"]
+[connection signal="pressed" from="ModeToolbar/InstanceModeButton" to="." method="_on_run_mode_button_pressed"]
+[connection signal="pressed" from="ModeToolbar/SettingsModeButton" to="." method="_on_settings_mode_button_pressed"]
+[connection signal="pressed" from="SvgModeControls/SvgPathAddButton" to="." method="_on_svg_path_add_button_pressed"]
+[connection signal="button_pressed" from="SvgModeControls/SvgTree" to="." method="_on_svg_tree_button_pressed"]
+[connection signal="item_selected" from="SvgModeControls/SvgTree" to="." method="_on_svg_tree_item_selected"]
+[connection signal="text_changed" from="SvgModeControls/HBoxContainer/TargetDirInput" to="." method="_on_target_dir_input_text_changed"]
+[connection signal="pressed" from="SvgModeControls/HBoxContainer/TargetDirBrowseButton" to="." method="_on_target_dir_browse_button_pressed"]
+[connection signal="item_selected" from="SvgModeControls/SplitOptions" to="." method="_on_split_options_item_selected"]
+[connection signal="value_changed" from="SvgModeControls/HBoxContainer2/VBoxContainer2/TargetDpi" to="." method="_on_target_dpi_value_changed"]
+[connection signal="value_changed" from="SvgModeControls/HBoxContainer2/VBoxContainer2/TransformScale" to="." method="_on_transform_scale_value_changed"]
+[connection signal="pressed" from="SvgModeControls/ImportButton" to="." method="_on_import_button_pressed"]
+[connection signal="pressed" from="InstanceModeControls/ApplyButton" to="." method="_on_apply_button_pressed"]
+[connection signal="text_changed" from="SettingsModeControls/HBoxContainer/InkscapePathInput" to="." method="_on_inkscape_path_input_text_changed"]
+[connection signal="pressed" from="SettingsModeControls/HBoxContainer/InkscapePathBrowseButton" to="." method="_on_inkscape_path_browse_button_pressed"]
