@@ -16,11 +16,14 @@ func _ready():
 	pass
 
 
-func _on_ColorSelectorCloseButton_pressed():
+func _on_color_selector_close_requested():
 	hide()
 
-func _on_ApplyButton_pressed():
-	emit_signal("apply_color", self.color)
+func _on_apply_button_pressed():
+	emit_signal("apply_color", color)
 
-func _on_UnsetButton_pressed():
+func _on_unset_button_pressed():
 	emit_signal("unset_color")
+
+func _on_close_button_pressed():
+	hide()

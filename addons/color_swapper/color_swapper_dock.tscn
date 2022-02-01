@@ -6,9 +6,12 @@
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
+render_mode unshaded;
 
 uniform bool cycle_enabled = false;
-uniform vec4 selected_col = vec4(1.0, 1.0, 1.0, 1.0);
+uniform vec4 selected_col_linear : hint_color;
+
+
 
 // https://gist.github.com/mairod/a75e7b44f68110e1576d77419d608786#gistcomment-3195243
 vec3 hue_shift(vec3 color, float hue) {
@@ -17,10 +20,34 @@ vec3 hue_shift(vec3 color, float hue) {
     return vec3(color * cosAngle + cross(k, color) * sin(hue) + k * dot(k, color) * (1.0 - cosAngle));
 }
 
+vec4 to_linear(vec4 col) {
+		return vec4(
+				col.r < 0.04045 ? col.r * (1.0 / 12.92) : pow((col.r + 0.055) * (1.0 / (1.0 + 0.055)), 2.4),
+				col.g < 0.04045 ? col.g * (1.0 / 12.92) : pow((col.g + 0.055) * (1.0 / (1.0 + 0.055)), 2.4),
+				col.b < 0.04045 ? col.b * (1.0 / 12.92) : pow((col.b + 0.055) * (1.0 / (1.0 + 0.055)), 2.4),
+				col.a);
+}
+
+vec4 to_srgb(vec4 col)  {
+		return vec4(
+				col.r < 0.0031308 ? 12.92 * col.r : (1.0 + 0.055) * pow(col.r, 1.0f / 2.4f) - 0.055,
+				col.g < 0.0031308 ? 12.92 * col.g : (1.0 + 0.055) * pow(col.g, 1.0f / 2.4f) - 0.055,
+				col.b < 0.0031308 ? 12.92 * col.b : (1.0 + 0.055) * pow(col.b, 1.0f / 2.4f) - 0.055, 
+				col.a);
+}
+
+bool is_srgb_equal(vec4 col1, vec4 col2) {
+	const float diff = 1.0 / 256.0 * 0.5;
+	
+	return abs(col1.r - col2.r) <= diff;// && abs(col1.g - col2.g) <= diff && abs(col1.b - col2.b) <= diff;// && col1.a == col2.a;
+}
+
 void fragment() {
 	vec4 col = texture(TEXTURE, UV);
 	
-	if (col.r == selected_col.r && col.g == selected_col.g && col.b == selected_col.b && col.a == selected_col.a) {
+	vec4 selected_col = to_srgb(selected_col_linear);
+	
+	if (is_srgb_equal(col, selected_col)) {
 		if (cycle_enabled) {
 			float factor = (UV.x + UV.y + TIME * 8.0) / 2.0;
 			factor = sin(factor);
@@ -30,6 +57,13 @@ void fragment() {
 			other_col = hue_shift(other_col, factor * 2.0 * PI);
 			
 			col = mix(col, vec4(other_col, 1.0), factor);
+		} else {
+			float shift = sin(TIME * 4.0);
+			if (col.r >= 0.5 || col.g >= 0.5 || col.b >= 0.5) {
+				col.rgb += (shift * 0.1);
+			} else {
+				col.rgb -= (shift * 0.1);
+			}
 		}
 	} else {
 		col.rgb *= 0.25;
@@ -42,7 +76,7 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="2"]
 shader = SubResource( "1" )
 shader_param/cycle_enabled = false
-shader_param/selected_col = Color(0.4, 0.4, 0.4, 1)
+shader_param/selected_col_linear = Color(0.156863, 0.266667, 0.34902, 0.537255)
 
 [node name="Colors" type="VBoxContainer"]
 rect_min_size = Vector2(0, 100)
@@ -68,7 +102,6 @@ offset_left = 4.0
 offset_right = 52.0
 offset_bottom = 31.0
 toggle_mode = true
-pressed = true
 text = "Parts"
 
 [node name="PaletteModeButton" type="Button" parent="ModeToolbar"]
@@ -189,6 +222,8 @@ hide_root = true
 select_mode = 1
 
 [node name="ImagePreview" type="TextureRect" parent="ImageModeControls"]
+texture_filter = 1
+texture_repeat = 1
 material = SubResource( "2" )
 offset_top = 39.0
 offset_right = 230.0
@@ -196,7 +231,7 @@ offset_bottom = 89.0
 rect_min_size = Vector2(0, 50)
 size_flags_horizontal = 3
 size_flags_vertical = 3
-stretch_mode = 6
+stretch_mode = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ImageModeControls"]
 offset_top = 93.0

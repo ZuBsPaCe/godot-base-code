@@ -93,27 +93,27 @@ var _image_color_counts := {}
 var _autorun := false
 var _modified_times := {}
 
-var _folder_dialog : FileDialog
+var _folder_dialog : EditorFileDialog
 
 func _ready():
-	_palette_color_selector = color_selector_scene.instance()
-	_palette_color_selector.unset_color.CONNECT(_on_palette_color_selector_unset_color)
-	_palette_color_selector.apply_color.CONNECT(_on_palette_color_selector_apply_color)
-	_palette_color_selector.set_position(get_viewport().size / 2.0 - _palette_color_selector.rect_size / 2.0)
+	_palette_color_selector = color_selector_scene.instantiate()
+	_palette_color_selector.unset_color.connect(_on_palette_color_selector_unset_color)
+	_palette_color_selector.apply_color.connect(_on_palette_color_selector_apply_color)
+	_palette_color_selector.set_position(get_viewport().size / 2.0 - _palette_color_selector.size / 2.0)
+	_palette_color_selector.hide()
 	editor_interface.add_child(_palette_color_selector)
 	
-	_folder_dialog = FileDialog.new()
-	_folder_dialog.mode = FileDialog.MODE_OPEN_DIR
-	_folder_dialog.current_dir = "user://"
-	_folder_dialog.popup_exclusive = true
-	_folder_dialog.rect_min_size.y = 500
-	_folder_dialog.resizable = true
-	_folder_dialog.filters = PackedStringArray(["*.png ; PNG Images", "*.bmp ; Bitmap Images"])
+	_folder_dialog = EditorFileDialog.new()
+	_folder_dialog.min_size.x = 600
+	_folder_dialog.min_size.y = 500
+	_folder_dialog.theme = editor_interface.get_base_control().theme
 	editor_interface.add_child(_folder_dialog)
 	
 	_on_PartModeButton_pressed()
 	
 	_load_config()
+	
+	print("%s" % _run_mode_controls.visible)
 
 
 func _notification(what: int):
@@ -140,27 +140,29 @@ func _notification(what: int):
 				_on_RunButton_pressed()
 
 
-func show_folder_dialog(access, callback_func):
+func show_folder_dialog(mode, access, callback_func: Callable):
+	_folder_dialog.file_mode = mode
 	_folder_dialog.access = access
 	
-	if _folder_dialog.dir_selected.is_connected(_on_ImageTargetBrowseButton_selected):
-		_folder_dialog.dir_selected.disconnect(_on_ImageTargetBrowseButton_selected)
-	
-	if _folder_dialog.dir_selected.is_connected(_on_ImagePathAddButton_selected):
-		_folder_dialog.dir_selected.disconnect(_on_ImagePathAddButton_selected)
-	
-	assert(["_on_ImageTargetBrowseButton_selected", "_on_ImagePathAddButton_selected"].has(callback_func))
-	
-	_folder_dialog.dir_selected.connect(callback_func)
+	var connections = _folder_dialog.dir_selected.get_connections()
+	for connection in connections:
+		_folder_dialog.dir_selected.disconnect(connection["callable"])
+		
+	if mode == FileDialog.FILE_MODE_OPEN_DIR:
+		_folder_dialog.clear_filters()
+		_folder_dialog.dir_selected.connect(callback_func)
+	else:
+		_folder_dialog.add_filter("*.png ; PNG Images, *.bmp ; Bitmap Images")
+		_folder_dialog.file_selected.connect(callback_func)
 	
 	_folder_dialog.popup_centered()
 
 
 func _on_PartModeButton_pressed():
-	_part_mode_button.pressed = true
-	_palette_mode_button.pressed = false
-	_image_mode_button.pressed = false
-	_run_mode_button.pressed = false
+	_part_mode_button.button_pressed = true
+	_palette_mode_button.button_pressed = false
+	_image_mode_button.button_pressed = false
+	_run_mode_button.button_pressed = false
 	
 	_part_mode_controls.visible = true
 	_palette_mode_controls.visible = false
@@ -169,10 +171,10 @@ func _on_PartModeButton_pressed():
 
 
 func _on_PaletteModeButton_pressed():
-	_part_mode_button.pressed = false
-	_palette_mode_button.pressed = true
-	_image_mode_button.pressed = false
-	_run_mode_button.pressed = false
+	_part_mode_button.button_pressed = false
+	_palette_mode_button.button_pressed = true
+	_image_mode_button.button_pressed = false
+	_run_mode_button.button_pressed = false
 	
 	_part_mode_controls.visible = false
 	_palette_mode_controls.visible = true
@@ -181,10 +183,10 @@ func _on_PaletteModeButton_pressed():
 
 
 func _on_ImageModeButton_pressed():
-	_part_mode_button.pressed = false
-	_palette_mode_button.pressed = false
-	_image_mode_button.pressed = true
-	_run_mode_button.pressed = false
+	_part_mode_button.button_pressed = false
+	_palette_mode_button.button_pressed = false
+	_image_mode_button.button_pressed = true
+	_run_mode_button.button_pressed = false
 	
 	_part_mode_controls.visible = false
 	_palette_mode_controls.visible = false
@@ -193,10 +195,10 @@ func _on_ImageModeButton_pressed():
 
 
 func _on_RunModeButton_pressed():
-	_part_mode_button.pressed = false
-	_palette_mode_button.pressed = false
-	_image_mode_button.pressed = false
-	_run_mode_button.pressed = true
+	_part_mode_button.button_pressed = false
+	_palette_mode_button.button_pressed = false
+	_image_mode_button.button_pressed = false
+	_run_mode_button.button_pressed = true
 	
 	_part_mode_controls.visible = false
 	_palette_mode_controls.visible = false
@@ -209,7 +211,7 @@ func _on_PartAddInput_text_changed(new_text):
 
 
 func _update_PartAddInput_state():
-	if _part_add_input.text.empty():
+	if _part_add_input.text.is_empty():
 		_part_add_button.disabled = true
 		return
 	
@@ -299,13 +301,13 @@ func _update_palette_grid():
 	var index := 0
 	for x in _palette_grid_width.value:
 		for y in _palette_grid_height.value:
-			var color_box = color_box_scene.instance()
+			var color_box = color_box_scene.instantiate()
 			color_box.setup(_palette_items[index].initialized, _palette_items[index].color)
 			_palette_grid.add_child(color_box)
 			
 			_palette_color_boxes.append(color_box)
 			
-			color_box.connect("pressed", self, "_color_box_selected", [index])
+			color_box.pressed.connect(_color_box_selected.bind(index))
 			color_box.gui_input.connect(_color_box_gui_input)
 			
 			index += 1
@@ -318,22 +320,22 @@ func _color_box_selected(index):
 	_palette_index = index
 	
 	for i in _palette_color_boxes.size():
-		_palette_color_boxes[i].pressed = i == index
+		_palette_color_boxes[i].button_pressed = i == index
 	
 	_update_selected_palette_item()
 
 
 func _color_box_gui_input(ev):
-	if ev is InputEventMouseButton && ev.button_index == 1 && ev.pressed && ev.doubleclick:
+	if ev is InputEventMouseButton && ev.button_index == 1 && ev.pressed && ev.double_click:
 		_on_PaletteEditColorButton_pressed()
 
 
 func _on_PaletteEditColorButton_pressed():
 	var selected_color_box = _palette_color_boxes[_palette_index]
 	
-	if (	_palette_color_selector.rect_global_position.x > get_viewport().size.x ||
-			_palette_color_selector.rect_global_position.y > get_viewport().size.y):
-		_palette_color_selector.set_position(get_viewport().size / 2.0 - _palette_color_selector.rect_size / 2.0)
+	if (	_palette_color_selector.position.x > get_viewport().size.x ||
+			_palette_color_selector.position.y > get_viewport().size.y):
+		_palette_color_selector.position = get_viewport().size / 2.0 - _palette_color_selector.size / 2.0
 	
 	if selected_color_box.initialized:
 		_palette_color_selector.color = selected_color_box.color
@@ -500,7 +502,7 @@ func _save_config():
 		serialized_palette_items.append(
 			{
 				"initialized": palette_item.initialized,
-				"color": palette_item.color.TO_HTML(),
+				"color": palette_item.color.to_html(),
 				"part_ids": palette_item.part_ids
 			})
 	
@@ -565,7 +567,7 @@ func _load_config():
 			var config : Dictionary = json.get_data()
 			
 			_autorun = config["autorun"]
-			_run_autorun_checkbox.pressed = _autorun
+			_run_autorun_checkbox.button_pressed = _autorun
 			
 			var serialized_parts : Array = config["parts"]
 			for part in serialized_parts:
@@ -629,7 +631,7 @@ func _on_PaletteWidth_changed():
 
 
 func _on_ImagePathAddButton_pressed():
-	show_folder_dialog(FileDialog.ACCESS_FILESYSTEM, "_on_ImagePathAddButton_selected")
+	show_folder_dialog(FileDialog.FILE_MODE_OPEN_DIR, FileDialog.ACCESS_FILESYSTEM, _on_ImagePathAddButton_selected)
 
 
 func _on_ImagePathAddButton_selected(dir):
@@ -767,9 +769,8 @@ func _update_image_preview():
 		
 		_image_preview.texture = texture
 		
-		_image_color_tree.clear()
 		
-		image.lock()
+		_image_color_tree.clear()
 		
 		var width := image.get_width()
 		var height := image.get_height()
@@ -788,8 +789,6 @@ func _update_image_preview():
 		
 		color_array.sort_custom(sort_colors)
 		
-		image.unlock()
-		
 		_image_color_tree.set_column_title(0, "Count")
 		_image_color_tree.set_column_title(1, "R")
 		_image_color_tree.set_column_title(2, "G")
@@ -803,10 +802,10 @@ func _update_image_preview():
 		for col in color_array:
 			var num = _image_color_counts[col]
 			var color_item = _image_color_tree.create_item(root_item)
-			color_item.set_text_align(1,TreeItem.ALIGN_CENTER)
-			color_item.set_text_align(2,TreeItem.ALIGN_CENTER)
-			color_item.set_text_align(3,TreeItem.ALIGN_CENTER)
-			color_item.set_text_align(4,TreeItem.ALIGN_CENTER)
+			color_item.set_text_alignment(1, HORIZONTAL_ALIGNMENT_CENTER)
+			color_item.set_text_alignment(2, HORIZONTAL_ALIGNMENT_CENTER)
+			color_item.set_text_alignment(3, HORIZONTAL_ALIGNMENT_CENTER)
+			color_item.set_text_alignment(4, HORIZONTAL_ALIGNMENT_CENTER)
 			
 			color_item.set_text(0, "%d" % num)
 			color_item.set_text(1, "%d" % col.r8)
@@ -835,7 +834,8 @@ func sort_colors(a, b):
 
 func _on_ImageColorTree_item_selected():
 	var col: Color = _image_color_tree.get_selected().get_metadata(0)
-	_image_preview.material.set_shader_param("selected_col", col)
+	_image_preview.material.set_shader_param("selected_col_linear", col)
+	print("SELECTED: %s" % col)
 	
 	var tree_item = _image_tree.get_selected()
 	var image_item: ImageItem = tree_item.get_metadata(0)
@@ -891,7 +891,7 @@ func _on_ImageTargetBrowseButton_pressed():
 	if _image_target_input.text.length() > 0:
 		_folder_dialog.current_dir = _image_target_input.text
 	
-	show_folder_dialog(FileDialog.ACCESS_RESOURCES, "_on_ImageTargetBrowseButton_selected")
+	show_folder_dialog(FileDialog.FILE_MODE_OPEN_DIR, FileDialog.ACCESS_RESOURCES, _on_ImageTargetBrowseButton_selected)
 
 
 func _on_ImageTargetBrowseButton_selected(dir):
@@ -964,8 +964,6 @@ func _on_RunButton_pressed():
 				image = Image.new()
 				image.load(image_item.path)
 			
-			image.lock()
-			
 			var width := image.get_width()
 			var height := image.get_height()
 			for y in height:
@@ -978,8 +976,6 @@ func _on_RunButton_pressed():
 					if new_col == null:
 						continue
 					image.set_pixel(x, y, new_col)
-			
-			image.unlock()
 			
 			var target_path: String = path_item.target_dir + "/" + image_item.filename
 			image.save_png(target_path)

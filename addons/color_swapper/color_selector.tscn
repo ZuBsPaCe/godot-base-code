@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://addons/color_swapper/color_selector.gd" id="1"]
 
 [node name="ColorSelector" type="Window"]
+size = Vector2i(500, 600)
+min_size = Vector2i(500, 600)
 script = ExtResource( "1" )
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -21,8 +23,8 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 offset_left = 10.0
 offset_top = 10.0
-offset_right = 950.0
-offset_bottom = 556.0
+offset_right = 1014.0
+offset_bottom = 590.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -30,46 +32,51 @@ __meta__ = {
 }
 
 [node name="ColorPicker" type="ColorPicker" parent="MarginContainer/VBoxContainer"]
-offset_right = 940.0
-offset_bottom = 513.0
+offset_right = 1004.0
+offset_bottom = 545.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 hsv_mode = true
 presets_enabled = false
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-offset_top = 517.0
-offset_right = 940.0
-offset_bottom = 546.0
+offset_top = 549.0
+offset_right = 1004.0
+offset_bottom = 580.0
 
 [node name="UnsetButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-offset_right = 57.0
-offset_bottom = 29.0
+offset_right = 53.0
+offset_bottom = 31.0
 text = "Unset"
 
 [node name="Filler" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-offset_left = 61.0
-offset_right = 440.0
-offset_bottom = 29.0
+offset_left = 57.0
+offset_right = 474.0
+offset_bottom = 31.0
 size_flags_horizontal = 3
 
 [node name="ApplyButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-offset_left = 444.0
-offset_right = 500.0
-offset_bottom = 29.0
+offset_left = 478.0
+offset_right = 530.0
+offset_bottom = 31.0
 text = "Apply"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Filler2" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-offset_left = 504.0
-offset_right = 883.0
-offset_bottom = 29.0
+offset_left = 534.0
+offset_right = 951.0
+offset_bottom = 31.0
 size_flags_horizontal = 3
 
 [node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-offset_left = 887.0
-offset_right = 940.0
-offset_bottom = 29.0
+offset_left = 955.0
+offset_right = 1004.0
+offset_bottom = 31.0
 text = "Close"
+
+[connection signal="close_requested" from="." to="." method="_on_color_selector_close_requested"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/UnsetButton" to="." method="_on_unset_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/ApplyButton" to="." method="_on_apply_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]
