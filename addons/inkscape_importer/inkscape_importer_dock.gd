@@ -18,18 +18,21 @@ class SvgItem:
 	var split_type : int
 	var target_dpi : int
 	var transform_scale : float
+	var transform_center : bool
 	
 	func _init(
 			p_path: String,
 			p_target_dir: String,
 			p_split_type: int,
 			p_target_dpi: int,
-			p_transform_scale: float):
+			p_transform_scale: float,
+			p_transform_center: bool):
 		path = p_path
 		target_dir = p_target_dir
 		split_type = p_split_type
 		target_dpi = p_target_dpi
 		transform_scale = p_transform_scale
+		transform_center = p_transform_center
 
 @onready var _svg_mode_button := $ModeToolbar/SvgModeButton
 @onready var _instance_mode_button := $ModeToolbar/InstanceModeButton
@@ -41,13 +44,14 @@ class SvgItem:
 
 @onready var _svg_path_add_buttn := $SvgModeControls/SvgPathAddButton
 @onready var _svg_tree := $SvgModeControls/SvgTree
-@onready var _target_dir_input := $SvgModeControls/HBoxContainer/TargetDirInput
-@onready var _target_dir_browse_button := $SvgModeControls/HBoxContainer/TargetDirBrowseButton
-@onready var _split_options := $SvgModeControls/SplitOptions
+@onready var _target_dir_input := $SvgModeControls/HBoxContainer2/VBoxContainer2/HBoxContainer/TargetDirInput
+@onready var _target_dir_browse_button := $SvgModeControls/HBoxContainer2/VBoxContainer2/HBoxContainer/TargetDirBrowseButton
+@onready var _split_options := $SvgModeControls/HBoxContainer2/VBoxContainer2/SplitOptions
 @onready var _target_dpi := $SvgModeControls/HBoxContainer2/VBoxContainer2/TargetDpi
-@onready var _transform_scale := $SvgModeControls/HBoxContainer2/VBoxContainer2/TransformScale
 @onready var _import_button := $SvgModeControls/ImportButton
 
+@onready var _transform_center := $InstanceModeControls/HBoxContainer1/VBoxContainer2/TransformCenter
+@onready var _transform_scale := $InstanceModeControls/HBoxContainer1/VBoxContainer2/TransformScale
 @onready var _apply_button := $InstanceModeControls/ApplyButton
 
 @onready var _inkscape_path_input := $SettingsModeControls/HBoxContainer/InkscapePathInput
@@ -106,9 +110,9 @@ func show_file_dialog(file_mode, access, initial_dir, filter, callable: Callable
 
 
 func _on_svg_mode_button_pressed():
-	_svg_mode_button.pressed = true
-	_instance_mode_button.pressed = false
-	_settings_mode_button.pressed = false
+	_svg_mode_button.button_pressed = true
+	_instance_mode_button.button_pressed = false
+	_settings_mode_button.button_pressed = false
 	
 	_svg_mode_controls.visible = true
 	_instance_mode_controls.visible = false
@@ -116,9 +120,9 @@ func _on_svg_mode_button_pressed():
 
 
 func _on_run_mode_button_pressed():
-	_svg_mode_button.pressed = false
-	_instance_mode_button.pressed = true
-	_settings_mode_button.pressed = false
+	_svg_mode_button.button_pressed = false
+	_instance_mode_button.button_pressed = true
+	_settings_mode_button.button_pressed = false
 	
 	_svg_mode_controls.visible = false
 	_instance_mode_controls.visible = true
@@ -126,9 +130,9 @@ func _on_run_mode_button_pressed():
 	
 
 func _on_settings_mode_button_pressed():
-	_svg_mode_button.pressed = false
-	_instance_mode_button.pressed = false
-	_settings_mode_button.pressed = true
+	_svg_mode_button.button_pressed = false
+	_instance_mode_button.button_pressed = false
+	_settings_mode_button.button_pressed = true
 	
 	_svg_mode_controls.visible = false
 	_instance_mode_controls.visible = false
@@ -140,7 +144,7 @@ func _on_svg_path_add_button_pressed():
 
 
 func _on_svg_path_add_button_selected(path):
-	_svg_items.append(SvgItem.new(path, "", SplitType.DISABLED, 96, 1.0))
+	_svg_items.append(SvgItem.new(path, "", SplitType.DISABLED, 96, 1.0, true))
 	
 	_last_import_dir = get_base_dir(path)
 	
@@ -155,6 +159,7 @@ func _on_svg_tree_item_selected():
 	_split_options.select(_current_svg_item.split_type)
 	_target_dpi.value = _current_svg_item.target_dpi
 	_transform_scale.value = _current_svg_item.transform_scale
+	_transform_center.button_pressed = _current_svg_item.transform_center
 	
 	_update_controls_enabled_state()
 
@@ -169,6 +174,7 @@ func _update_controls_enabled_state():
 	_target_dpi.editable = !disable
 	_transform_scale.editable = !disable
 	_import_button.disabled = disable || _current_svg_item.target_dir == ""
+	_apply_button.disabled = disable || _current_svg_item.target_dir == ""
 
 
 func _on_svg_tree_button_pressed(item, column, id):
@@ -196,7 +202,8 @@ func _save_config():
 			"target_dir": svg_item.target_dir,
 			"split_type": svg_item.split_type,
 			"target_dpi": svg_item.target_dpi,
-			"transform_scale": svg_item.transform_scale})
+			"transform_scale": svg_item.transform_scale,
+			"transform_center": svg_item.transform_center})
 
 	var config := {}
 	
@@ -231,7 +238,8 @@ func _load_config():
 					item["target_dir"],
 					item["split_type"],
 					item["target_dpi"],
-					item["transform_scale"]
+					item["transform_scale"],
+					item["transform_center"]
 				))
 			
 			_last_import_dir = config["last_import_dir"]
@@ -375,6 +383,11 @@ func _on_transform_scale_value_changed(value):
 	_save_config()
 
 
+func _on_transform_center_toggled(button_pressed):
+	_current_svg_item.transform_center = button_pressed
+	_save_config()
+
+
 func _on_inkscape_path_input_text_changed(new_text):
 	_current_inkscape_path = new_text
 	_save_config()
@@ -412,7 +425,36 @@ func _on_apply_button_pressed():
 		
 		textures.append(ResourceLoader.load(internal_path, "Texture"))
 	
-	var positions := _get_svg_positions(ids)
+	var positions_and_sizes := _get_svg_positions_and_sizes(ids)
+	var positions: PackedVector2Array = positions_and_sizes[0]
+	var sizes: PackedVector2Array = positions_and_sizes[1]
+	
+	var center_offset := Vector2()
+	
+	if _current_svg_item.transform_center and ids.size() > 0:
+		var min_corner := Vector2.ZERO
+		var max_corner := Vector2.ZERO
+		
+		for i in ids.size():
+			var position = positions[i]
+			var size = sizes[i]
+			
+			var min_current = position - size * 0.5
+			var max_current = position + size * 0.5
+			
+			if i == 0:
+				min_corner = min_current
+				max_corner = max_current
+			else:
+				min_corner.x = min(min_corner.x, min_current.x)
+				min_corner.y = min(min_corner.y, min_current.y)
+				max_corner.x = max(max_corner.x, max_current.x)
+				max_corner.y = max(max_corner.y, max_current.y)
+		
+		center_offset = -0.5 * (max_corner + min_corner)
+		
+		print("Min: %s   Max: %s   Offset: %s" % [min_corner, max_corner, center_offset])
+	
 	
 	var added := 0
 	var updated := 0
@@ -439,8 +481,10 @@ func _on_apply_button_pressed():
 			print("Updating %s" % id)
 			updated += 1
 		
-		node.position = position
+		node.position = position + center_offset
 		node.scale = Vector2(_current_svg_item.transform_scale, _current_svg_item.transform_scale)
+		
+		print("Position: %s   Size: %s    Final: %s" % [position, sizes[i], node.position])
 	
 	print("Inkscape Importer: Apply done! Added %d. Updated %d." % [added, updated])
 
@@ -474,9 +518,10 @@ func _get_svg_ids() -> PackedStringArray:
 	
 	return ids
 
-
-func _get_svg_positions(ids: PackedStringArray) -> PackedVector2Array:
+# Returns Array[Positions, Sizes] of Type Array[PackedVector2Array, PackedVector2Array]
+func _get_svg_positions_and_sizes(ids: PackedStringArray) -> Array:
 	var positions := PackedVector2Array()
+	var sizes := PackedVector2Array()
 	
 	var arg1 := "/c"
 	var arg2 = "\"" + _current_inkscape_path + "\" --query-all \"" + _current_svg_item.path + "\"" 
@@ -486,6 +531,7 @@ func _get_svg_positions(ids: PackedStringArray) -> PackedVector2Array:
 	
 	var lines = output[0].split("\n")
 	var position_dict := {}
+	var size_dict := {}
 	
 	var scale := Vector2.ONE * _current_svg_item.target_dpi / 96.0 * _current_svg_item.transform_scale
 	
@@ -503,11 +549,15 @@ func _get_svg_positions(ids: PackedStringArray) -> PackedVector2Array:
 			size *= scale
 			
 			position_dict[id] = pos + size * 0.5
+			size_dict[id] = size
+			
 	
 	for id in ids:
 		if position_dict.has(id):
 			positions.append(position_dict[id])
+			sizes.append(size_dict[id])
 		else:
 			positions.append(Vector2())
+			sizes.append(Vector2())
 	
-	return positions
+	return [positions, sizes]

@@ -49,7 +49,7 @@ size_flags_horizontal = 3
 [node name="SvgModeControls" type="VBoxContainer" parent="."]
 offset_top = 35.0
 offset_right = 271.0
-offset_bottom = 245.0
+offset_bottom = 210.0
 size_flags_vertical = 3
 
 [node name="SvgPathAddButton" type="Button" parent="SvgModeControls"]
@@ -69,35 +69,59 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="SvgModeControls"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="SvgModeControls"]
 offset_top = 39.0
 offset_right = 271.0
-offset_bottom = 70.0
+offset_bottom = 140.0
 
-[node name="TargetDirLabel" type="Label" parent="SvgModeControls/HBoxContainer"]
-offset_top = 2.0
-offset_right = 76.0
-offset_bottom = 28.0
+[node name="VBoxContainer" type="VBoxContainer" parent="SvgModeControls/HBoxContainer2"]
+offset_right = 80.0
+offset_bottom = 101.0
+
+[node name="TargetDirLabel" type="Label" parent="SvgModeControls/HBoxContainer2/VBoxContainer"]
+offset_right = 80.0
+offset_bottom = 26.0
 text = "Target Dir"
 
-[node name="TargetDirInput" type="LineEdit" parent="SvgModeControls/HBoxContainer"]
-offset_left = 80.0
-offset_right = 201.0
+[node name="SplitLabel" type="Label" parent="SvgModeControls/HBoxContainer2/VBoxContainer"]
+offset_top = 30.0
+offset_right = 80.0
+offset_bottom = 56.0
+text = "Split"
+
+[node name="TargetDpiLabel" type="Label" parent="SvgModeControls/HBoxContainer2/VBoxContainer"]
+offset_top = 60.0
+offset_right = 80.0
+offset_bottom = 86.0
+text = "Target DPI"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SvgModeControls/HBoxContainer2"]
+offset_left = 84.0
+offset_right = 271.0
+offset_bottom = 101.0
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SvgModeControls/HBoxContainer2/VBoxContainer2"]
+offset_right = 187.0
+offset_bottom = 31.0
+
+[node name="TargetDirInput" type="LineEdit" parent="SvgModeControls/HBoxContainer2/VBoxContainer2/HBoxContainer"]
+offset_right = 117.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
 editable = false
 
-[node name="TargetDirBrowseButton" type="Button" parent="SvgModeControls/HBoxContainer"]
-offset_left = 205.0
-offset_right = 271.0
+[node name="TargetDirBrowseButton" type="Button" parent="SvgModeControls/HBoxContainer2/VBoxContainer2/HBoxContainer"]
+offset_left = 121.0
+offset_right = 187.0
 offset_bottom = 31.0
 disabled = true
 text = "Browse"
 
-[node name="SplitOptions" type="OptionButton" parent="SvgModeControls"]
-offset_top = 74.0
-offset_right = 271.0
-offset_bottom = 105.0
+[node name="SplitOptions" type="OptionButton" parent="SvgModeControls/HBoxContainer2/VBoxContainer2"]
+offset_top = 35.0
+offset_right = 187.0
+offset_bottom = 66.0
 size_flags_horizontal = 3
 clip_text = true
 item_count = 3
@@ -108,68 +132,74 @@ popup/item_1/id = 2
 popup/item_2/text = "Split Groups"
 popup/item_2/id = 3
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="SvgModeControls"]
-offset_top = 109.0
-offset_right = 271.0
-offset_bottom = 175.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="SvgModeControls/HBoxContainer2"]
-offset_right = 124.0
-offset_bottom = 66.0
-
-[node name="TargetDpiLabel" type="Label" parent="SvgModeControls/HBoxContainer2/VBoxContainer"]
-offset_right = 124.0
-offset_bottom = 26.0
-text = "Target DPI"
-
-[node name="TransformScaleLabel" type="Label" parent="SvgModeControls/HBoxContainer2/VBoxContainer"]
-offset_top = 30.0
-offset_right = 124.0
-offset_bottom = 56.0
-text = "Transform Scale"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="SvgModeControls/HBoxContainer2"]
-offset_left = 128.0
-offset_right = 271.0
-offset_bottom = 66.0
-size_flags_horizontal = 3
-
 [node name="TargetDpi" type="SpinBox" parent="SvgModeControls/HBoxContainer2/VBoxContainer2"]
-offset_right = 143.0
-offset_bottom = 31.0
+offset_top = 70.0
+offset_right = 187.0
+offset_bottom = 101.0
 min_value = 1.0
 max_value = 1200.0
 value = 96.0
 rounded = true
 update_on_text_changed = true
 
-[node name="TransformScale" type="SpinBox" parent="SvgModeControls/HBoxContainer2/VBoxContainer2"]
-offset_top = 35.0
-offset_right = 143.0
-offset_bottom = 66.0
-step = 0.0
-value = 1.0
-update_on_text_changed = true
-
 [node name="ImportButton" type="Button" parent="SvgModeControls"]
-offset_top = 179.0
+offset_top = 144.0
 offset_right = 271.0
-offset_bottom = 210.0
+offset_bottom = 175.0
 text = "Import"
 
 [node name="InstanceModeControls" type="VBoxContainer" parent="."]
 visible = false
 offset_top = 214.0
-offset_right = 148.0
-offset_bottom = 214.0
+offset_right = 271.0
+offset_bottom = 280.0
 size_flags_vertical = 3
 
-[node name="ApplyButton" type="Button" parent="InstanceModeControls"]
-offset_right = 148.0
+[node name="HBoxContainer1" type="HBoxContainer" parent="InstanceModeControls"]
+offset_right = 271.0
 offset_bottom = 31.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InstanceModeControls/HBoxContainer1"]
+offset_right = 124.0
+offset_bottom = 31.0
+
+[node name="TransformCenterLabel" type="Label" parent="InstanceModeControls/HBoxContainer1/VBoxContainer"]
+offset_right = 124.0
+offset_bottom = 26.0
+text = "Center"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TransformScaleLabel" type="Label" parent="InstanceModeControls/HBoxContainer1/VBoxContainer"]
+offset_right = 124.0
+offset_bottom = 26.0
+text = "Transform Scale"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="InstanceModeControls/HBoxContainer1"]
+offset_left = 128.0
+offset_right = 271.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+
+[node name="TransformCenter" type="CheckBox" parent="InstanceModeControls/HBoxContainer1/VBoxContainer2"]
+offset_right = 24.0
+offset_bottom = 31.0
+
+[node name="TransformScale" type="SpinBox" parent="InstanceModeControls/HBoxContainer1/VBoxContainer2"]
+offset_right = 143.0
+offset_bottom = 31.0
+step = 0.0
+value = 1.0
+update_on_text_changed = true
+
+[node name="ApplyButton" type="Button" parent="InstanceModeControls"]
+offset_top = 35.0
+offset_right = 271.0
+offset_bottom = 66.0
 text = "Add to current scene"
 
 [node name="SettingsModeControls" type="VBoxContainer" parent="."]
@@ -207,12 +237,13 @@ text = "Browse"
 [connection signal="pressed" from="SvgModeControls/SvgPathAddButton" to="." method="_on_svg_path_add_button_pressed"]
 [connection signal="button_pressed" from="SvgModeControls/SvgTree" to="." method="_on_svg_tree_button_pressed"]
 [connection signal="item_selected" from="SvgModeControls/SvgTree" to="." method="_on_svg_tree_item_selected"]
-[connection signal="text_changed" from="SvgModeControls/HBoxContainer/TargetDirInput" to="." method="_on_target_dir_input_text_changed"]
-[connection signal="pressed" from="SvgModeControls/HBoxContainer/TargetDirBrowseButton" to="." method="_on_target_dir_browse_button_pressed"]
-[connection signal="item_selected" from="SvgModeControls/SplitOptions" to="." method="_on_split_options_item_selected"]
+[connection signal="text_changed" from="SvgModeControls/HBoxContainer2/VBoxContainer2/HBoxContainer/TargetDirInput" to="." method="_on_target_dir_input_text_changed"]
+[connection signal="pressed" from="SvgModeControls/HBoxContainer2/VBoxContainer2/HBoxContainer/TargetDirBrowseButton" to="." method="_on_target_dir_browse_button_pressed"]
+[connection signal="item_selected" from="SvgModeControls/HBoxContainer2/VBoxContainer2/SplitOptions" to="." method="_on_split_options_item_selected"]
 [connection signal="value_changed" from="SvgModeControls/HBoxContainer2/VBoxContainer2/TargetDpi" to="." method="_on_target_dpi_value_changed"]
-[connection signal="value_changed" from="SvgModeControls/HBoxContainer2/VBoxContainer2/TransformScale" to="." method="_on_transform_scale_value_changed"]
 [connection signal="pressed" from="SvgModeControls/ImportButton" to="." method="_on_import_button_pressed"]
+[connection signal="toggled" from="InstanceModeControls/HBoxContainer1/VBoxContainer2/TransformCenter" to="." method="_on_transform_center_toggled"]
+[connection signal="value_changed" from="InstanceModeControls/HBoxContainer1/VBoxContainer2/TransformScale" to="." method="_on_transform_scale_value_changed"]
 [connection signal="pressed" from="InstanceModeControls/ApplyButton" to="." method="_on_apply_button_pressed"]
 [connection signal="text_changed" from="SettingsModeControls/HBoxContainer/InkscapePathInput" to="." method="_on_inkscape_path_input_text_changed"]
 [connection signal="pressed" from="SettingsModeControls/HBoxContainer/InkscapePathBrowseButton" to="." method="_on_inkscape_path_browse_button_pressed"]
