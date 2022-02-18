@@ -20,11 +20,15 @@ func _ready():
 		player_scene
 	)
 	
-	_game_state.set_state(GameState.MAIN_MENU)
+	_game_state.setup(
+		GameState.MAIN_MENU,
+		_on_GameStateMachine_enter_state,
+		Callable(),
+		Callable())
 
 
-func _on_GameStateMachine_enter_state(p_state):
-	match p_state:
+func _on_GameStateMachine_enter_state():
+	match _game_state.current:
 		GameState.MAIN_MENU:
 			pass
 
