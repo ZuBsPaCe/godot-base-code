@@ -10,6 +10,7 @@ const config_file = "res://map_generator.json"
 @onready var _height_num := $HBoxContainer2/VBoxContainer2/HeightNum
 @onready var _level_num := $HBoxContainer2/VBoxContainer2/LevelNum
 @onready var _generate_button := $GenerateButton
+@onready var _clear_button := $ClearButton
 
 var editor_interface : EditorInterface
 
@@ -144,6 +145,38 @@ func _on_browse_generator_script_file_selected(path: String):
 func _on_generate_button_pressed():
 	print("MapGenerator: Starting")
 	
+	var signature := "func generate(scene: Node, seed: String, width: int, height: int, level: int):"
+	var arg_count := 5
+	
+	var instance = _load_generator_script("generate", signature, arg_count)
+	if instance == null:
+		return
+
+	var scene := get_tree().edited_scene_root
+	
+	instance.generate(scene, _seed, _width, _height, _level)
+	
+	print("MapGenerator: Done")
+
+
+func _on_clear_button_pressed():
+	print("MapGenerator: Clearing")
+	
+	var signature := "func clear(scene: Node):"
+	var arg_count := 1
+	
+	var instance = _load_generator_script("clear", signature, arg_count)
+	if instance == null:
+		return
+
+	var scene := get_tree().edited_scene_root
+	
+	instance.clear(scene)
+	
+	print("MapGenerator: Done")
+
+
+func _load_generator_script(method_name: String, signature: String, arg_count: int):
 	var generate_script = ResourceLoader.load(_generate_script_path)
 	
 	if generate_script == null:
@@ -157,39 +190,33 @@ func _on_generate_button_pressed():
 	if not generate_script.is_tool():
 		printerr("MapGenerator: Please add @tool to the top of the script [%s]" % _generate_script_path)
 		return
-	
-	var generate_example := "func generate(scene: Node, seed: String, width: int, height: int, level: int):"
-	var arg_count := 5
+
 	
 	var method_found := false
 	var args_match := false
 	for method in generate_script.get_script_method_list():
-		if method.name == "generate":
+		print("Debug: %s" % method.name)
+		if method.name == method_name:
 			method_found = true
 			if method.args.size() == arg_count:
 				args_match = true
-		break
+			break
 	
 	
 	if not method_found:
-		printerr("MapGenerator: Please add a 'generate' method to script [%s]" % _generate_script_path)
-		print("MapGenerator: Expected signature is: %s" % generate_example)
+		printerr("MapGenerator: Please add a '%s' method to script [%s]" % [method_name, _generate_script_path])
+		print("MapGenerator: Expected signature is: %s" % signature)
 		return
 	
 	if not args_match:
-		printerr("MapGenerator: 'generate' method hast wrong arguments in script [%s]" % _generate_script_path)
-		print("MapGenerator: Expected signature is: %s" % generate_example)
+		printerr("MapGenerator: '%s' method hast wrong arguments in script [%s]" % [method_name, _generate_script_path])
+		print("MapGenerator: Expected signature is: %s" % signature)
 		return
 	
 	print("MapGenerator: Loaded script [%s]" % _generate_script_path)
 	
 	var instance = generate_script.new()
-	
-	var scene := get_tree().edited_scene_root
-	
-	instance.generate(scene, _seed, _width, _height, _level)
-	
-	print("MapGenerator: Done")
+	return instance
 
 
 func _on_seed_edit_text_changed(new_text):
@@ -210,3 +237,4 @@ func _on_height_num_value_changed(value):
 func _on_level_num_value_changed(value):
 	_level = int(value)
 	_save_config()
+

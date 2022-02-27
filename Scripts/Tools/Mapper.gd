@@ -108,7 +108,7 @@ func init(map, seed_num = 0):
 		randomize()
 		seed_num = randi()
 	
-	print("Seed %d" % seed_num)
+	#print("Seed %d" % seed_num)
 	seed(seed_num)
 
 
@@ -204,13 +204,13 @@ func place_circle_proxy(parent: Proxy, type, radius: float, retries = 1) -> Prox
 
 
 enum ConnectAreasMethod {
-	RandomWalk,
-	Manhattan
+	RANDOM_WALK,
+	MANHATTAN
 }
 
-func connect_separate_areas(proxy: Proxy, method):
+func connect_separate_areas(proxy: Proxy, area_types: Array, connect_type, method):
 	while true:
-		var areas := get_separate_areas(proxy)
+		var areas := get_separate_areas(proxy, area_types)
 		
 		if areas.size() <= 1:
 			break
@@ -258,14 +258,14 @@ func connect_separate_areas(proxy: Proxy, method):
 				
 				random_walk_indexes.append(index)
 				
-				if _map.get_indexed_item(index) > 1 && !area_indexes.has(index):
+				if _map.get_indexed_item(index) in area_types && !area_indexes.has(index):
 					break
 			
-			if method == ConnectAreasMethod.RandomWalk:
+			if method == ConnectAreasMethod.RANDOM_WALK:
 				for swap_index in random_walk_indexes:
-					_map.set_indexed_item(swap_index, 2)
+					_map.set_indexed_item(swap_index, connect_type)
 			
-			elif method == ConnectAreasMethod.Manhattan:
+			elif method == ConnectAreasMethod.MANHATTAN:
 				var current = _map.get_coord(random_walk_indexes.front())
 				var current_x: int = current[0]
 				var current_y: int = current[1]
@@ -279,23 +279,23 @@ func connect_separate_areas(proxy: Proxy, method):
 				
 				if randi() % 2 == 0:
 					while current_x != end_x:
-						_map.set_item(current_x, current_y, 2)
+						_map.set_item(current_x, current_y, connect_type)
 						current_x += step_x
 					
 					while current_y != end_y:
-						_map.set_item(current_x, current_y, 2)
+						_map.set_item(current_x, current_y, connect_type)
 						current_y += step_y
 				else:
 					while current_y != end_y:
-						_map.set_item(current_x, current_y, 2)
+						_map.set_item(current_x, current_y, connect_type)
 						current_y += step_y
 					
 					while current_x != end_x:
-						_map.set_item(current_x, current_y, 2)
+						_map.set_item(current_x, current_y, connect_type)
 						current_x += step_x
 	
 
-func get_separate_areas(proxy: Proxy) -> Array:
+func get_separate_areas(proxy: Proxy, area_types: Array) -> Array:
 	var areas := []
 	
 	var seen_indexes := {}
@@ -306,18 +306,18 @@ func get_separate_areas(proxy: Proxy) -> Array:
 			if seen_indexes.has(index):
 				continue
 			
-			if _map.get_item(x, y) > 1:
+			if _map.get_item(x, y) in area_types:
 				var area_indexes := []
-				_flood_fill_count(proxy, x, y, seen_indexes, area_indexes)
+				_flood_fill_count(proxy, x, y, area_types, seen_indexes, area_indexes)
 				areas.append(area_indexes)
 	
 	return areas
 
 
-func count_separate_areas(proxy: Proxy) -> int:
-	return get_separate_areas(proxy).size()
+func count_separate_areas(proxy: Proxy, area_types: Array) -> int:
+	return get_separate_areas(proxy, area_types).size()
 
-func _flood_fill_count(proxy: Proxy, start_x, start_y, seen_indexes: Dictionary, area_indexes: Array) -> void:
+func _flood_fill_count(proxy: Proxy, start_x, start_y, area_types: Array, seen_indexes: Dictionary, area_indexes: Array) -> void:
 	var heads := [[start_x, start_y]]
 	
 	var start_index = start_y * _map.width + start_x
@@ -355,7 +355,7 @@ func _flood_fill_count(proxy: Proxy, start_x, start_y, seen_indexes: Dictionary,
 				continue
 		
 			if _map.is_valid(next_x, next_y):
-				if _map.get_item(next_x, next_y) > 1:
+				if _map.get_item(next_x, next_y) in area_types:
 					heads.append([next_x, next_y])
 					seen_indexes[index] = true
 					area_indexes.append(index)
