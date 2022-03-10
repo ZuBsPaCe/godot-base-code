@@ -57,8 +57,8 @@ func get_map_coords_in_circle(map:Map, x:int, y:int, tile_radius:int) -> void:
 			var distances : Array = _distances_in_circle[r - 1].duplicate()
 			for offset_y in range(-r, r + 1):
 				for offset_x in range(-r, r + 1):
-					var real_x := x + offset_x
-					var real_y := y + offset_y
+#					var real_x := x + offset_x
+#					var real_y := y + offset_y
 					
 					var distance := sqrt(offset_x * offset_x + offset_y * offset_y)
 					
@@ -128,6 +128,9 @@ func turn_right(dir) -> int:
 	if dir < 3:
 		return dir + 1
 	return 0
+
+func turn(dir, diff) -> int:
+	return posmod(dir + diff, 4)
 	
 func reverse(dir) -> int:
 	return (dir + 2) % 4

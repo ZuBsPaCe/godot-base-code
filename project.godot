@@ -56,6 +56,12 @@ config/features=PackedStringArray("4.0")
 [autoload]
 
 Globals="*res://Scripts/Globals.gd"
+Tools="*res://Scripts/Tools/Tools.gd"
+
+[debug]
+
+gdscript/warnings/assert_always_true=false
+gdscript/warnings/assert_always_false=false
 
 [display]
 

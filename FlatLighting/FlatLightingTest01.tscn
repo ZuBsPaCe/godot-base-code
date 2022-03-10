@@ -1,0 +1,54 @@
+[gd_scene load_steps=8 format=3 uid="uid://b6x1rehrp1jx5"]
+
+[ext_resource type="Script" path="res://FlatLighting/FlatLightingTest01.gd" id="1_mhyj0"]
+[ext_resource type="Script" path="res://FlatLighting/FlatLighting.gd" id="2_2sq6c"]
+[ext_resource type="Material" path="res://FlatLighting/ShadowOverlay.tres" id="4_bvsac"]
+[ext_resource type="PackedScene" path="res://FlatLighting/FlatLight.tscn" id="5_eleoj"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_cyfvs"]
+viewport_path = NodePath("ShadowViewport")
+
+[sub_resource type="OpenSimplexNoise" id="OpenSimplexNoise_dy2ff"]
+
+[sub_resource type="NoiseTexture" id="NoiseTexture_wj114"]
+width = 16
+height = 16
+noise = SubResource( "OpenSimplexNoise_dy2ff" )
+
+[node name="FlatLightingTest01" type="Node2D"]
+script = ExtResource( "1_mhyj0" )
+
+[node name="FlatLighting" type="Node2D" parent="."]
+script = ExtResource( "2_2sq6c" )
+_shadow_viewport_path = NodePath("../ShadowViewport")
+_shadow_camera_path = NodePath("../ShadowViewport/ShadowCamera")
+_shadow_overlay_path = NodePath("../ShadowOverlay")
+_camera_path = NodePath("../Camera")
+
+[node name="ShadowViewport" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="ShadowCamera" type="Camera3D" parent="ShadowViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+projection = 1
+current = true
+size = 1080.0
+far = 100.0
+
+[node name="ShadowOverlay" type="Sprite2D" parent="."]
+material = ExtResource( "4_bvsac" )
+texture = SubResource( "ViewportTexture_cyfvs" )
+flip_v = true
+
+[node name="CenterQuad" type="Sprite2D" parent="."]
+texture = SubResource( "NoiseTexture_wj114" )
+
+[node name="FlatLight" parent="." instance=ExtResource( "5_eleoj" )]
+
+[node name="Camera" type="Camera2D" parent="."]
+current = true
+smoothing_enabled = true
+smoothing_speed = 0.5
+drag_horizontal_enabled = true
+drag_vertical_enabled = true

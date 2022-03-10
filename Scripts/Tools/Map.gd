@@ -81,6 +81,48 @@ func get_indexed_item_if_valid(index: int):
 	if !is_index_valid(index):
 		return null
 	return _map[index]
+	
+
+func is_item(x: int, y: int, value) -> bool:
+	if !is_valid(x, y):
+		return false
+	return get_item(x, y) == value
+	
+
+func is_item_or_invalid(x: int, y: int, value) -> bool:
+	if !is_valid(x, y):
+		return true
+	return get_item(x, y) == value
+
+
+func is_item_at_dir4(x: int, y: int, dir4, value) -> bool:
+	match dir4:
+		0:
+			y -= 1
+		1:
+			x += 1
+		2:
+			y += 1
+		3:
+			x -= 1
+		_:
+			assert(false)
+	return is_item(x, y, value)
+
+
+func is_item_at_dir4_or_invalid(x: int, y: int, dir4, value) -> bool:
+	match dir4:
+		0:
+			y -= 1
+		1:
+			x += 1
+		2:
+			y += 1
+		3:
+			x -= 1
+		_:
+			assert(false)
+	return is_item_or_invalid(x, y, value)
 
 
 func get_neighbour_count(x: int, y: int, value) -> int:

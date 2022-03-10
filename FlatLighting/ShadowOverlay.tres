@@ -1,0 +1,6 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cis7bs7g7nnoh"]
+
+[ext_resource type="Shader" path="res://FlatLighting/ShadowOverlay.gdshader" id="1_rqalg"]
+
+[resource]
+shader = ExtResource( "1_rqalg" )

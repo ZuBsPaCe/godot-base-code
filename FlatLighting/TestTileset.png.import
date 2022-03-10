@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bff0t46yc7v6m"
-path="res://.godot/imported/Icon.png-0a27ad4b569a311237007f7829233937.ctex"
+uid="uid://db07rs12wvvja"
+path="res://.godot/imported/TestTileset.png-7a22427d5ac0656d0f8d89c9e1935079.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Icon/Icon.png"
-dest_files=["res://.godot/imported/Icon.png-0a27ad4b569a311237007f7829233937.ctex"]
+source_file="res://FlatLighting/TestTileset.png"
+dest_files=["res://.godot/imported/TestTileset.png-7a22427d5ac0656d0f8d89c9e1935079.ctex"]
 
 [params]
 

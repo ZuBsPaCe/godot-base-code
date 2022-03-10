@@ -91,7 +91,7 @@ func _perform_process():
 		await _process_callback.call()
 
 
-func _process(delta):
+func _process(_delta):
 	if _blocked:
 		return
 	

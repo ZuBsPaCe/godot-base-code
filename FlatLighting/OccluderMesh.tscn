@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcuhy031a5b6n"]
+
+[ext_resource type="Script" path="res://FlatLighting/Occluder.gd" id="1_cfj5o"]
+
+[node name="OccluderMesh" type="MeshInstance3D"]
+cast_shadow = 0
+script = ExtResource( "1_cfj5o" )
