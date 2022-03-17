@@ -1,9 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://7tujbg5x1mob"]
+[gd_scene load_steps=13 format=3 uid="uid://7tujbg5x1mob"]
 
 [ext_resource type="Script" path="res://FlatLighting/FlatLightingTest02.gd" id="1_pr3wy"]
 [ext_resource type="Script" path="res://FlatLighting/FlatLighting.gd" id="2_2sq6c"]
-[ext_resource type="Material" path="res://FlatLighting/ShadowOverlay.tres" id="4_bvsac"]
-[ext_resource type="PackedScene" path="res://FlatLighting/FlatLight.tscn" id="5_eleoj"]
+[ext_resource type="Material" uid="uid://cis7bs7g7nnoh" path="res://FlatLighting/ShadowOverlay.tres" id="4_bvsac"]
+[ext_resource type="PackedScene" uid="uid://dycgykhwr6a1q" path="res://FlatLighting/FlatLight.tscn" id="5_eleoj"]
 [ext_resource type="Texture2D" uid="uid://db07rs12wvvja" path="res://FlatLighting/TestTileset.png" id="5_o0utj"]
 [ext_resource type="Script" path="res://Scripts/Tools/DebugDraw.gd" id="7_rrjht"]
 
@@ -37,9 +37,6 @@ use_texture_padding = false
 tile_size = Vector2i(64, 64)
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource( "TileSetAtlasSource_qier2" )
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_cyfvs"]
-viewport_path = NodePath("ShadowViewport")
 
 [node name="FlatLightingTest02" type="Node2D"]
 script = ExtResource( "1_pr3wy" )
@@ -81,8 +78,6 @@ layer_0/tile_data = PackedInt32Array(-524304, 65536, 0, -458768, 65536, 0, -3932
 
 [node name="ShadowOverlay" type="Sprite2D" parent="."]
 material = ExtResource( "4_bvsac" )
-texture = SubResource( "ViewportTexture_cyfvs" )
-flip_v = true
 
 [node name="Camera" type="Camera2D" parent="."]
 current = true

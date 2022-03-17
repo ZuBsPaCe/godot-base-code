@@ -6,8 +6,6 @@ extends Node2D
 @onready var flat_lighting := $FlatLighting
 @onready var light := $FlatLight
 
-func _ready() -> void:
-	flat_lighting.register_light(light)
 	
 func _input(event: InputEvent):
 	if event is InputEventMouseButton:

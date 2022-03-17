@@ -1,17 +1,36 @@
 extends MeshInstance3D
 
-var _occluder_material := preload("res://FlatLighting/Occluder.tres")
+@export var create_debug_mesh := false
 
 func _ready():
 	if mesh == null:
-		printerr("FlatLighting: Occluder.create_mesh() was not called")
-		return
+		if create_debug_mesh:
+			var points := [
+				Vector2(-32, -32),
+				Vector2( 32, -32),
+				Vector2( 32,  32),
+				Vector2(-32,  32)
+			]
+			
+			var flat_lighting := get_tree().current_scene.get_node("FlatLighting")
+			
+			create_mesh(position, points, true, flat_lighting.extra_cull_margin, flat_lighting.occluder_material)			
+		else:		
+			printerr("FlatLighting: Occluder.create_mesh() was not called")
+			return
+	
+	
 
-func create_mesh(p_pos3d: Vector3, p_points: Array, p_closed: bool, p_extra_cull_margin: float) -> void:
+func create_mesh(
+		p_pos3d: Vector3, 
+		p_points: Array, 
+		p_closed: bool, 
+		p_extra_cull_margin: float,
+		p_occluder_material: Material) -> void:
 	
 	var surface = SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	surface.set_material(_occluder_material)
+	surface.set_material(p_occluder_material)
 	
 	
 	# Points are specified in cw winding order surrounding a (filled) polygon,

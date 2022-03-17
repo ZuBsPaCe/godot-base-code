@@ -11,13 +11,15 @@ extends Node2D
 @export var _shadow_overlay_path : NodePath
 @export var _camera_path : NodePath
 
+@export var occluder_material: Material
+@export var _shadow_overlay_material: Material
+
 @onready var _shadow_viewport : SubViewport = get_node(_shadow_viewport_path)
 @onready var _shadow_camera : Camera3D = get_node(_shadow_camera_path)
 @onready var _shadow_overlay : Sprite2D = get_node(_shadow_overlay_path)
 @onready var _camera : Camera2D = get_node(_camera_path)
 
 var _occluder_mesh_scene := preload("res://FlatLighting/OccluderMesh.tscn")
-var _occluder_material: ShaderMaterial = preload("res://FlatLighting/Occluder.tres")
 
 var _lights := []
 
@@ -27,16 +29,18 @@ func _ready():
 	var viewport_width = ProjectSettings.get("display/window/size/viewport_width")
 	var viewport_height = ProjectSettings.get("display/window/size/viewport_height")
 	
+	if occluder_material == null:
+		occluder_material = load("res://FlatLighting/Occluder.tres")
+	
+	if _shadow_overlay_material == null:
+		_shadow_overlay_material = load("res://FlatLighting/ShadowOverlay.tres")
+	
 	if _shadow_viewport == null:
 		printerr("FlatLighting: ShadowViewport not set")
 		_configuration_error = true
 		
 	if _shadow_camera == null:
 		printerr("FlatLighting: ShadowCamera not set")
-		_configuration_error = true
-	
-	if _shadow_overlay == null:
-		printerr("FlatLighting: ShadowOverlay not set")
 		_configuration_error = true
 		
 	if _camera == null:
@@ -49,6 +53,17 @@ func _ready():
 		if _shadow_overlay != null:
 			_shadow_overlay.visible = false
 		return
+	
+	if _shadow_overlay == null:
+		print("FlatLighting: ShadowOverlay not set")
+	else:
+		if _shadow_overlay.material == null:
+			_shadow_overlay.material = _shadow_overlay_material
+		
+		if _shadow_overlay.texture == null:
+			_shadow_overlay.flip_v = true
+			
+			_shadow_overlay.texture = _shadow_viewport.get_texture()
 	
 	if !is_equal_approx(float(_shadow_viewport.size.x) / _shadow_viewport.size.y, float(viewport_width) / viewport_height):
 		printerr("FlatLighting: ShadowViewport aspect ratio will be changed to viewport aspect ratio")
@@ -100,13 +115,15 @@ func _process(_delta):
 	_shadow_overlay.position = camera_center
 
 	for light in _lights:
-		_occluder_material.set_shader_param("light_pos", light.get_global_position())
-		_occluder_material.set_shader_param("light_radius", light.radius)
+		occluder_material.set_shader_param("light_pos", light.get_global_position())
+		occluder_material.set_shader_param("light_radius", light.radius)
 
 func register_light(light):
+	assert(!_lights.has(light))
 	_lights.append(light)
 
 func unregister_light(light):
+	assert(_lights.has(light))
 	_lights.erase(light)
 	
 func add_occluder_quad(pos2d: Vector2, tile_size: float):
@@ -124,7 +141,7 @@ func add_occluder_quad(pos2d: Vector2, tile_size: float):
 	
 #	points_cw.reverse()
 	
-	occluder_mesh_instance.create_mesh(pos3d, points_cw, true, extra_cull_margin)
+	occluder_mesh_instance.create_mesh(pos3d, points_cw, true, extra_cull_margin, occluder_material)
 	
 	occluder_mesh_instance.name = "Occluder Mesh"
 	
@@ -135,9 +152,13 @@ func add_occluder_points(pos2d: Vector2, points_cw: Array):
 	
 	var occluder_mesh_instance = _occluder_mesh_scene.instantiate()
 	
-	occluder_mesh_instance.create_mesh(pos3d, points_cw, true, extra_cull_margin)
+	occluder_mesh_instance.create_mesh(pos3d, points_cw, true, extra_cull_margin, occluder_material)
 	
 	occluder_mesh_instance.name = "Occluder Mesh"
 	
 	_shadow_viewport.add_child(occluder_mesh_instance) 
 
+func clear_occluders():
+	for child in _shadow_viewport.get_children():
+		if child is MeshInstance3D:
+			child.queue_free()

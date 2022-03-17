@@ -10,8 +10,6 @@ const Direction4 := preload("res://Scripts/Tools/Direction4.gd").Direction4
 @onready var debug_draw := $DebugDraw
 
 func _ready() -> void:
-	flat_lighting.register_light(light)
-	
 	var used_rect: Rect2 = tilemap_ceiling.get_used_rect()
 	var map := Map.new(used_rect.size.x, used_rect.size.y)
 	
@@ -25,24 +23,15 @@ func _ready() -> void:
 		var map_coord = coord + to_map
 		map.set_item(map_coord.x, map_coord.y, 1)
 	
-	var wall_islands := [] 
-	var floor_islands := [] 
-	for y in map.height:
-		for x in map.width:
-			if map.get_item(x, y) == 1:
-				wall_islands.append(get_island(map, x, y, 1, 2))
-			elif map.get_item(x, y) == 0:
-				floor_islands.append(get_island(map, x, y, 0, -1))
-	
-	print("%s Wall Islands found" % wall_islands.size())
-	print("%s Floor Islands found" % floor_islands.size())
+	var islands: Array = Tools.get_map_islands(map)
 	
 	var tile_size := Vector2i(64, 64)
 	
-	for island in wall_islands:	
-		var outline := get_outline(map, island[0].x, island[0].y, 1, 2, true)
+	for island in islands:
+		var windedness := 1 if island.item == 1 else -1
+		
+		var outline: Array = Tools.map_get_outline(map, island.map_coords.coords[0].x, island.map_coords.coords[0].y, windedness)
 
-		print("Outline size: %s" % outline.size())
 		var color := Color()
 		color = color.from_hsv(randf(), 1.0, 1.0)
 
@@ -61,36 +50,12 @@ func _ready() -> void:
 		
 		flat_lighting.add_occluder_points(Vector2.ZERO, outline)
 	
-	for island in floor_islands:
-		var outline := get_outline(map, island[0].x, island[0].y, -1, -1, true)
+		var start_coord = (island.map_coords.coords[0] + to_tilemap) * tile_size
+		if island.item == 1:
+			debug_draw.add_rect(Rect2(start_coord, tile_size), Color.RED)
+		else:
+			debug_draw.add_rect(Rect2(start_coord, tile_size), Color.GRAY)
 
-		print("Outline size: %s" % outline.size())
-		var color := Color()
-		color = color.from_hsv(randf(), 1.0, 1.0)
-
-		for i in outline.size():
-			var from = outline[i]
-			var to = outline[i + 1] if i + 1 < outline.size() else outline[0]
-
-			from = (from + to_tilemap) * tile_size
-			to = (to + to_tilemap) * tile_size
-			
-			debug_draw.add_line(from, to, color, 8)
-			debug_draw.add_circle(from, 8, color)
-		
-		for i in outline.size():
-			outline[i] = (outline[i] + to_tilemap) * 64.0
-		
-		flat_lighting.add_occluder_points(Vector2.ZERO, outline)
-		
-	for island in wall_islands:
-		var coord = (island[0] + to_tilemap) * tile_size
-		debug_draw.add_rect(Rect2(coord, tile_size), Color.RED)
-	
-	for island in floor_islands:
-		var coord = (island[0] + to_tilemap) * tile_size
-		debug_draw.add_rect(Rect2(coord, tile_size), Color.GRAY)
-	
 
 func get_outline(map: Map, x: int, y: int, windedness: int, value: int, optimize: bool) -> Array:
 	assert(windedness == 1 or windedness == -1)

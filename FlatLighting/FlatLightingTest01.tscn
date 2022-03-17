@@ -2,11 +2,9 @@
 
 [ext_resource type="Script" path="res://FlatLighting/FlatLightingTest01.gd" id="1_mhyj0"]
 [ext_resource type="Script" path="res://FlatLighting/FlatLighting.gd" id="2_2sq6c"]
+[ext_resource type="Material" uid="uid://bus8d5i527dfd" path="res://FlatLighting/Occluder.tres" id="3_pvcu0"]
 [ext_resource type="Material" path="res://FlatLighting/ShadowOverlay.tres" id="4_bvsac"]
 [ext_resource type="PackedScene" path="res://FlatLighting/FlatLight.tscn" id="5_eleoj"]
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_cyfvs"]
-viewport_path = NodePath("ShadowViewport")
 
 [sub_resource type="OpenSimplexNoise" id="OpenSimplexNoise_dy2ff"]
 
@@ -24,6 +22,8 @@ _shadow_viewport_path = NodePath("../ShadowViewport")
 _shadow_camera_path = NodePath("../ShadowViewport/ShadowCamera")
 _shadow_overlay_path = NodePath("../ShadowOverlay")
 _camera_path = NodePath("../Camera")
+occluder_material = ExtResource( "3_pvcu0" )
+_shadow_overlay_material = ExtResource( "4_bvsac" )
 
 [node name="ShadowViewport" type="SubViewport" parent="."]
 size = Vector2i(1920, 1080)
@@ -37,9 +37,6 @@ size = 1080.0
 far = 100.0
 
 [node name="ShadowOverlay" type="Sprite2D" parent="."]
-material = ExtResource( "4_bvsac" )
-texture = SubResource( "ViewportTexture_cyfvs" )
-flip_v = true
 
 [node name="CenterQuad" type="Sprite2D" parent="."]
 texture = SubResource( "NoiseTexture_wj114" )
