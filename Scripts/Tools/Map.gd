@@ -1,10 +1,13 @@
 class_name Map
 extends Reference
 
-var width : int setget ,_get_width
-var height : int setget ,_get_height
-var size : int setget ,_get_size
+var width : int
+var height : int
+var size : int
 
+
+# TODO REMOVE THIS FROM HERE OMG
+var _orbs := []
 
 var _map := []
 var _marked_indexes := []
@@ -15,6 +18,7 @@ func _init(p_width : int, p_height : int) -> void:
 	height = p_height
 	size = width * height
 	_map.resize(size)
+	_orbs.resize(size)
 
 
 func set_all(item) -> void:
@@ -44,6 +48,17 @@ func set_item(x : int, y : int, item) -> void:
 	_map[y * width + x] = item
 
 
+func set_orb(x : int, y : int, orb:Node2D) -> void:
+	_orbs[y * width + x] = orb
+	
+	
+func try_get_orb(x : int, y : int) -> Node2D:
+	var orb = _orbs[y * width + x]
+	if orb != null:
+		_orbs[y * width + x] = null
+	return orb
+
+
 func set_indexed_item(index: int, item) -> void:
 	_map[index] = item
 
@@ -66,6 +81,48 @@ func get_indexed_item_if_valid(index: int):
 	if !is_index_valid(index):
 		return null
 	return _map[index]
+	
+
+func is_item(x: int, y: int, value) -> bool:
+	if !is_valid(x, y):
+		return false
+	return get_item(x, y) == value
+	
+
+func is_item_or_invalid(x: int, y: int, value) -> bool:
+	if !is_valid(x, y):
+		return true
+	return get_item(x, y) == value
+
+
+func is_item_at_dir4(x: int, y: int, dir4, value) -> bool:
+	match dir4:
+		0:
+			y -= 1
+		1:
+			x += 1
+		2:
+			y += 1
+		3:
+			x -= 1
+		_:
+			assert(false)
+	return is_item(x, y, value)
+
+
+func is_item_at_dir4_or_invalid(x: int, y: int, dir4, value) -> bool:
+	match dir4:
+		0:
+			y -= 1
+		1:
+			x += 1
+		2:
+			y += 1
+		3:
+			x -= 1
+		_:
+			assert(false)
+	return is_item_or_invalid(x, y, value)
 
 
 func get_neighbour_count(x: int, y: int, value) -> int:
@@ -109,15 +166,3 @@ func mark_item(x : int, y : int) -> void:
 func set_marked_items(item) -> void:
 	for index in _marked_indexes:
 		_map[index] = item
-
-
-func _get_width() -> int:
-	return width
-
-
-func _get_height() -> int:
-	return height
-
-
-func _get_size() -> int:
-	return size

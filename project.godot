@@ -24,22 +24,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Tools/Map.gd"
 }, {
-"base": "Reference",
-"class": "Mapper",
+"base": "Node",
+"class": "StateMachine",
 "language": "GDScript",
-"path": "res://Scripts/Tools/Mapper.gd"
-}, {
-"base": "MeshInstance",
-"class": "Occluder",
-"language": "GDScript",
-"path": "res://Scripts/Lighting/Occluder.gd"
+"path": "res://Scripts/Tools/StateMachine.gd"
 } ]
 _global_script_class_icons={
 "Cooldown": "",
 "Coord": "",
 "Map": "",
-"Mapper": "",
-"Occluder": ""
+"StateMachine": ""
 }
 
 [application]

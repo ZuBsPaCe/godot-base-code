@@ -9,6 +9,8 @@ enum GameState {
 
 export var player_scene:PackedScene
 
+onready var _game_state := $GameStateMachine
+
 
 func _ready():
 
@@ -18,11 +20,16 @@ func _ready():
 		player_scene
 	)
 	
-	switch_game_state(GameState.MAIN_MENU)
+	_game_state.setup(
+		GameState.MAIN_MENU,
+		funcref(self, "_on_GameStateMachine_enter_state"),
+		FuncRef.new(),
+		FuncRef.new()
+	)
 
 
-func switch_game_state(new_state) -> void:
-	match new_state:
+func _on_GameStateMachine_enter_state():
+	match _game_state.current:
 		GameState.MAIN_MENU:
 			pass
 
@@ -30,4 +37,4 @@ func switch_game_state(new_state) -> void:
 			pass
 
 		_:
-			assert(false, "Unknown game state %s" % new_state)
+			assert(false, "Unknown game state")
