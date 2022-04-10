@@ -26,7 +26,7 @@ func setup(
 		p_process_callback: FuncRef,
 		p_leave_callback: FuncRef) -> void:
 	
-	pause_mode = PAUSE_MODE_PROCESS
+	#pause_mode = PAUSE_MODE_PROCESS
 	
 	current = -1
 	_wait_secs = 0.0

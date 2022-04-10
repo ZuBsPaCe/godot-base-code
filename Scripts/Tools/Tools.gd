@@ -1,4 +1,5 @@
 extends Node2D
+class_name Tools
 
 const TILE_SIZE := 16.0
 const HALF_TILE_SIZE := TILE_SIZE / 2.0
@@ -159,7 +160,7 @@ func get_alpha_0(color: Color) -> Color:
 
 # Array Helpers
 
-func rand_item(array : Array) -> Object:
+static func rand_item(array : Array) -> Object:
 	return array[randi() % array.size()]
 
 func rand_pop(array : Array) -> Object:
