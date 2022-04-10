@@ -25,7 +25,7 @@ func setup(
 		p_process_callback: Callable,
 		p_leave_callback: Callable) -> void:
 	
-	process_mode = Node.PROCESS_MODE_ALWAYS
+	#process_mode = Node.PROCESS_MODE_ALWAYS
 	
 	current = -1
 	_wait_secs = 0.0
