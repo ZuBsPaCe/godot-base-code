@@ -24,8 +24,7 @@ func setup(p_parent_node: Node, p_secs: float, p_done: bool, auto_start = AUTO_S
 	secs = p_secs
 	
 	_timer = Timer.new()
-	if p_secs > 0.0:
-		_timer.wait_time = p_secs
+	_timer.wait_time = p_secs
 	_timer.one_shot = true
 	
 	if !done && auto_start == AUTO_START:

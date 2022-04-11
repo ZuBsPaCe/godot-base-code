@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://db07rs12wvvja"
-path="res://.godot/imported/TestTileset.png-7a22427d5ac0656d0f8d89c9e1935079.ctex"
+uid="uid://c7efy2h1rrkcv"
+path="res://.godot/imported/light_256_normal.png-9a0f712eb6915db5608b3a3a1580cafb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://FlatLighting/TestTileset.png"
-dest_files=["res://.godot/imported/TestTileset.png-7a22427d5ac0656d0f8d89c9e1935079.ctex"]
+source_file="res://FlatLighting/LightCookies/light_256_normal.png"
+dest_files=["res://.godot/imported/light_256_normal.png-9a0f712eb6915db5608b3a3a1580cafb.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dj8gr0muidwqx"]
+
+[node name="ShadowViewport" type="SubViewport"]
+size = Vector2i(256, 256)
+render_target_clear_mode = 1
+render_target_update_mode = 0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+projection = 1
+current = true
+size = 256.0
+far = 100.0

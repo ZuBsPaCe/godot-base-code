@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bknogk22kn7d0"
-path="res://.godot/imported/godot.png-deda369e67a48157696f2fda5464ef57.ctex"
+uid="uid://biplbwl74cbdc"
+path="res://.godot/imported/light_128_normal.png-f3ac222e2d98ca23f6280ee244de34f4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Icon/godot.png"
-dest_files=["res://.godot/imported/godot.png-deda369e67a48157696f2fda5464ef57.ctex"]
+source_file="res://FlatLighting/LightCookies/light_128_normal.png"
+dest_files=["res://.godot/imported/light_128_normal.png-f3ac222e2d98ca23f6280ee244de34f4.ctex"]
 
 [params]
 

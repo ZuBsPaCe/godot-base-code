@@ -1,0 +1,7 @@
+[gd_resource type="World3D" load_steps=2 format=3 uid="uid://ciho05avscmf8"]
+
+[sub_resource type="Environment" id="Environment_62pd4"]
+background_mode = 1
+
+[resource]
+environment = SubResource( "Environment_62pd4" )

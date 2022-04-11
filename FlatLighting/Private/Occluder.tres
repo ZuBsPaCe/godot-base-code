@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bg8s4qs8d7d1h"]
+
+[ext_resource type="Shader" path="res://FlatLighting/Private/Occluder.gdshader" id="1_vlj0x"]
+
+[resource]
+render_priority = 0
+shader = ExtResource( "1_vlj0x" )
+shader_param/light_pos_array = PackedVector2Array()
+shader_param/light_radius_array = PackedFloat32Array()

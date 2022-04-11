@@ -20,6 +20,16 @@ _global_script_classes=[{
 "path": "res://Scripts/Tools/Map.gd"
 }, {
 "base": "RefCounted",
+"class": &"MapCoords",
+"language": &"GDScript",
+"path": "res://Scripts/Tools/MapCoords.gd"
+}, {
+"base": "RefCounted",
+"class": &"MapIsland",
+"language": &"GDScript",
+"path": "res://Scripts/Tools/MapIsland.gd"
+}, {
+"base": "RefCounted",
 "class": &"Mapper",
 "language": &"GDScript",
 "path": "res://Scripts/Tools/Mapper.gd"
@@ -37,6 +47,8 @@ _global_script_classes=[{
 _global_script_class_icons={
 "Cooldown": "",
 "Map": "",
+"MapCoords": "",
+"MapIsland": "",
 "Mapper": "",
 "MultiStateMachine": "",
 "StateMachine": ""
@@ -57,6 +69,7 @@ config/features=PackedStringArray("4.0")
 
 Globals="*res://Scripts/Globals.gd"
 Tools="*res://Scripts/Tools/Tools.gd"
+FlatLightingLocator="*res://FlatLighting/FlatLightingLocator.gd"
 
 [debug]
 

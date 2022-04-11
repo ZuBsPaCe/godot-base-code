@@ -1,0 +1,137 @@
+[gd_scene load_steps=4 format=3 uid="uid://cpfuqijl5qps4"]
+
+[ext_resource type="Script" path="res://FlatLighting/Private/FlatLighting.gd" id="1_j6tpx"]
+[ext_resource type="World3D" uid="uid://ciho05avscmf8" path="res://FlatLighting/Private/world_3d.tres" id="2_2lr0m"]
+
+[sub_resource type="PackedScene" id="PackedScene_tintv"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"names": PackedStringArray("ShadowViewport", "SubViewport", "size", "render_target_clear_mode", "render_target_update_mode", "Camera3D", "Camera3D", "transform", "projection", "current", "size", "far"),
+"node_count": 2,
+"node_paths": [NodePath(".")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 3, 2, 0, 3, 1, 4, 2, 0, 1073741824, 0, 6, 5, -1, 5, 7, 3, 8, 4, 9, 5, 10, 6, 11, 7, 0),
+"variants": [Vector2i(256, 256), 1, 0, Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2), 1, true, 256.0, 100.0],
+"version": 2
+}
+
+[node name="FlatLighting" type="Node2D"]
+script = ExtResource( "1_j6tpx" )
+shadow_viewport_scene = SubResource( "PackedScene_tintv" )
+
+[node name="ShadowViewport1" type="SubViewport" parent="."]
+world_3d = ExtResource( "2_2lr0m" )
+size = Vector2i(1024, 1024)
+render_target_update_mode = 4
+
+[node name="ShadowCamera" type="Camera3D" parent="ShadowViewport1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+projection = 1
+current = true
+size = 1024.0
+far = 100.0
+
+[node name="ShadowViewport2" type="SubViewport" parent="."]
+world_3d = ExtResource( "2_2lr0m" )
+size = Vector2i(1024, 1024)
+render_target_update_mode = 4
+
+[node name="ShadowCamera" type="Camera3D" parent="ShadowViewport2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+projection = 1
+current = true
+size = 1024.0
+far = 100.0
+
+[node name="ShadowViewport3" type="SubViewport" parent="."]
+world_3d = ExtResource( "2_2lr0m" )
+size = Vector2i(1024, 1024)
+render_target_update_mode = 4
+
+[node name="ShadowCamera" type="Camera3D" parent="ShadowViewport3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+projection = 1
+current = true
+size = 1024.0
+far = 100.0
+
+[node name="ShadowViewport4" type="SubViewport" parent="."]
+world_3d = ExtResource( "2_2lr0m" )
+size = Vector2i(1024, 1024)
+render_target_update_mode = 4
+
+[node name="ShadowCamera" type="Camera3D" parent="ShadowViewport4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+projection = 1
+current = true
+size = 1024.0
+far = 100.0
+
+[node name="ShadowViewport5" type="SubViewport" parent="."]
+world_3d = ExtResource( "2_2lr0m" )
+size = Vector2i(1024, 1024)
+render_target_update_mode = 4
+
+[node name="ShadowCamera" type="Camera3D" parent="ShadowViewport5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+projection = 1
+current = true
+size = 1024.0
+far = 100.0
+
+[node name="ShadowViewport6" type="SubViewport" parent="."]
+world_3d = ExtResource( "2_2lr0m" )
+size = Vector2i(1024, 1024)
+render_target_update_mode = 4
+
+[node name="ShadowCamera" type="Camera3D" parent="ShadowViewport6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+projection = 1
+current = true
+size = 1024.0
+far = 100.0
+
+[node name="ShadowViewport7" type="SubViewport" parent="."]
+world_3d = ExtResource( "2_2lr0m" )
+size = Vector2i(1024, 1024)
+render_target_update_mode = 4
+
+[node name="ShadowCamera" type="Camera3D" parent="ShadowViewport7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+projection = 1
+current = true
+size = 1024.0
+far = 100.0
+
+[node name="ShadowViewport8" type="SubViewport" parent="."]
+world_3d = ExtResource( "2_2lr0m" )
+size = Vector2i(1024, 1024)
+render_target_update_mode = 4
+
+[node name="ShadowCamera" type="Camera3D" parent="ShadowViewport8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+projection = 1
+current = true
+size = 1024.0
+far = 100.0
+
+[node name="LightViewport" type="SubViewport" parent="."]
+disable_3d = true
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="CustomClearColor" type="ColorRect" parent="LightViewport"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = -960.0
+offset_bottom = -540.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="LightCamera" type="Camera2D" parent="LightViewport"]
+current = true

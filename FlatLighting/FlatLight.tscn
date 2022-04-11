@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dycgykhwr6a1q"]
+[gd_scene load_steps=2 format=3 uid="uid://bfpdyi6lwn52t"]
 
-[ext_resource type="Script" path="res://FlatLighting/FlatLight.gd" id="1_672bc"]
+[ext_resource type="Script" path="res://FlatLighting/Private/FlatLight.gd" id="1_wvms3"]
 
 [node name="FlatLight" type="Node2D"]
-script = ExtResource( "1_672bc" )
+script = ExtResource( "1_wvms3" )

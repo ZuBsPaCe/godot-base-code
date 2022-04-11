@@ -48,7 +48,7 @@ func _ready() -> void:
 		for i in outline.size():
 			outline[i] = (outline[i] + to_tilemap) * 64.0
 		
-		flat_lighting.add_occluder_points(Vector2.ZERO, outline)
+		flat_lighting.register_occluder(Vector2.ZERO, outline, true)
 	
 		var start_coord = (island.map_coords.coords[0] + to_tilemap) * tile_size
 		if island.item == 1:
@@ -205,4 +205,6 @@ func _process(_delta: float) -> void:
 	
 	camera.position = player_pos
 	light.position = get_global_mouse_position()
+	
+	$ShadowOverlay.position = $FlatLighting.get_camera_center()
 	

@@ -14,8 +14,8 @@ render_mode skip_vertex_transform, unshaded, depth_draw_never, depth_test_disabl
 // https://github.com/slembcke/CausticCavern.spritebuilder/blob/softshadows/SoftShadow.fsh
 // https://github.com/slembcke/CausticCavern.spritebuilder/blob/softshadows/SoftShadow.vsh
 
-uniform vec2 light_pos = vec2(0.0, 0.0);
-uniform float light_radius = 50.0;
+uniform vec2 light_pos_array[8];
+uniform float light_radius_array[8];
 
 varying vec4 positionFrag;
 varying vec4 clipFrag;
@@ -36,6 +36,13 @@ mat2 edgeMatrix(vec2 d, float r){
 
 void vertex(){
 	// Unpack the vertex data.
+	// INV_VIEW_MATRIX = CAMERA_MATRIX
+	vec3 cam_pos = (INV_VIEW_MATRIX * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
+	int index = int(cam_pos.z) - 1;
+	
+	vec2 light_pos = light_pos_array[index];
+	float light_radius = light_radius_array[index];
+	
 	vec2 lightPosition = light_pos;
 	vec2 segmentA = UV2;
 	vec2 segmentB = UV;
@@ -43,8 +50,8 @@ void vertex(){
 	float projectionOffset = (VERTEX.x - 0.5) * 2.0;
 	
 	// Transform local vertex coords to world coords.
-	segmentA = (WORLD_MATRIX * vec4(segmentA, 0.0, 1.0)).xy;
-	segmentB = (WORLD_MATRIX * vec4(segmentB, 0.0, 1.0)).xy;
+	segmentA = (MODEL_MATRIX * vec4(segmentA, 0.0, 1.0)).xy;
+	segmentB = (MODEL_MATRIX * vec4(segmentB, 0.0, 1.0)).xy;
 	
 //	float distToSegmentA = length(lightPosition-segmentA);
 //	segmentA -= normalize(lightPosition-segmentA) * clamp(distToSegmentA, 0.0, 64.0) / 64.0 * 32.0;
@@ -65,8 +72,8 @@ void vertex(){
 
 	vec4 projected = vec4(projectedPosition, 0.0, 1.0 - segmentCoords.y);
 
-	float cam_x = CAMERA_MATRIX[3][0];
-	float cam_y = CAMERA_MATRIX[3][1];
+	float cam_x = INV_VIEW_MATRIX[3][0];
+	float cam_y = INV_VIEW_MATRIX[3][1];
 
 	POSITION = PROJECTION_MATRIX * vec4(
 		projected.x - cam_x * projected.w,
@@ -107,12 +114,13 @@ void fragment(){
 	
 	float occlusion = occlusionA - occlusionB;
 
-	float inset = distance(position, segment);
-	float dist = distance(position, light_pos);
-	float reveal = 48.0 - 40.0 * clamp(dist / 800.0, 0.0, 1.0);
+//	float inset = distance(position, segment);
+//	float dist = distance(position, light_pos);
+//	float reveal = 48.0 - 40.0 * clamp(dist / 800.0, 0.0, 1.0);
+//
+//	float inset_fac = clamp(inset / reveal, 0.0, 1.0);
+//	float alphaFactor = inset_fac;
 
-	float inset_fac = clamp(inset / reveal, 0.0, 1.0);
-	float alphaFactor = inset_fac;
 
 //	float lightDist = distance(position, light_pos);
 //	float alphaFactor = clamp(lightDist / 800.0, 0.0, 1.0);
@@ -120,8 +128,15 @@ void fragment(){
 	
 //	float alphaFactor = clamp(inset / 40.0, 0.0, 1.0);
 //	float alphaFactor = segCoords.y;
-//	alphaFactor = 1.0;
+	float alphaFactor = 1.0;
 	
 	ALBEDO = vec3(occlusion, occlusion, occlusion) * alphaFactor;
 	ALPHA = 1.0;
+	
+//	vec3 world_camera = (CAMERA_MATRIX * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
+//	ALBEDO.x = 1.0 / (world_camera.z / 2.0) ;
+
+
+//	vec3 world_camera = (CAMERA_MATRIX * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
+//	ALBEDO.r *= (world_camera.z / 2.0);
 }

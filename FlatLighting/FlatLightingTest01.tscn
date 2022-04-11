@@ -1,47 +1,52 @@
-[gd_scene load_steps=8 format=3 uid="uid://b6x1rehrp1jx5"]
+[gd_scene load_steps=10 format=3 uid="uid://beyfqtj436bnw"]
 
-[ext_resource type="Script" path="res://FlatLighting/FlatLightingTest01.gd" id="1_mhyj0"]
-[ext_resource type="Script" path="res://FlatLighting/FlatLighting.gd" id="2_2sq6c"]
-[ext_resource type="Material" uid="uid://bus8d5i527dfd" path="res://FlatLighting/Occluder.tres" id="3_pvcu0"]
-[ext_resource type="Material" path="res://FlatLighting/ShadowOverlay.tres" id="4_bvsac"]
-[ext_resource type="PackedScene" path="res://FlatLighting/FlatLight.tscn" id="5_eleoj"]
+[ext_resource type="Script" path="res://FlatLighting/Private/FlatLightingTest01.gd" id="1_p8evp"]
+[ext_resource type="PackedScene" uid="uid://cpfuqijl5qps4" path="res://FlatLighting/FlatLighting.tscn" id="2_a7qfw"]
+[ext_resource type="Texture2D" uid="uid://cmmug510i4nn4" path="res://FlatLighting/LightCookies/light_1024_normal.png" id="4_0py1h"]
+[ext_resource type="PackedScene" uid="uid://bfpdyi6lwn52t" path="res://FlatLighting/FlatLight.tscn" id="5_eleoj"]
 
-[sub_resource type="OpenSimplexNoise" id="OpenSimplexNoise_dy2ff"]
+[sub_resource type="FastNoiseLite" id="OpenSimplexNoise_438lq"]
 
-[sub_resource type="NoiseTexture" id="NoiseTexture_wj114"]
+[sub_resource type="NoiseTexture" id="NoiseTexture_88gcv"]
 width = 16
 height = 16
-noise = SubResource( "OpenSimplexNoise_dy2ff" )
+noise = SubResource( "OpenSimplexNoise_438lq" )
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6bovc"]
+radius = 64.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j5m7i"]
+size = Vector2(2000, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sc22r"]
+size = Vector2(100, 1200)
 
 [node name="FlatLightingTest01" type="Node2D"]
-script = ExtResource( "1_mhyj0" )
+script = ExtResource( "1_p8evp" )
 
-[node name="FlatLighting" type="Node2D" parent="."]
-script = ExtResource( "2_2sq6c" )
-_shadow_viewport_path = NodePath("../ShadowViewport")
-_shadow_camera_path = NodePath("../ShadowViewport/ShadowCamera")
-_shadow_overlay_path = NodePath("../ShadowOverlay")
+[node name="FlatLighting" parent="." instance=ExtResource( "2_a7qfw" )]
 _camera_path = NodePath("../Camera")
-occluder_material = ExtResource( "3_pvcu0" )
-_shadow_overlay_material = ExtResource( "4_bvsac" )
-
-[node name="ShadowViewport" type="SubViewport" parent="."]
-size = Vector2i(1920, 1080)
-render_target_update_mode = 4
-
-[node name="ShadowCamera" type="Camera3D" parent="ShadowViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
-projection = 1
-current = true
-size = 1080.0
-far = 100.0
-
-[node name="ShadowOverlay" type="Sprite2D" parent="."]
+_overlay_path = NodePath("../Overlay")
+use_custom_clear_color = true
 
 [node name="CenterQuad" type="Sprite2D" parent="."]
-texture = SubResource( "NoiseTexture_wj114" )
+texture = SubResource( "NoiseTexture_88gcv" )
 
-[node name="FlatLight" parent="." instance=ExtResource( "5_eleoj" )]
+[node name="Overlay" type="Sprite2D" parent="."]
+
+[node name="OccluderContainer" type="Node2D" parent="."]
+
+[node name="LightContainer" type="Node2D" parent="."]
+
+[node name="MouseLight" type="CharacterBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseLight"]
+shape = SubResource( "CircleShape2D_6bovc" )
+
+[node name="FlatLight" parent="MouseLight" instance=ExtResource( "5_eleoj" )]
+texture = ExtResource( "4_0py1h" )
+radius = 57.6
+create_source_sprite = true
 
 [node name="Camera" type="Camera2D" parent="."]
 current = true
@@ -49,3 +54,65 @@ smoothing_enabled = true
 smoothing_speed = 0.5
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="HFlowContainer" type="HFlowContainer" parent="CanvasLayer/MarginContainer"]
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 1870.0
+offset_bottom = 100.0
+size_flags_vertical = 0
+theme_override_constants/hseparation = 50
+
+[node name="Spacer" type="Control" parent="CanvasLayer/MarginContainer/HFlowContainer"]
+offset_right = 1420.0
+offset_bottom = 50.0
+size_flags_horizontal = 3
+
+[node name="AddButton" type="Button" parent="CanvasLayer/MarginContainer/HFlowContainer"]
+minimum_size = Vector2(150, 0)
+offset_left = 1470.0
+offset_right = 1620.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 30
+text = "Add "
+
+[node name="RemoveButton" type="Button" parent="CanvasLayer/MarginContainer/HFlowContainer"]
+minimum_size = Vector2(150, 0)
+offset_left = 1670.0
+offset_right = 1820.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 30
+text = "Remove
+"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="Boundary1" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-21, -566)
+shape = SubResource( "RectangleShape2D_j5m7i" )
+
+[node name="Boundary2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-21, 576)
+shape = SubResource( "RectangleShape2D_j5m7i" )
+
+[node name="Boundary3" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-989, 4)
+shape = SubResource( "RectangleShape2D_sc22r" )
+
+[node name="Boundary4" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(971, -5)
+shape = SubResource( "RectangleShape2D_sc22r" )
+
+[connection signal="pressed" from="CanvasLayer/MarginContainer/HFlowContainer/AddButton" to="." method="_on_add_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/HFlowContainer/RemoveButton" to="." method="_on_remove_button_pressed"]
