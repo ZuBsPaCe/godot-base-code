@@ -84,7 +84,7 @@ func _on_add_button_pressed():
 	var shape := CollisionShape2D.new()
 	
 	var physic_material := PhysicsMaterial.new()
-	physic_material.bounce = 1.0
+	physic_material.bounce = 0.1
 	
 	var body := RigidDynamicBody2D.new()
 	body.gravity_scale = 0.0

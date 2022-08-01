@@ -59,6 +59,7 @@ texture = ExtResource( "4_45jqv" )
 radius = 100.0
 create_debug_sprite = true
 color = Color(0.0941176, 1, 0.368627, 1)
+auto_hide = false
 
 [node name="RightLight" type="CharacterBody2D" parent="."]
 position = Vector2(1288, 1006)
@@ -69,6 +70,7 @@ texture = ExtResource( "4_45jqv" )
 radius = 100.0
 create_debug_sprite = true
 color = Color(1, 0.396078, 0.294118, 1)
+auto_hide = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightLight"]
 shape = SubResource( "CircleShape2D_fg6hd" )

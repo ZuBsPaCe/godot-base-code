@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cpfuqijl5qps4"]
 
 [ext_resource type="Script" path="res://FlatLighting/Private/FlatLighting.gd" id="1_j6tpx"]
-[ext_resource type="World3D" uid="uid://diev5r0n0fw8" path="res://FlatLighting/Private/world_3d.tres" id="2_2lr0m"]
+[ext_resource type="World3D" uid="uid://ciho05avscmf8" path="res://FlatLighting/Private/world_3d.tres" id="2_2lr0m"]
 
 [node name="FlatLighting" type="Node2D"]
 script = ExtResource( "1_j6tpx" )
@@ -48,7 +48,7 @@ size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
 [node name="ShadowCamera" type="Camera3D" parent="ShadowViewport4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
 projection = 1
 current = true
 size = 1024.0
@@ -60,7 +60,7 @@ size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
 [node name="ShadowCamera" type="Camera3D" parent="ShadowViewport5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 projection = 1
 current = true
 size = 1024.0
@@ -72,7 +72,7 @@ size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
 [node name="ShadowCamera" type="Camera3D" parent="ShadowViewport6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
 projection = 1
 current = true
 size = 1024.0
@@ -84,7 +84,7 @@ size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
 [node name="ShadowCamera" type="Camera3D" parent="ShadowViewport7"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
 projection = 1
 current = true
 size = 1024.0
@@ -96,7 +96,7 @@ size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
 [node name="ShadowCamera" type="Camera3D" parent="ShadowViewport8"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
 projection = 1
 current = true
 size = 1024.0
