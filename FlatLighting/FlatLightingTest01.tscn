@@ -46,7 +46,6 @@ shape = SubResource( "CircleShape2D_6bovc" )
 [node name="FlatLight" parent="MouseLight" instance=ExtResource( "5_eleoj" )]
 texture = ExtResource( "4_0py1h" )
 radius = 57.6
-create_source_sprite = true
 
 [node name="Camera" type="Camera2D" parent="."]
 current = true
