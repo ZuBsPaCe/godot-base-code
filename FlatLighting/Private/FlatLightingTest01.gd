@@ -5,6 +5,7 @@ extends Node2D
 @onready var flat_lighting := $FlatLighting
 @onready var mouse_light := $MouseLight
 @onready var overlay := $Overlay
+@onready var create_debug_sprites := false
 
 var _light_bodies := []
 
@@ -98,7 +99,16 @@ func _on_add_button_pressed():
 	
 	light.texture = load(light_tex)
 	light.radius = circle.radius * 0.9
-	light.create_source_sprite = true
+	light.create_debug_sprite = create_debug_sprites
+	
+	var color_luck := _light_bodies.size() % 3
+	match color_luck:
+		0:
+			light.color = Color.RED
+		1:
+			light.color = Color.GREEN
+		2:
+			light.color = Color.BLUE
 	
 	body.add_child(shape)
 	body.add_child(light)

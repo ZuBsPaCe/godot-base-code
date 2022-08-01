@@ -63,7 +63,6 @@ material = SubResource( "ShaderMaterial_evt48" )
 [node name="FlatLight" parent="." instance=ExtResource( "3_55044" )]
 texture = ExtResource( "4_i55me" )
 radius = 20.0
-create_source_sprite = true
 
 [node name="CenterQuad" type="Sprite2D" parent="."]
 visible = false

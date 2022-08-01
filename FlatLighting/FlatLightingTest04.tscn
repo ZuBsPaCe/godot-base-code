@@ -1,0 +1,78 @@
+[gd_scene load_steps=9 format=3 uid="uid://cp2unled1ldxv"]
+
+[ext_resource type="PackedScene" uid="uid://cpfuqijl5qps4" path="res://FlatLighting/FlatLighting.tscn" id="1_mekn8"]
+[ext_resource type="Script" path="res://FlatLighting/Private/FlatLightingTest04.gd" id="1_vu72y"]
+[ext_resource type="PackedScene" uid="uid://bfpdyi6lwn52t" path="res://FlatLighting/FlatLight.tscn" id="3_6kpvb"]
+[ext_resource type="Texture2D" uid="uid://c4wj7yk3kl4q2" path="res://FlatLighting/LightCookies/light_2048_normal.png" id="4_45jqv"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_5420a"]
+viewport_path = NodePath("FlatLighting/ShadowViewport1")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rulea"]
+radius = 64.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fl2be"]
+radius = 64.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fg6hd"]
+radius = 64.0
+
+[node name="FlatLightingTest04" type="Node2D"]
+script = ExtResource( "1_vu72y" )
+
+[node name="FlatLighting" parent="." instance=ExtResource( "1_mekn8" )]
+_camera_path = NodePath("../Camera2D")
+_overlay_path = NodePath("../ShadowOverlay")
+
+[node name="ShadowOverlay" type="Sprite2D" parent="."]
+position = Vector2(960, 540)
+
+[node name="DebugOverlay" type="Sprite2D" parent="."]
+position = Vector2(285, 482)
+scale = Vector2(0.25, -0.25)
+texture = SubResource( "ViewportTexture_5420a" )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(960, 540)
+
+[node name="LineOccluder" type="CharacterBody2D" parent="."]
+position = Vector2(1000, 700)
+input_pickable = true
+
+[node name="LineOccluder" type="MeshInstance2D" parent="LineOccluder"]
+
+[node name="Polygon2D" type="Polygon2D" parent="LineOccluder/LineOccluder"]
+polygon = PackedVector2Array(100, 0, -100, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LineOccluder"]
+shape = SubResource( "CircleShape2D_rulea" )
+
+[node name="LeftLight" type="CharacterBody2D" parent="."]
+position = Vector2(800, 1000)
+input_pickable = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftLight"]
+shape = SubResource( "CircleShape2D_fl2be" )
+
+[node name="LeftLight" parent="LeftLight" instance=ExtResource( "3_6kpvb" )]
+texture = ExtResource( "4_45jqv" )
+radius = 100.0
+create_debug_sprite = true
+color = Color(0.0941176, 1, 0.368627, 1)
+
+[node name="RightLight" type="CharacterBody2D" parent="."]
+position = Vector2(1288, 1006)
+input_pickable = true
+
+[node name="RightLight" parent="RightLight" instance=ExtResource( "3_6kpvb" )]
+texture = ExtResource( "4_45jqv" )
+radius = 100.0
+create_debug_sprite = true
+color = Color(1, 0.396078, 0.294118, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightLight"]
+shape = SubResource( "CircleShape2D_fg6hd" )
+
+[connection signal="input_event" from="LineOccluder" to="." method="_on_line_occluder_input_event"]
+[connection signal="input_event" from="LeftLight" to="." method="_on_left_light_input_event"]
+[connection signal="input_event" from="RightLight" to="." method="_on_right_light_input_event"]

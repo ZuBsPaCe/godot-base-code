@@ -67,7 +67,7 @@ func get_outline(map: Map, x: int, y: int, windedness: int, value: int, optimize
 	var bottom_left := Vector2i(0, 1)
 	var bottom_right := Vector2i(1, 1)
 	
-	var corners : Array
+	var corners :  Array
 	
 	var start := Vector2i(x, y)
 	var coord := start

@@ -6,7 +6,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_komjx"]
 shader = ExtResource( "2_h8auo" )
-shader_param/shadow_alpha = null
+shader_param/flat_light_factor = null
 
 [node name="FlatLightingTest02" type="Node2D"]
 script = ExtResource( "1_se3j3" )

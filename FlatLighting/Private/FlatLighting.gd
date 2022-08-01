@@ -12,11 +12,8 @@ extends Node2D
 @export var occluder_material: Material
 @export var _shadow_overlay_material: Material
 
-@export var shadow_viewport_scene : PackedScene
-
 @export var use_custom_clear_color := false
 @export var custom_clear_color := Color.BLACK
-
 
 #@onready var _shadow_viewport_container: Node = $ShadowViewportContainer
 @onready var light_viewport: SubViewport = $LightViewport
@@ -27,12 +24,17 @@ extends Node2D
 
 var _default_occluder_material := preload("Occluder.tres")
 
+var _internal_light_shader := preload("InternalLight.gdshader")
+
 var _private_dir: String
+
+
 
 class FlatLightHandle:
 	var global_position: Vector2		
 	var radius: float		
 	var texture: Texture2D
+	var color: Color
 	var owner: Node2D
 	
 	var internal_index := -1
@@ -70,7 +72,7 @@ var _configuration_error := false
 var _light_pos_array := []
 var _light_radius_array := []
 
-func _enter_tree():
+func _init():
 	FlatLightingLocator.flat_lighting = self
 	
 func _ready():
@@ -178,8 +180,10 @@ func _process(_delta):
 		shadow_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 		
 		var internal_light_material := ShaderMaterial.new()
-		internal_light_material.shader = load(_private_dir + "/InternalLight.gdshader")
+		
+		internal_light_material.shader = _internal_light_shader
 		internal_light_material.set_shader_param("light_tex", handle.texture)
+		internal_light_material.set_shader_param("color", handle.color)
 		
 		var internal_light := Sprite2D.new()
 		internal_light.name = "InternalLight"
@@ -288,6 +292,7 @@ func _process(_delta):
 	for handle in _flat_occluders:
 		if handle.owner != null and handle.global_position != handle.owner.global_position:
 			handle.global_position = handle.owner.global_position
+			handle.update_position = true
 		
 		if handle.update_position:
 			handle.internal_occluder.transform.origin = Vector3(handle.global_position.x, handle.global_position.y, 0.0)
@@ -299,20 +304,25 @@ func _update_viewport_size(shadow_viewport: SubViewport, light_texture_size: Vec
 func get_texture() -> Texture2D:
 	return $LightViewport.get_texture()
 
-func register_light(global_position: Vector2, radius: float, texture: Texture, owner: Node2D = null) -> Object:
+func register_light(global_position: Vector2, radius: float, texture: Texture, color: Color, owner: Node2D = null) -> Object:
 	var handle := FlatLightHandle.new()
 		
 	handle.global_position = global_position
 	handle.radius = radius
 	handle.texture = texture
+	handle.color = color
 	handle.owner = owner
 	
 	_register_light_queue.append(handle)
 	
 	return handle
 
-func unregister_light_handle(handle):
+func unregister_light(handle):
 	_unregister_light_queue.append(handle)
+
+func update_light_radius(handle, radius: float):
+	handle.radius = radius
+	handle.update_radius = true
 	
 func register_occluder(global_position: Vector2, points_cw: Array, closed: bool, owner: Node2D = null):
 	var handle := FlatOccluderHandle.new()
@@ -324,7 +334,7 @@ func register_occluder(global_position: Vector2, points_cw: Array, closed: bool,
 	
 	_register_occluder_queue.append(handle)
 	
-func unregister_occluder_handle(handle):
+func unregister_occluder(handle):
 	_unregister_occluder_queue.append(handle)
 	
 func get_occluder_quad(tile_size: float) -> Array:
