@@ -15,6 +15,7 @@ extends Node2D
 @export var custom_clear_color := Color.BLACK
 
 @onready var light_viewport: SubViewport = $LightViewport
+@onready var area_viewport: SubViewport = $AreaViewport
 
 @onready var _camera: Camera2D = get_node(_camera_path)
 @onready var _overlay: Sprite2D
@@ -22,8 +23,8 @@ extends Node2D
 var _default_occluder_material := preload("Occluder.tres")
 
 var _internal_light_shader := preload("InternalLight.gdshader")
-
-var _private_dir: String
+var _internal_area_shader := preload("InternalArea.gdshader")
+var _internal_area_material: ShaderMaterial
 
 
 class ShadowViewportHandle:
@@ -58,10 +59,22 @@ class FlatOccluderHandle:
 	var update_position := false
 
 
+class AreaHandle:
+	var global_position: Vector2
+	var texture: Texture2D
+	var owner: Node2D
+	
+	var internal_area: Sprite2D
+	
+	var update_position := false
+
+
 var _shadow_viewport_handles := []
 
 var _flat_light_handles := []
 var _flat_occluder_handles := []
+
+var _area_handles := []
 
 var _register_flat_light_queue := []
 var _unregister_flat_light_queue := []
@@ -69,6 +82,8 @@ var _unregister_flat_light_queue := []
 var _register_occluder_queue := []
 var _unregister_occluder_queue := []
 
+var _register_area_queue := []
+var _unregister_area_queue := []
 
 
 var _configuration_error := false
@@ -127,15 +142,16 @@ func _ready():
 			handle.shadow_camera = shadow_camera
 
 			_shadow_viewport_handles.append(handle)
-
-	_private_dir = get_script().resource_path.get_base_dir()
 	
 	if occluder_material == null:
 		occluder_material = _default_occluder_material
 	
 #	if _shadow_overlay_material == null:
 #		_shadow_overlay_material = load("res://FlatLighting/ShadowOverlay.tres")
-		
+	
+	_internal_area_material = ShaderMaterial.new()
+	_internal_area_material.shader = _internal_area_shader
+	
 	if _camera == null:
 		printerr("FlatLighting: Camera not set")
 		_configuration_error = true
@@ -188,6 +204,7 @@ func update_viewport_size():
 	var viewport_height = ProjectSettings.get("display/window/size/viewport_height")
 
 	light_viewport.size = Vector2(viewport_width / shadow_viewport_downscale, viewport_height / shadow_viewport_downscale)
+	area_viewport.size = Vector2(viewport_width / shadow_viewport_downscale, viewport_height / shadow_viewport_downscale)
 
 #	_shadow_camera.size = viewport_height
 
@@ -328,7 +345,27 @@ func _process(_delta):
 		_flat_occluder_handles.erase(handle)
 	
 	_unregister_occluder_queue.clear()
+	
+	
+	for handle in _register_area_queue:
+		var internal_area := Sprite2D.new()
+		internal_area.name = "InternalArea"
+		internal_area.texture = handle.texture
+		internal_area.flip_v = true
+		internal_area.material = _internal_area_material
 		
+		handle.internal_area = internal_area
+		
+		area_viewport.add_child(internal_area)
+		_area_handles.append(handle)
+	
+	_register_area_queue.clear()
+	
+	for handle in _unregister_area_queue:
+		handle.internal_area.queue_free()
+		_area_handles.erase(handle)
+	
+	_unregister_area_queue.clear()
 
 	var camera_center := get_camera_center()
 	
@@ -375,9 +412,27 @@ func _process(_delta):
 			handle.internal_occluder.transform.origin = Vector3(handle.global_position.x, handle.global_position.y, 0.0)
 			handle.update_position = false
 
+	for area_handle in _area_handles:
+		if area_handle.owner != null and area_handle.global_position != area_handle.owner.global_position:
+			area_handle.global_position = area_handle.owner.global_position
+			area_handle.update_position = false
+			
+#		if area_handle.update_position:
+#			shadow_viewport_handle.shadow_camera.position = Vector3(flat_light_handle.global_position.x, flat_light_handle.global_position.y, shadow_viewport_handle.internal_index + 1)
+#
+#			_light_pos_array[shadow_viewport_handle.internal_index] = flat_light_handle.global_position
+#			flat_light_handle.update_position = false
+#			update_light_pos_array = true
+		
+		# Must be updated each frame!
+		#shadow_viewport_handle.internal_light.position = flat_light_handle.global_position - camera_center
+		area_handle.internal_area.position = area_handle.global_position - camera_center
 
 func get_texture() -> Texture2D:
 	return $LightViewport.get_texture()
+
+func get_area_texture() -> Texture2D:
+	return $AreaViewport.get_texture()
 
 func register_light(global_position: Vector2, radius: float, texture: Texture, color: Color, priority: int, owner: Node2D = null) -> Object:
 	var handle := FlatLightHandle.new()
@@ -412,7 +467,23 @@ func register_occluder(global_position: Vector2, points_cw: Array, closed: bool,
 	
 func unregister_occluder(handle):
 	_unregister_occluder_queue.append(handle)
+
+
+func register_area(global_position: Vector2, texture: Texture, owner: Node2D = null) -> Object:
+	var handle := AreaHandle.new()
 	
+	handle.global_position = global_position
+	handle.texture = texture
+	handle.owner = owner
+	
+	_register_area_queue.append(handle)
+	
+	return handle
+
+func unregister_area(handle):
+	_unregister_area_queue.append(handle)
+
+
 func get_occluder_quad(tile_size: float) -> Array:
 	
 	var half_size := tile_size * 0.5

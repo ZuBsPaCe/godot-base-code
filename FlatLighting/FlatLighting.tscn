@@ -121,3 +121,23 @@ color = Color(0, 0, 0, 1)
 
 [node name="LightCamera" type="Camera2D" parent="LightViewport"]
 current = true
+
+[node name="AreaViewport" type="SubViewport" parent="."]
+disable_3d = true
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="CustomClearColor" type="ColorRect" parent="AreaViewport"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = -960.0
+offset_bottom = -540.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AreaCamera" type="Camera2D" parent="AreaViewport"]
+current = true

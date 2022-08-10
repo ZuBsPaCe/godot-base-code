@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://djvoh3gebdfqg"]
+[gd_scene load_steps=5 format=3 uid="uid://ei03imvvogha"]
 
 [ext_resource type="Script" path="res://FlatLighting/Private/FlatLightingTest02.gd" id="1_se3j3"]
-[ext_resource type="Shader" path="res://FlatLighting/Private/FullscreenShader.gdshader" id="2_h8auo"]
+[ext_resource type="Shader" path="res://FlatLighting/Shaders/FullscreenShader.gdshader" id="2_h8auo"]
 [ext_resource type="PackedScene" uid="uid://beyfqtj436bnw" path="res://FlatLighting/FlatLightingTest01.tscn" id="3_v3g2x"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_komjx"]

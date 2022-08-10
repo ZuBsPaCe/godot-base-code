@@ -57,7 +57,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Game"
-run/main_scene="res://Scenes/Game.tscn"
+run/main_scene="res://FlatLighting/FlatLightingTest05.tscn"
 boot_splash/image="res://Sprites/BootSplash/zubspace_banner.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color(0, 0, 0, 1)
