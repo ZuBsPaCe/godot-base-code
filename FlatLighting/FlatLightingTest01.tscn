@@ -10,7 +10,7 @@
 [sub_resource type="NoiseTexture" id="NoiseTexture_88gcv"]
 width = 16
 height = 16
-noise = SubResource( "OpenSimplexNoise_438lq" )
+noise = SubResource("OpenSimplexNoise_438lq")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6bovc"]
 radius = 64.0
@@ -22,15 +22,15 @@ size = Vector2(2000, 100)
 size = Vector2(100, 1200)
 
 [node name="FlatLightingTest01" type="Node2D"]
-script = ExtResource( "1_p8evp" )
+script = ExtResource("1_p8evp")
 
-[node name="FlatLighting" parent="." instance=ExtResource( "2_a7qfw" )]
+[node name="FlatLighting" parent="." instance=ExtResource("2_a7qfw")]
 _camera_path = NodePath("../Camera")
 _overlay_path = NodePath("../Overlay")
 use_custom_clear_color = true
 
 [node name="CenterQuad" type="Sprite2D" parent="."]
-texture = SubResource( "NoiseTexture_88gcv" )
+texture = SubResource("NoiseTexture_88gcv")
 
 [node name="Overlay" type="Sprite2D" parent="."]
 
@@ -41,10 +41,10 @@ texture = SubResource( "NoiseTexture_88gcv" )
 [node name="MouseLight" type="CharacterBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MouseLight"]
-shape = SubResource( "CircleShape2D_6bovc" )
+shape = SubResource("CircleShape2D_6bovc")
 
-[node name="FlatLight" parent="MouseLight" instance=ExtResource( "5_eleoj" )]
-texture = ExtResource( "4_0py1h" )
+[node name="FlatLight" parent="MouseLight" instance=ExtResource("5_eleoj")]
+texture = ExtResource("4_0py1h")
 radius = 57.6
 
 [node name="Camera" type="Camera2D" parent="."]
@@ -60,9 +60,9 @@ drag_vertical_enabled = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_top = 50
 theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 50
 
 [node name="HFlowContainer" type="HFlowContainer" parent="CanvasLayer/MarginContainer"]
@@ -71,24 +71,21 @@ offset_top = 50.0
 offset_right = 1870.0
 offset_bottom = 100.0
 size_flags_vertical = 0
-theme_override_constants/hseparation = 50
 
 [node name="Spacer" type="Control" parent="CanvasLayer/MarginContainer/HFlowContainer"]
-offset_right = 1420.0
+offset_right = 1614.0
 offset_bottom = 50.0
 size_flags_horizontal = 3
 
 [node name="AddButton" type="Button" parent="CanvasLayer/MarginContainer/HFlowContainer"]
-minimum_size = Vector2(150, 0)
-offset_left = 1470.0
-offset_right = 1620.0
+offset_left = 1618.0
+offset_right = 1692.0
 offset_bottom = 50.0
 theme_override_font_sizes/font_size = 30
 text = "Add "
 
 [node name="RemoveButton" type="Button" parent="CanvasLayer/MarginContainer/HFlowContainer"]
-minimum_size = Vector2(150, 0)
-offset_left = 1670.0
+offset_left = 1696.0
 offset_right = 1820.0
 offset_bottom = 50.0
 theme_override_font_sizes/font_size = 30
@@ -99,19 +96,19 @@ text = "Remove
 
 [node name="Boundary1" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(-21, -566)
-shape = SubResource( "RectangleShape2D_j5m7i" )
+shape = SubResource("RectangleShape2D_j5m7i")
 
 [node name="Boundary2" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(-21, 576)
-shape = SubResource( "RectangleShape2D_j5m7i" )
+shape = SubResource("RectangleShape2D_j5m7i")
 
 [node name="Boundary3" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(-989, 4)
-shape = SubResource( "RectangleShape2D_sc22r" )
+shape = SubResource("RectangleShape2D_sc22r")
 
 [node name="Boundary4" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(971, -5)
-shape = SubResource( "RectangleShape2D_sc22r" )
+shape = SubResource("RectangleShape2D_sc22r")
 
 [connection signal="pressed" from="CanvasLayer/MarginContainer/HFlowContainer/AddButton" to="." method="_on_add_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/HFlowContainer/RemoveButton" to="." method="_on_remove_button_pressed"]

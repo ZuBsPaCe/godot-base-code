@@ -1,8 +1,8 @@
 extends Camera2D
 
-var _bounce_tween := Tween.new()
+var _bounce_tween: Tween
 
-var _intensity_tween := Tween.new()
+var _intensity_tween: Tween
 var _intensity: float
 
 var _bounce_time: float
@@ -15,8 +15,11 @@ func start_shake(direction: Vector2, intensity: float, frequency: float, duratio
 
 	_direction = -direction
 
-	_intensity_tween.kill()
-	_bounce_tween.kill()
+	if _intensity_tween:
+		_intensity_tween.kill()
+	
+	if _bounce_tween:
+		_bounce_tween.kill()
 	
 	_intensity = intensity
 	

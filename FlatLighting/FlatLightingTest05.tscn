@@ -1,37 +1,36 @@
-[gd_scene load_steps=10 format=3 uid="uid://csnj4f22mlsu"]
+[gd_scene load_steps=10 format=3 uid="uid://c3b4xpbkj7sak"]
 
 [ext_resource type="Script" path="res://FlatLighting/Private/FlatLightingTest05.gd" id="1_t1rcn"]
 [ext_resource type="PackedScene" uid="uid://cpfuqijl5qps4" path="res://FlatLighting/FlatLighting.tscn" id="2_5rpru"]
 [ext_resource type="PackedScene" uid="uid://bfpdyi6lwn52t" path="res://FlatLighting/FlatLight.tscn" id="3_1bi1o"]
 [ext_resource type="Shader" path="res://FlatLighting/Shaders/SimpleLightAndArea.gdshader" id="3_qg6ws"]
-[ext_resource type="Texture2D" uid="uid://dw72gvixcdst2" path="res://Objects/Helpers/Textures/Clouds-512.png" id="4_xovkd"]
+[ext_resource type="Texture2D" uid="uid://cmmug510i4nn4" path="res://FlatLighting/LightCookies/light_1024_normal.png" id="6_eh6jc"]
+[ext_resource type="Texture2D" uid="uid://dw72gvixcdst2" path="res://Objects/Helpers/Textures/Clouds-512.png" id="6_kgo58"]
 [ext_resource type="PackedScene" uid="uid://b0ur7bcey7kb4" path="res://FlatLighting/FlatArea.tscn" id="7_ppd52"]
-[ext_resource type="Texture2D" uid="uid://c4wj7yk3kl4q2" path="res://FlatLighting/LightCookies/light_2048_normal.png" id="8_i2x2r"]
-[ext_resource type="Texture2D" uid="uid://cmmug510i4nn4" path="res://FlatLighting/LightCookies/light_1024_normal.png" id="9_wla3l"]
+[ext_resource type="Texture2D" uid="uid://c4wj7yk3kl4q2" path="res://FlatLighting/LightCookies/light_2048_normal.png" id="8_ywxqi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wb55p"]
-shader = ExtResource( "3_qg6ws" )
+shader = ExtResource("3_qg6ws")
 
 [node name="FlatLightingTest05" type="Node2D"]
-script = ExtResource( "1_t1rcn" )
+script = ExtResource("1_t1rcn")
 
-[node name="FlatLighting" parent="." instance=ExtResource( "2_5rpru" )]
+[node name="FlatLighting" parent="." instance=ExtResource("2_5rpru")]
 _camera_path = NodePath("../Camera2D")
 
 [node name="Background" type="Sprite2D" parent="."]
 modulate = Color(0.121569, 0.466667, 0.164706, 1)
 texture_filter = 2
-material = SubResource( "ShaderMaterial_wb55p" )
-texture = ExtResource( "4_xovkd" )
+material = SubResource("ShaderMaterial_wb55p")
+texture = ExtResource("6_kgo58")
 
-[node name="FlatLight" parent="." instance=ExtResource( "3_1bi1o" )]
-z_index = 5
-texture = ExtResource( "8_i2x2r" )
+[node name="FlatArea" parent="." instance=ExtResource("7_ppd52")]
+texture = ExtResource("6_eh6jc")
+
+[node name="FlatLight" parent="." instance=ExtResource("3_1bi1o")]
+texture = ExtResource("8_ywxqi")
 radius = 50.0
-create_debug_sprite = true
-
-[node name="FlatArea" parent="." instance=ExtResource( "7_ppd52" )]
-texture = ExtResource( "9_wla3l" )
+color = Color(0.341176, 0.905882, 0.364706, 1)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true

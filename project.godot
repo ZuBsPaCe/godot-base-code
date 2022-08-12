@@ -57,13 +57,13 @@ _global_script_class_icons={
 [application]
 
 config/name="Game"
-run/main_scene="res://FlatLighting/FlatLightingTest05.tscn"
+run/main_scene="res://Scenes/Game.tscn"
+config/features=PackedStringArray("4.0")
 boot_splash/image="res://Sprites/BootSplash/zubspace_banner.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color(0, 0, 0, 1)
 config/icon="res://Sprites/Icon/Icon.png"
 config/windows_native_icon="res://Sprites/Icon/icon.ico"
-config/features=PackedStringArray("4.0")
 
 [autoload]
 

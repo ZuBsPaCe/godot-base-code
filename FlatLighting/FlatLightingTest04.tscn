@@ -18,9 +18,9 @@ radius = 64.0
 radius = 64.0
 
 [node name="FlatLightingTest04" type="Node2D"]
-script = ExtResource( "1_vu72y" )
+script = ExtResource("1_vu72y")
 
-[node name="FlatLighting" parent="." instance=ExtResource( "1_mekn8" )]
+[node name="FlatLighting" parent="." instance=ExtResource("1_mekn8")]
 _camera_path = NodePath("../Camera2D")
 _overlay_path = NodePath("../ShadowOverlay")
 
@@ -30,7 +30,7 @@ position = Vector2(960, 540)
 [node name="DebugOverlay" type="Sprite2D" parent="."]
 position = Vector2(285, 482)
 scale = Vector2(0.25, -0.25)
-texture = SubResource( "ViewportTexture_5420a" )
+texture = SubResource("ViewportTexture_5420a")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(960, 540)
@@ -45,17 +45,17 @@ input_pickable = true
 polygon = PackedVector2Array(100, 0, -100, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LineOccluder"]
-shape = SubResource( "CircleShape2D_rulea" )
+shape = SubResource("CircleShape2D_rulea")
 
 [node name="LeftLight" type="CharacterBody2D" parent="."]
 position = Vector2(800, 1000)
 input_pickable = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftLight"]
-shape = SubResource( "CircleShape2D_fl2be" )
+shape = SubResource("CircleShape2D_fl2be")
 
-[node name="LeftLight" parent="LeftLight" instance=ExtResource( "3_6kpvb" )]
-texture = ExtResource( "4_45jqv" )
+[node name="LeftLight" parent="LeftLight" instance=ExtResource("3_6kpvb")]
+texture = ExtResource("4_45jqv")
 radius = 100.0
 create_debug_sprite = true
 color = Color(0.0941176, 1, 0.368627, 1)
@@ -65,15 +65,15 @@ auto_hide = false
 position = Vector2(1288, 1006)
 input_pickable = true
 
-[node name="RightLight" parent="RightLight" instance=ExtResource( "3_6kpvb" )]
-texture = ExtResource( "4_45jqv" )
+[node name="RightLight" parent="RightLight" instance=ExtResource("3_6kpvb")]
+texture = ExtResource("4_45jqv")
 radius = 100.0
 create_debug_sprite = true
 color = Color(1, 0.396078, 0.294118, 1)
 auto_hide = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightLight"]
-shape = SubResource( "CircleShape2D_fg6hd" )
+shape = SubResource("CircleShape2D_fg6hd")
 
 [connection signal="input_event" from="LineOccluder" to="." method="_on_line_occluder_input_event"]
 [connection signal="input_event" from="LeftLight" to="." method="_on_left_light_input_event"]

@@ -834,7 +834,7 @@ func sort_colors(a, b):
 
 func _on_ImageColorTree_item_selected():
 	var col: Color = _image_color_tree.get_selected().get_metadata(0)
-	_image_preview.material.set_shader_param("selected_col_linear", col)
+	_image_preview.material.set_shader_uniform("selected_col_linear", col)
 	print("SELECTED: %s" % col)
 	
 	var tree_item = _image_tree.get_selected()
@@ -861,11 +861,11 @@ func _on_ImageColorTree_item_selected():
 
 
 func _on_ImagePreview_mouse_entered():
-	_image_preview.material.set_shader_param("cycle_enabled", true)
+	_image_preview.material.set_shader_uniform("cycle_enabled", true)
 
 
 func _on_ImagePreview_mouse_exited():
-	_image_preview.material.set_shader_param("cycle_enabled", false)
+	_image_preview.material.set_shader_uniform("cycle_enabled", false)
 
 
 func _on_ImagePartOptions_item_selected(index):

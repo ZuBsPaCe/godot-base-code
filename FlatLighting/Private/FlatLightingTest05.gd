@@ -38,8 +38,8 @@ func _ready():
 		
 		mesh_instance.material = ShaderMaterial.new()
 		mesh_instance.material.shader = load("res://FlatLighting/Shaders/SimpleLightAndArea.gdshader")
-		mesh_instance.material.set_shader_param("light_tex", FlatLightingLocator.flat_lighting.get_texture())
-		mesh_instance.material.set_shader_param("area_tex", FlatLightingLocator.flat_lighting.get_area_texture())
+		mesh_instance.material.set_shader_uniform("light_tex", FlatLightingLocator.flat_lighting.get_texture())
+		mesh_instance.material.set_shader_uniform("area_tex", FlatLightingLocator.flat_lighting.get_area_texture())
 		
 		
 		add_child(mesh_instance)
@@ -54,8 +54,8 @@ func _ready():
 			clone.position = Vector2(x * 512, y * 512)
 			add_child(clone)
 	
-	$Background.material.set_shader_param("light_tex", FlatLightingLocator.flat_lighting.get_texture())
-	$Background.material.set_shader_param("area_tex", FlatLightingLocator.flat_lighting.get_area_texture())
+	$Background.material.set_shader_uniform("light_tex", FlatLightingLocator.flat_lighting.get_texture())
+	$Background.material.set_shader_uniform("area_tex", FlatLightingLocator.flat_lighting.get_area_texture())
 
 func _process(delta):
 	_update_target()

@@ -4,4 +4,4 @@
 background_mode = 1
 
 [resource]
-environment = SubResource( "Environment_kfyrd" )
+environment = SubResource("Environment_kfyrd")

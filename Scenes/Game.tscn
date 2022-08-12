@@ -5,10 +5,10 @@
 [ext_resource type="Script" path="res://Scripts/Tools/StateMachine.gd" id="3_nf4ml"]
 
 [node name="Game" type="Node2D"]
-script = ExtResource( "1" )
+script = ExtResource("1")
 
 [node name="GameStateMachine" type="Node" parent="."]
-script = ExtResource( "3_nf4ml" )
+script = ExtResource("3_nf4ml")
 
 [node name="MainMenu" type="CanvasLayer" parent="."]
 
@@ -17,4 +17,4 @@ script = ExtResource( "3_nf4ml" )
 [node name="EntityContainer" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-script = ExtResource( "2" )
+script = ExtResource("2")

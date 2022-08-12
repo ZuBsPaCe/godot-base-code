@@ -5,14 +5,14 @@
 [ext_resource type="PackedScene" uid="uid://beyfqtj436bnw" path="res://FlatLighting/FlatLightingTest01.tscn" id="3_v3g2x"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_komjx"]
-shader = ExtResource( "2_h8auo" )
-shader_param/flat_light_factor = null
+shader = ExtResource("2_h8auo")
+flat_light_factor = null
 
 [node name="FlatLightingTest02" type="Node2D"]
-script = ExtResource( "1_se3j3" )
+script = ExtResource("1_se3j3")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
-material = SubResource( "ShaderMaterial_komjx" )
+material = SubResource("ShaderMaterial_komjx")
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 1920.0
@@ -25,4 +25,4 @@ handle_input_locally = false
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="FlatLightingTest01" parent="SubViewportContainer/SubViewport" instance=ExtResource( "3_v3g2x" )]
+[node name="FlatLightingTest01" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_v3g2x")]

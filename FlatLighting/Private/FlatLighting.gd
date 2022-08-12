@@ -243,8 +243,8 @@ func _start_shadow_viewport(flat_light_handle: FlatLightHandle):
 	var internal_light_material: ShaderMaterial = internal_light.material
 	
 #	internal_light.texture = shadow_viewport.get_texture()
-	internal_light_material.set_shader_param("light_tex", flat_light_handle.texture)
-	internal_light_material.set_shader_param("color", flat_light_handle.color)
+	internal_light_material.set_shader_uniform("light_tex", flat_light_handle.texture)
+	internal_light_material.set_shader_uniform("color", flat_light_handle.color)
 	
 	internal_light.visible = true
 	
@@ -398,10 +398,10 @@ func _process(_delta):
 			update_light_radius_array = true
 	
 	if update_light_pos_array:
-		occluder_material.set_shader_param("light_pos_array", _light_pos_array)
+		occluder_material.set_shader_uniform("light_pos_array", _light_pos_array)
 		
 	if update_light_radius_array:
-		occluder_material.set_shader_param("light_radius_array", _light_radius_array)
+		occluder_material.set_shader_uniform("light_radius_array", _light_radius_array)
 	
 	for handle in _flat_occluder_handles:
 		if handle.owner != null and handle.global_position != handle.owner.global_position:
