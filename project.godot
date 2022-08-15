@@ -67,7 +67,7 @@ config/windows_native_icon="res://Sprites/Icon/icon.ico"
 
 [autoload]
 
-Globals="*res://Scripts/Globals.gd"
+Globals="*res://Scripts/Tools/Examples/ExampleGlobals.gd"
 Tools="*res://Scripts/Tools/Tools.gd"
 FlatLightingLocator="*res://FlatLighting/FlatLightingLocator.gd"
 
