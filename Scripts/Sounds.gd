@@ -24,7 +24,7 @@ func _ready() -> void:
 	pass
 
 
-func register(key, sample: AudioStreamSample, volume: float):
+func register(key, sample: AudioStream, volume: float):
 	var sample_info: SampleInfo = _sample_dict.get(key)
 
 	if sample_info == null:
@@ -38,7 +38,7 @@ func register(key, sample: AudioStreamSample, volume: float):
 func play(key, pos = null):
 	var sample_info: SampleInfo = _sample_dict[key]
 	var index := randi() % sample_info.samples.size()
-	var stream: AudioStreamSample = sample_info.samples[index]
+	var stream: AudioStream = sample_info.samples[index]
 	var volume: float = sample_info.volumes[index]
 
 	_play(stream, volume, pos)
@@ -50,7 +50,7 @@ func play_delayed(key, delay: float, play_while_paused: bool, pos = null):
 	play(key, pos)
 
 
-func _play(stream: AudioStreamSample, volume: float, pos = null) -> void:
+func _play(stream: AudioStream, volume: float, pos = null) -> void:
 	
 	var pos_valid := typeof(pos) == TYPE_VECTOR2
 	
