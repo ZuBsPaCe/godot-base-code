@@ -1,8 +1,4 @@
 extends Node2D
-class_name Tools
-
-const TILE_SIZE := 16.0
-const HALF_TILE_SIZE := TILE_SIZE / 2.0
 
 
 const Direction4 := preload("res://Scripts/Tools/Direction4.gd").Direction4
@@ -20,24 +16,24 @@ func _ready():
 
 func to_coord(pos: Vector2) -> Coord:
 	return Coord.new(
-		int(pos.x / TILE_SIZE),
-		int(pos.y / TILE_SIZE))
+		int(pos.x / Globals.TILE_SIZE),
+		int(pos.y / Globals.TILE_SIZE))
 
 
 func to_pos(coord: Coord) -> Vector2:
 	return Vector2(
-		coord.x * TILE_SIZE,
-		coord.y * TILE_SIZE)
+		coord.x * Globals.TILE_SIZE,
+		coord.y * Globals.TILE_SIZE)
 
 func to_random_pos(coord: Coord) -> Vector2:
 	return Vector2(
-		coord.x * TILE_SIZE + randf() * TILE_SIZE,
-		coord.y * TILE_SIZE + randf() * TILE_SIZE)
+		coord.x * Globals.TILE_SIZE + randf() * Globals.TILE_SIZE,
+		coord.y * Globals.TILE_SIZE + randf() * Globals.TILE_SIZE)
 
 func to_center_pos(coord: Coord) -> Vector2:
 	return Vector2(
-		coord.x * TILE_SIZE + HALF_TILE_SIZE,
-		coord.y * TILE_SIZE + HALF_TILE_SIZE)
+		coord.x * Globals.TILE_SIZE + Globals.HALF_TILE_SIZE,
+		coord.y * Globals.TILE_SIZE + Globals.HALF_TILE_SIZE)
 
 
 func manhattan_distance(from: Coord, to: Coord) -> float:

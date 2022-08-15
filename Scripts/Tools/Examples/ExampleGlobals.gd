@@ -1,5 +1,8 @@
 extends Node
 
+const TILE_SIZE := 16.0
+const HALF_TILE_SIZE := TILE_SIZE / 2.0
+
 var _enity_container
 var _player_scene: PackedScene
 

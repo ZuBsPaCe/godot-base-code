@@ -33,6 +33,7 @@ func setup(p_parent_node: Node, p_secs: float, p_done: bool, auto_start = AUTO_S
 	if !done && auto_start == AUTO_START:
 		_timer.autostart = true
 	
+	# warning-ignore:return_value_discarded
 	_timer.connect("timeout", self, "_timeout")
 	
 	p_parent_node.add_child(_timer)

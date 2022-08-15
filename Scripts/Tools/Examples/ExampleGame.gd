@@ -11,7 +11,6 @@ export var player_scene:PackedScene
 
 onready var _game_state := $GameStateMachine
 
-
 func _ready():
 
 	Globals.setup(

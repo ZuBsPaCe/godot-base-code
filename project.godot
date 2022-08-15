@@ -48,8 +48,8 @@ config/windows_native_icon="res://Sprites/Icon/icon.ico"
 
 [autoload]
 
-Globals="*res://Scripts/Globals.gd"
-PoolTest="*res://addons/object_pool/pool.gd"
+Globals="*res://Scripts/Tools/Examples/ExampleGlobals.gd"
+Tools="*res://Scripts/Tools/Tools.gd"
 
 [display]
 
@@ -61,7 +61,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/object_pool/plugin.cfg" )
+enabled=PoolStringArray(  )
 
 [importer_defaults]
 
