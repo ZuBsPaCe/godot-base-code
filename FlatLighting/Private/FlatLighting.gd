@@ -36,12 +36,12 @@ class ShadowViewportHandle:
 
 
 class FlatLightHandle:
-	var global_position: Vector2
+	var global_pos: Vector2
 	var radius: float
 	var texture: Texture2D
 	var color: Color
 	var priority: int
-	var owner: Node2D
+	var node: Node2D
 	
 	var shadow_viewport_handle: ShadowViewportHandle
 	
@@ -50,19 +50,19 @@ class FlatLightHandle:
 
 
 class FlatOccluderHandle:
-	var global_position: Vector2
+	var global_pos: Vector2
 	var points_cw: Array
 	var closed: bool
-	var owner: Node2D
+	var node: Node2D
 	
 	var internal_occluder: MeshInstance3D
 	var update_position := false
 
 
 class AreaHandle:
-	var global_position: Vector2
+	var global_pos: Vector2
 	var texture: Texture2D
-	var owner: Node2D
+	var node: Node2D
 	
 	var internal_area: Sprite2D
 	
@@ -378,19 +378,19 @@ func _process(_delta):
 		
 		var shadow_viewport_handle: ShadowViewportHandle = flat_light_handle.shadow_viewport_handle
 		
-		if flat_light_handle.owner != null and flat_light_handle.global_position != flat_light_handle.owner.global_position:
-			flat_light_handle.global_position = flat_light_handle.owner.global_position
+		if flat_light_handle.node != null and flat_light_handle.global_pos != flat_light_handle.node.global_position:
+			flat_light_handle.global_pos = flat_light_handle.node.global_position
 			flat_light_handle.update_position = true
 			
 		if flat_light_handle.update_position:
-			shadow_viewport_handle.shadow_camera.position = Vector3(flat_light_handle.global_position.x, flat_light_handle.global_position.y, shadow_viewport_handle.internal_index + 1)
+			shadow_viewport_handle.shadow_camera.position = Vector3(flat_light_handle.global_pos.x, flat_light_handle.global_pos.y, shadow_viewport_handle.internal_index + 1)
 			
-			_light_pos_array[shadow_viewport_handle.internal_index] = flat_light_handle.global_position
+			_light_pos_array[shadow_viewport_handle.internal_index] = flat_light_handle.global_pos
 			flat_light_handle.update_position = false
 			update_light_pos_array = true
 		
 		# Must be updated each frame!
-		shadow_viewport_handle.internal_light.position = flat_light_handle.global_position - camera_center
+		shadow_viewport_handle.internal_light.position = flat_light_handle.global_pos - camera_center
 		
 		if flat_light_handle.update_radius:
 			_light_radius_array[shadow_viewport_handle.internal_index] = flat_light_handle.radius
@@ -404,29 +404,21 @@ func _process(_delta):
 		occluder_material.set_shader_uniform("light_radius_array", _light_radius_array)
 	
 	for handle in _flat_occluder_handles:
-		if handle.owner != null and handle.global_position != handle.owner.global_position:
-			handle.global_position = handle.owner.global_position
+		if handle.node != null and handle.global_pos != handle.node.global_position:
+			handle.global_pos = handle.node.global_position
 			handle.update_position = true
 		
 		if handle.update_position:
-			handle.internal_occluder.transform.origin = Vector3(handle.global_position.x, handle.global_position.y, 0.0)
+			handle.internal_occluder.transform.origin = Vector3(handle.global_pos.x, handle.global_pos.y, 0.0)
 			handle.update_position = false
 
 	for area_handle in _area_handles:
-		if area_handle.owner != null and area_handle.global_position != area_handle.owner.global_position:
-			area_handle.global_position = area_handle.owner.global_position
+		if area_handle.node != null and area_handle.global_pos != area_handle.node.global_position:
+			area_handle.global_pos = area_handle.node.global_position
 			area_handle.update_position = false
 			
-#		if area_handle.update_position:
-#			shadow_viewport_handle.shadow_camera.position = Vector3(flat_light_handle.global_position.x, flat_light_handle.global_position.y, shadow_viewport_handle.internal_index + 1)
-#
-#			_light_pos_array[shadow_viewport_handle.internal_index] = flat_light_handle.global_position
-#			flat_light_handle.update_position = false
-#			update_light_pos_array = true
-		
 		# Must be updated each frame!
-		#shadow_viewport_handle.internal_light.position = flat_light_handle.global_position - camera_center
-		area_handle.internal_area.position = area_handle.global_position - camera_center
+		area_handle.internal_area.position = area_handle.global_pos - camera_center
 
 func get_texture() -> Texture2D:
 	return $LightViewport.get_texture()
@@ -434,15 +426,15 @@ func get_texture() -> Texture2D:
 func get_area_texture() -> Texture2D:
 	return $AreaViewport.get_texture()
 
-func register_light(global_position: Vector2, radius: float, texture: Texture, color: Color, priority: int, owner: Node2D = null) -> Object:
+func register_light(global_pos: Vector2, radius: float, texture: Texture, color: Color, priority: int, node: Node2D = null) -> Object:
 	var handle := FlatLightHandle.new()
 		
-	handle.global_position = global_position
+	handle.global_pos = global_pos
 	handle.radius = radius
 	handle.texture = texture
 	handle.color = color
 	handle.priority = priority
-	handle.owner = owner
+	handle.node = node
 	
 	_register_flat_light_queue.append(handle)
 	
@@ -455,13 +447,13 @@ func update_light_radius(handle, radius: float):
 	handle.radius = radius
 	handle.update_radius = true
 
-func register_occluder(global_position: Vector2, points_cw: Array, closed: bool, owner: Node2D = null):
+func register_occluder(global_pos: Vector2, points_cw: Array, closed: bool, node: Node2D = null):
 	var handle := FlatOccluderHandle.new()
 	
-	handle.global_position = global_position
+	handle.global_pos = global_pos
 	handle.points_cw = points_cw
 	handle.closed = closed
-	handle.owner = owner
+	handle.node = node
 	
 	_register_occluder_queue.append(handle)
 	
@@ -469,12 +461,12 @@ func unregister_occluder(handle):
 	_unregister_occluder_queue.append(handle)
 
 
-func register_area(global_position: Vector2, texture: Texture, owner: Node2D = null) -> Object:
+func register_area(global_pos: Vector2, texture: Texture, node: Node2D = null) -> Object:
 	var handle := AreaHandle.new()
 	
-	handle.global_position = global_position
+	handle.global_pos = global_pos
 	handle.texture = texture
-	handle.owner = owner
+	handle.node = node
 	
 	_register_area_queue.append(handle)
 	

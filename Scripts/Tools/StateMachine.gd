@@ -63,6 +63,7 @@ func _perform_leave():
 	assert(_enter_called)
 	
 	if _leave_callback.is_valid() && current >= 0:
+		@warning_ignore(redundant_await)
 		await _leave_callback.call()
 	
 	_enter_called = false
@@ -79,6 +80,7 @@ func _perform_enter():
 	current = next
 	
 	if _enter_callback.is_valid():
+		@warning_ignore(redundant_await)
 		await _enter_callback.call()
 	
 	_enter_called = true
@@ -88,6 +90,7 @@ func _perform_process():
 	assert(_enter_called)
 	
 	if _process_callback.is_valid():
+		@warning_ignore(redundant_await)
 		await _process_callback.call()
 
 

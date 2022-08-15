@@ -1,9 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bes6evhmksduf"]
+[gd_scene load_steps=2 format=3 uid="uid://d1ht1tsw0w7vt"]
 
-[sub_resource type="StreamTexture2D" id="StreamTexture2D_8mlub"]
-load_path = "res://.godot/imported/Example.png-33a66a6f6abe21e3c8c05dafdb682eaa.stex"
+[sub_resource type="CompressedTexture2D" id="StreamTexture2D_8mlub"]
 
 [node name="Node2D" type="Node2D"]
 
 [node name="Sprite" type="Sprite2D" parent="."]
-texture = SubResource( "StreamTexture2D_8mlub" )
+texture = SubResource("StreamTexture2D_8mlub")

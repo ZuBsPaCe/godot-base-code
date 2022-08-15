@@ -102,7 +102,7 @@ func _unhandled_input(event):
 				active_light.update_radius(active_node.scale.x * 64.0)
 
 
-func _on_left_light_input_event(viewport, event, shape_idx):
+func _on_left_light_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
 		if event.button_index == 1 && event.pressed:
 			active_node = $LeftLight
@@ -114,7 +114,7 @@ func _on_left_light_input_event(viewport, event, shape_idx):
 				$LeftLight/LeftLight.register()
 
 
-func _on_right_light_input_event(viewport, event, shape_idx):
+func _on_right_light_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
 		if event.button_index == 1 && event.pressed:
 			active_node = $RightLight
@@ -126,7 +126,7 @@ func _on_right_light_input_event(viewport, event, shape_idx):
 				$RightLight/RightLight.register()
 
 
-func _on_line_occluder_input_event(viewport, event, shape_idx):
+func _on_line_occluder_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
 		if event.button_index == 1 && event.pressed:
 			active_node = $LineOccluder

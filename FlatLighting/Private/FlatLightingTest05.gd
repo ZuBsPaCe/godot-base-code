@@ -57,7 +57,7 @@ func _ready():
 	$Background.material.set_shader_uniform("light_tex", FlatLightingLocator.flat_lighting.get_texture())
 	$Background.material.set_shader_uniform("area_tex", FlatLightingLocator.flat_lighting.get_area_texture())
 
-func _process(delta):
+func _process(_delta):
 	_update_target()
 	$Camera2D.position = get_global_mouse_position()
 	$FlatLight.position = get_global_mouse_position()

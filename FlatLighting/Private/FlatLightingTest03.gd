@@ -11,6 +11,7 @@ const Direction4 := preload("res://Scripts/Tools/Direction4.gd").Direction4
 
 func _ready() -> void:
 	var used_rect: Rect2 = tilemap_ceiling.get_used_rect()
+	@warning_ignore(narrowing_conversion)
 	var map := Map.new(used_rect.size.x, used_rect.size.y)
 	
 	var to_tilemap := Vector2i(used_rect.position)

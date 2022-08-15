@@ -39,6 +39,7 @@ func get_index(x: int, y: int) -> int:
 
 
 func get_coord(index: int) -> Array:
+	@warning_ignore(integer_division)
 	var y = int(floor(index / width))
 	var x = index - y * width
 	return [x, y]

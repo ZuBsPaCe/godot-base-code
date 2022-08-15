@@ -35,8 +35,8 @@ func _ready():
 	if create_debug_sprite:
 		var sprite := Sprite2D.new()
 		sprite.texture = load("res://FlatLighting/LightCookies/alpha_128.png")
-		var scale := radius / 64.0
-		sprite.scale = Vector2(scale, scale)
+		var debug_scale := radius / 64.0
+		sprite.scale = Vector2(debug_scale, debug_scale)
 		sprite.modulate = color
 		add_child(sprite)
 
