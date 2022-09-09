@@ -86,7 +86,7 @@ func _on_add_button_pressed():
 	var physic_material := PhysicsMaterial.new()
 	physic_material.bounce = 0.1
 	
-	var body := RigidDynamicBody2D.new()
+	var body := RigidBody2D.new()
 	body.gravity_scale = 0.0
 	body.physics_material_override = physic_material
 	

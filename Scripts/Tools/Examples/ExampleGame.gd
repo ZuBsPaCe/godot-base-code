@@ -14,7 +14,7 @@ enum GameState {
 
 func _ready():
 
-	Globals.setup(
+	Global.setup(
 		$Camera2D,
 		$EntityContainer,
 		player_scene

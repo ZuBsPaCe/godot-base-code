@@ -17,6 +17,8 @@ func _ready() -> void:
 	var to_tilemap := Vector2i(used_rect.position)
 	var to_map := -to_tilemap
 	
+	var to_tilemap_vec := Vector2(to_tilemap)
+	
 	map.set_all(0)
 	
 	var used_coords = tilemap_ceiling.get_used_cells(0)
@@ -26,32 +28,32 @@ func _ready() -> void:
 	
 	var islands: Array = Tools.get_map_islands(map)
 	
-	var tile_size := Vector2i(64, 64)
+	var tile_size := Vector2(64, 64)
 	
 	for island in islands:
 		var windedness := 1 if island.item == 1 else -1
 		
-		var outline: Array = Tools.map_get_outline(map, island.map_coords.coords[0].x, island.map_coords.coords[0].y, windedness)
+		var outline: Array[Vector2] = island.get_outline(windedness)
 
 		var color := Color()
 		color = color.from_hsv(randf(), 1.0, 1.0)
 
 		for i in outline.size():
-			var from = outline[i]
-			var to = outline[i + 1] if i + 1 < outline.size() else outline[0]
+			var from: Vector2 = outline[i]
+			var to: Vector2 = outline[i + 1] if i + 1 < outline.size() else outline[0]
 
-			from = (from + to_tilemap) * tile_size
-			to = (to + to_tilemap) * tile_size
+			from = (from + to_tilemap_vec) * tile_size
+			to = (to + to_tilemap_vec) * tile_size
 			
 			debug_draw.add_line(from, to, color, 8)
 			debug_draw.add_circle(from, 8, color)
 			
 		for i in outline.size():
-			outline[i] = (outline[i] + to_tilemap) * 64.0
+			outline[i] = (outline[i] + to_tilemap_vec) * 64.0
 		
 		flat_lighting.register_occluder(Vector2.ZERO, outline, true)
 	
-		var start_coord = (island.map_coords.coords[0] + to_tilemap) * tile_size
+		var start_coord := (Vector2(island.map_coords.coords[0]) + to_tilemap_vec) * tile_size
 		if island.item == 1:
 			debug_draw.add_rect(Rect2(start_coord, tile_size), Color.RED)
 		else:

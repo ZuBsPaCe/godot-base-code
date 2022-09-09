@@ -38,7 +38,7 @@ func _bounce(first: bool):
 	var new_offset := _direction * _intensity
 	_direction *= -1
 
-	_direction = _direction.rotated(randf() * deg2rad(5.0))
+	_direction = _direction.rotated(randf() * deg_to_rad(5.0))
 
 	if first:
 		# Starting at center, not at extreme => bounce_time / 2.

@@ -14,11 +14,14 @@ extends Node2D
 @export var use_custom_clear_color := false
 @export var custom_clear_color := Color.BLACK
 
+@export var _debug_occluders := false
+
 @onready var light_viewport: SubViewport = $LightViewport
 @onready var area_viewport: SubViewport = $AreaViewport
 
 @onready var _camera: Camera2D = get_node(_camera_path)
 @onready var _overlay: Sprite2D
+
 
 var _default_occluder_material := preload("Occluder.tres")
 
@@ -243,8 +246,8 @@ func _start_shadow_viewport(flat_light_handle: FlatLightHandle):
 	var internal_light_material: ShaderMaterial = internal_light.material
 	
 #	internal_light.texture = shadow_viewport.get_texture()
-	internal_light_material.set_shader_uniform("light_tex", flat_light_handle.texture)
-	internal_light_material.set_shader_uniform("color", flat_light_handle.color)
+	internal_light_material.set_shader_parameter("light_tex", flat_light_handle.texture)
+	internal_light_material.set_shader_parameter("color", flat_light_handle.color)
 	
 	internal_light.visible = true
 	
@@ -398,10 +401,10 @@ func _process(_delta):
 			update_light_radius_array = true
 	
 	if update_light_pos_array:
-		occluder_material.set_shader_uniform("light_pos_array", _light_pos_array)
+		occluder_material.set_shader_parameter("light_pos_array", _light_pos_array)
 		
 	if update_light_radius_array:
-		occluder_material.set_shader_uniform("light_radius_array", _light_radius_array)
+		occluder_material.set_shader_parameter("light_radius_array", _light_radius_array)
 	
 	for handle in _flat_occluder_handles:
 		if handle.node != null and handle.global_pos != handle.node.global_position:
@@ -419,6 +422,17 @@ func _process(_delta):
 			
 		# Must be updated each frame!
 		area_handle.internal_area.position = area_handle.global_pos - camera_center
+	
+	if _debug_occluders:
+		z_index = 999
+		queue_redraw()
+
+func _draw():	
+	for handle in _flat_occluder_handles:
+		for i in handle.points_cw.size() - 1:
+			draw_line(handle.points_cw[i], handle.points_cw[i + 1], Color.DEEP_PINK, 3)
+		if handle.closed:
+			draw_line(handle.points_cw[handle.points_cw.size() - 1], handle.points_cw[0], Color.DEEP_PINK, 3)
 
 func get_texture() -> Texture2D:
 	return $LightViewport.get_texture()

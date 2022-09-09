@@ -4,10 +4,11 @@
 [ext_resource type="World3D" uid="uid://ciho05avscmf8" path="res://FlatLighting/Private/world_3d.tres" id="2_2lr0m"]
 
 [node name="FlatLighting" type="Node2D"]
-script = ExtResource( "1_j6tpx" )
+script = ExtResource("1_j6tpx")
 
 [node name="ShadowViewport1" type="SubViewport" parent="."]
-world_3d = ExtResource( "2_2lr0m" )
+world_3d = ExtResource("2_2lr0m")
+canvas_item_default_texture_filter = 0
 size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
@@ -19,7 +20,8 @@ size = 1024.0
 far = 100.0
 
 [node name="ShadowViewport2" type="SubViewport" parent="."]
-world_3d = ExtResource( "2_2lr0m" )
+world_3d = ExtResource("2_2lr0m")
+canvas_item_default_texture_filter = 0
 size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
@@ -31,7 +33,8 @@ size = 1024.0
 far = 100.0
 
 [node name="ShadowViewport3" type="SubViewport" parent="."]
-world_3d = ExtResource( "2_2lr0m" )
+world_3d = ExtResource("2_2lr0m")
+canvas_item_default_texture_filter = 0
 size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
@@ -43,7 +46,8 @@ size = 1024.0
 far = 100.0
 
 [node name="ShadowViewport4" type="SubViewport" parent="."]
-world_3d = ExtResource( "2_2lr0m" )
+world_3d = ExtResource("2_2lr0m")
+canvas_item_default_texture_filter = 0
 size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
@@ -55,7 +59,8 @@ size = 1024.0
 far = 100.0
 
 [node name="ShadowViewport5" type="SubViewport" parent="."]
-world_3d = ExtResource( "2_2lr0m" )
+world_3d = ExtResource("2_2lr0m")
+canvas_item_default_texture_filter = 0
 size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
@@ -67,7 +72,8 @@ size = 1024.0
 far = 100.0
 
 [node name="ShadowViewport6" type="SubViewport" parent="."]
-world_3d = ExtResource( "2_2lr0m" )
+world_3d = ExtResource("2_2lr0m")
+canvas_item_default_texture_filter = 0
 size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
@@ -79,7 +85,8 @@ size = 1024.0
 far = 100.0
 
 [node name="ShadowViewport7" type="SubViewport" parent="."]
-world_3d = ExtResource( "2_2lr0m" )
+world_3d = ExtResource("2_2lr0m")
+canvas_item_default_texture_filter = 0
 size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
@@ -91,7 +98,8 @@ size = 1024.0
 far = 100.0
 
 [node name="ShadowViewport8" type="SubViewport" parent="."]
-world_3d = ExtResource( "2_2lr0m" )
+world_3d = ExtResource("2_2lr0m")
+canvas_item_default_texture_filter = 0
 size = Vector2i(1024, 1024)
 render_target_update_mode = 4
 
@@ -104,11 +112,13 @@ far = 100.0
 
 [node name="LightViewport" type="SubViewport" parent="."]
 disable_3d = true
+canvas_item_default_texture_filter = 0
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="CustomClearColor" type="ColorRect" parent="LightViewport"]
 visible = false
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -960.0
@@ -124,11 +134,13 @@ current = true
 
 [node name="AreaViewport" type="SubViewport" parent="."]
 disable_3d = true
+canvas_item_default_texture_filter = 0
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="CustomClearColor" type="ColorRect" parent="AreaViewport"]
 visible = false
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -960.0

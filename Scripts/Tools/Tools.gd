@@ -16,24 +16,24 @@ func _ready():
 
 func to_coord(pos: Vector2) -> Vector2i:
 	return Vector2i(
-		int(pos.x / Globals.TILE_SIZE),
-		int(pos.y / Globals.TILE_SIZE))
+		int(pos.x / Global.TILE_SIZE),
+		int(pos.y / Global.TILE_SIZE))
 
 
 func to_pos(coord: Vector2i) -> Vector2:
 	return Vector2(
-		coord.x * Globals.TILE_SIZE,
-		coord.y * Globals.TILE_SIZE)
+		coord.x * Global.TILE_SIZE,
+		coord.y * Global.TILE_SIZE)
 
 func to_random_pos(coord: Vector2i) -> Vector2:
 	return Vector2(
-		coord.x * Globals.TILE_SIZE + randf() * Globals.TILE_SIZE,
-		coord.y * Globals.TILE_SIZE + randf() * Globals.TILE_SIZE)
+		coord.x * Global.TILE_SIZE + randf() * Global.TILE_SIZE,
+		coord.y * Global.TILE_SIZE + randf() * Global.TILE_SIZE)
 
 func to_center_pos(coord: Vector2i) -> Vector2:
 	return Vector2(
-		coord.x * Globals.TILE_SIZE + Globals.HALF_TILE_SIZE,
-		coord.y * Globals.TILE_SIZE + Globals.HALF_TILE_SIZE)
+		coord.x * Global.TILE_SIZE + Global.HALF_TILE_SIZE,
+		coord.y * Global.TILE_SIZE + Global.HALF_TILE_SIZE)
 
 
 func manhattan_distance(from: Vector2i, to: Vector2i) -> float:
@@ -95,6 +95,7 @@ func step_dir(coord:Vector2i, dir) -> Vector2i:
 		Direction4.W:
 			return Vector2i(coord.x - 1, coord.y)
 		_:
+			@warning_ignore(assert_always_false)
 			assert(false)
 			return coord
 			
@@ -146,7 +147,7 @@ func get_vec_from_dir(dir) -> Vector2:
 		_:
 			return Vector2.ZERO
 
-func get_map_islands(map: Map) -> Array:
+func get_map_islands(map: Map) -> Array[MapIsland]:
 	var seen_map := Map.new(map.width, map.height)
 	seen_map.set_all(false)
 	
@@ -159,7 +160,7 @@ func get_map_islands(map: Map) -> Array:
 			
 			var item = map.get_item(x, y)
 			var map_island := _get_map_island(map, seen_map, x, y, item)
-			print(str(map_island))
+			#print(str(map_island))
 			map_islands.append(map_island)
 	
 	return map_islands
@@ -175,7 +176,7 @@ func _get_map_island(map: Map, seen_map: Map, x: int, y: int, item: int) -> MapI
 	var checks := [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]
 
 	while !heads.is_empty():
-		var coord: Vector2i = heads.pop_back()
+		var coord: Vector2i = heads.pop_front()
 
 		for check in checks:
 			var check_coord := coord + check
@@ -184,128 +185,22 @@ func _get_map_island(map: Map, seen_map: Map, x: int, y: int, item: int) -> MapI
 				continue
 				
 			if map.is_item(check_coord.x, check_coord.y, item):
-				island.append(check_coord)
-				seen_map.set_item(check_coord.x, check_coord.y, true)
-				heads.append(check_coord)
+				
+				# Prevent islands from having holes, otherwise creating outlines
+				# for occluders or such would get a lot more complicated!
+				var could_loop := false
+				for loop_check in checks:
+					if loop_check != check_coord and map.is_item(loop_check.x, loop_check.y, item) and island.has(loop_check):
+						could_loop = true
+						break
+				
+				if !could_loop:
+					island.append(check_coord)
+					seen_map.set_item(check_coord.x, check_coord.y, true)
+					heads.append(check_coord)
 
-	return MapIsland.new(item, MapCoords.new(island))
+	return MapIsland.new(item, MapCoords.new(island), start_coord)
 
-
-func map_get_outline(map: Map, x: int, y: int, windedness: int, optimize = true) -> Array:
-	assert(windedness == 1 or windedness == -1)
-	
-	# Important: We assume, that x/y starts at the topmost row, on its leftmost tile.
-	
-	var top_right := Vector2i(1, 0)
-	var top_left := Vector2i(0, 0)
-	var bottom_left := Vector2i(0, 1)
-	var bottom_right := Vector2i(1, 1)
-	
-	var corners : Array
-	
-	var start := Vector2i(x, y)
-	var coord := start
-	
-	var outline := []
-	var start_dir = null
-	
-	var value: int = map.get_item(x, y)
-	
-	if windedness == 1:
-		# Create clockwise outline
-	
-		if map.is_item_at_dir4(coord.x, coord.y, Direction4.E, value):
-			start_dir = Direction4.E
-			coord.x += 1
-		elif map.is_item_at_dir4(coord.x, coord.y, Direction4.S, value):
-			start_dir = Direction4.S
-			coord.y += 1
-		else:
-			outline.append(coord + top_right)
-			outline.append(coord + bottom_right)
-			outline.append(coord + bottom_left)
-			outline.append(coord + top_left)
-			return outline
-		
-		# corner_index points to the bottom left corner if indexed with dir
-		corners = [bottom_left, top_left, top_right, bottom_right]
-		
-	else:
-		# Create counter-clockwise outline
-		
-		if map.is_item_at_dir4(coord.x, coord.y, Direction4.S, value):
-			start_dir = Direction4.S
-			coord.y += 1
-		elif map.is_item_at_dir4(coord.x, coord.y, Direction4.E, value):
-			start_dir = Direction4.E
-			coord.x += 1
-		else:
-			outline.append(coord + top_left)
-			outline.append(coord + bottom_left)
-			outline.append(coord + bottom_right)
-			outline.append(coord + top_right)
-			return outline
-		
-		# corner_index points to the bottom right corner in direction dir
-		corners = [bottom_right, bottom_left, top_left, top_right]
-		
-	var dir = start_dir
-	var debug = 0
-
-	while ++debug < 10000:
-		# Shit, this is tricky....
-		# Convention: We only add outline coords, which are NOT shared with the
-		# next tile!
-		
-		if map.is_item_at_dir4(coord.x, coord.y, Tools.turn(dir, -windedness), value):
-			dir = Tools.turn(dir, -windedness)
-		elif map.is_item_at_dir4(coord.x, coord.y, dir, value):
-			outline.append(coord + corners[dir])
-		elif map.is_item_at_dir4(coord.x, coord.y, Tools.turn(dir, windedness), value):
-			outline.append(coord + corners[dir])
-			outline.append(coord + corners[Tools.turn(dir, windedness)])
-			dir = Tools.turn(dir, windedness)
-		else:
-			outline.append(coord + corners[dir])
-			outline.append(coord + corners[Tools.turn(dir, windedness)])
-			outline.append(coord + corners[Tools.turn(dir, windedness * 2)])
-			dir = Tools.turn(dir, windedness * 2)
-
-		if coord.x == start.x && coord.y == start.y && dir == start_dir:
-			break
-		
-		coord = Tools.step_dir(coord, dir)
-	
-	assert(debug < 10000)
-	
-	if optimize && outline.size() > 2:		
-		var size = outline.size()
-		
-		var prev = outline.back()
-		var current = outline[0]
-		
-		var i := 0
-		
-		while i < size:
-			var next		
-			if i < size - 1:
-				next = outline[i + 1]
-			else:
-				next = outline[0]
-			
-			if current.x == prev.x and current.x == next.x:
-				outline.remove_at(i)
-				size -= 1
-			elif current.y == prev.y and current.y == next.y:
-				outline.remove_at(i)
-				size -= 1
-			else:
-				i += 1
-			
-			prev = current
-			current = next
-
-	return outline
 
 # Color Helpers
 
@@ -325,6 +220,9 @@ func rand_pop(array : Array) -> Variant:
 	var object = array[index]
 	array.remove_at(index)
 	return object
+
+func rand_color(alpha = 1.0):
+	return Color(randf(), randf(), randf(), alpha)
 
 
 # Raycast Helpers

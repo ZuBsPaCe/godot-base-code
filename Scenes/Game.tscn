@@ -1,52 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://c75jhbxia5n1l"]
 
+[ext_resource type="Script" path="res://Scripts/Tools/Examples/ExampleGame.gd" id="1_nh4hs"]
 [ext_resource type="Script" path="res://Scripts/Tools/CameraShake.gd" id="2"]
 [ext_resource type="Script" path="res://Scripts/Tools/StateMachine.gd" id="3_nf4ml"]
 
-[sub_resource type="GDScript" id="GDScript_u02e2"]
-script/source = "extends Node2D
-
-enum GameState {
-	NONE,
-	MAIN_MENU,
-	GAME
-}
-
-
-@export var player_scene:PackedScene
-
-@onready var _game_state := $GameStateMachine
-
-
-func _ready():
-
-	Globals.setup(
-		$Camera2D,
-		$EntityContainer,
-		player_scene
-	)
-	
-	_game_state.setup(
-		GameState.MAIN_MENU,
-		_on_GameStateMachine_enter_state,
-		Callable(),
-		Callable())
-
-
-func _on_GameStateMachine_enter_state():
-	match _game_state.current:
-		GameState.MAIN_MENU:
-			pass
-
-		GameState.GAME:
-			pass
-
-		_:
-			assert(false, \"Unknown game state\")
-"
-
 [node name="Game" type="Node2D"]
-script = SubResource("GDScript_u02e2")
+script = ExtResource("1_nh4hs")
 
 [node name="GameStateMachine" type="Node" parent="."]
 script = ExtResource("3_nf4ml")

@@ -154,8 +154,8 @@ func place_rectangle_proxy(parent: Proxy, type, width: int, height: int, retries
 		if !ok:
 			continue
 		
-		var x: int = rect.position.x
-		var y: int = rect.position.y
+		var x := int(rect.position.x)
+		var y := int(rect.position.y)
 		
 		found_proxy = Proxy.new(type)
 		found_proxy.rectangle(x, y, width, height)
@@ -187,7 +187,7 @@ func place_circle_proxy(parent: Proxy, type, radius: float, retries = 1) -> Prox
 		var ok := true
 		
 		for child in parent.children:
-			if _proxy_intersects_circle(child, center_x, center_y, radius):
+			if _proxy_intersects_circle(child, int(center_x), int(center_y), int(radius)):
 				ok = false
 				break
 		

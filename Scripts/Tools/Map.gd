@@ -5,10 +5,6 @@ var width : int
 var height : int
 var size : int
 
-
-# TODO REMOVE THIS FROM HERE OMG
-var _orbs := []
-
 var _map := []
 var _marked_indexes := []
 
@@ -18,7 +14,6 @@ func _init(p_width : int, p_height : int) -> void:
 	height = p_height
 	size = width * height
 	_map.resize(size)
-	_orbs.resize(size)
 
 
 func set_all(item) -> void:
@@ -26,7 +21,7 @@ func set_all(item) -> void:
 		_map[index] = item
 
 
-func is_valid(x : int, y : int) -> bool:
+func is_valid(x: int, y: int) -> bool:
 	return x >= 0 && y >= 0 && x < width && y < height
 
 
@@ -45,30 +40,19 @@ func get_coord(index: int) -> Array:
 	return [x, y]
 
 
-func set_item(x : int, y : int, item) -> void:
+func set_item(x: int, y: int, item) -> void:
 	_map[y * width + x] = item
-
-
-func set_orb(x : int, y : int, orb:Node2D) -> void:
-	_orbs[y * width + x] = orb
-	
-	
-func try_get_orb(x : int, y : int) -> Node2D:
-	var orb = _orbs[y * width + x]
-	if orb != null:
-		_orbs[y * width + x] = null
-	return orb
 
 
 func set_indexed_item(index: int, item) -> void:
 	_map[index] = item
 
 
-func get_item(x : int, y : int):
+func get_item(x: int, y: int):
 	return _map[y * width + x]
 
 
-func get_item_if_valid(x : int, y : int):
+func get_item_if_valid(x: int, y: int):
 	if !is_valid(x, y):
 		return null
 	return get_item(x, y)
@@ -107,6 +91,7 @@ func is_item_at_dir4(x: int, y: int, dir4, value) -> bool:
 		3:
 			x -= 1
 		_:
+			@warning_ignore(assert_always_false)
 			assert(false)
 	return is_item(x, y, value)
 
@@ -122,6 +107,7 @@ func is_item_at_dir4_or_invalid(x: int, y: int, dir4, value) -> bool:
 		3:
 			x -= 1
 		_:
+			@warning_ignore(assert_always_false)
 			assert(false)
 	return is_item_or_invalid(x, y, value)
 
@@ -160,7 +146,7 @@ func clear_marks() -> void:
 	_marked_indexes.clear()
 
 
-func mark_item(x : int, y : int) -> void:
+func mark_item(x: int, y: int) -> void:
 	_marked_indexes.append(y * width + x)
 
 

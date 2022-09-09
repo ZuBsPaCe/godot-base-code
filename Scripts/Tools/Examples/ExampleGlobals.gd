@@ -7,7 +7,7 @@ var _enity_container
 var _player_scene: PackedScene
 
 var camera: Camera2D
-var player: RigidDynamicBody2D
+var player: RigidBody2D
 
 var _center_node: Node2D;
 
