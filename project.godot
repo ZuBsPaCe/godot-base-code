@@ -50,6 +50,12 @@ config/windows_native_icon="res://Sprites/Icon/icon.ico"
 
 Globals="*res://Scripts/Tools/Examples/ExampleGlobals.gd"
 Tools="*res://Scripts/Tools/Tools.gd"
+State="*res://Scripts/Tools/Examples/ExampleState.gd"
+Effects="*res://Scripts/Tools/Examples/ExampleEffects.gd"
+
+[debug]
+
+gdscript/warnings/return_value_discarded=false
 
 [display]
 
