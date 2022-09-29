@@ -18,6 +18,7 @@ var _enter_callback: Callable
 var _process_callback: Callable
 
 
+# The caller can set unused callbacks to "FuncRef.new()"
 func setup(
 		p_initial_state: int,
 		

@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://c75jhbxia5n1l"]
+[gd_scene load_steps=6 format=3 uid="uid://c75jhbxia5n1l"]
 
 [ext_resource type="Script" path="res://Scripts/Tools/Examples/ExampleGame.gd" id="1_nh4hs"]
 [ext_resource type="Script" path="res://Scripts/Tools/CameraShake.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://ke83lndodr8n" path="res://Scenes/MainMenu.tscn" id="3_kyeol"]
 [ext_resource type="Script" path="res://Scripts/Tools/StateMachine.gd" id="3_nf4ml"]
+[ext_resource type="PackedScene" path="res://Scenes/GameOverlay.tscn" id="4_kn6jl"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_nh4hs")
@@ -10,11 +12,16 @@ script = ExtResource("1_nh4hs")
 [node name="GameStateMachine" type="Node" parent="."]
 script = ExtResource("3_nf4ml")
 
-[node name="MainMenu" type="CanvasLayer" parent="."]
+[node name="MainMenu" parent="." instance=ExtResource("3_kyeol")]
 
-[node name="GameOverlay" type="CanvasLayer" parent="."]
+[node name="GameOverlay" parent="." instance=ExtResource("4_kn6jl")]
 
 [node name="EntityContainer" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("2")
+
+[node name="Dummy" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 24, 16, -24, -16, -24)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
