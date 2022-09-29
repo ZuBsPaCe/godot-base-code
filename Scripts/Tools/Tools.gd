@@ -44,19 +44,16 @@ func manhattan_distance(from: Vector2i, to: Vector2i) -> float:
 var _coord_offsets_in_circle := [[Vector2i()]]
 var _distances_in_circle := [[0.0]]
 
-var map_coords_in_circle := []
-var map_distances_in_circle := []
+var map_coords_in_circle: Array[Vector2i] = []
+var map_distances_in_circle: Array[float] = []
 
-func get_map_coords_in_circle(map:Map, x:int, y:int, tile_radius:int) -> void:
+func get_map_coords_in_circle(map: Map, coord: Vector2i, tile_radius: int) -> void:
 	if _coord_offsets_in_circle.size() < tile_radius:
 		for r in range(_coord_offsets_in_circle.size(), tile_radius + 1):
 			var coord_offsets : Array = _coord_offsets_in_circle[r - 1].duplicate()
 			var distances : Array = _distances_in_circle[r - 1].duplicate()
 			for offset_y in range(-r, r + 1):
-				for offset_x in range(-r, r + 1):
-#					var real_x := x + offset_x
-#					var real_y := y + offset_y
-					
+				for offset_x in range(-r, r + 1):				
 					var distance := sqrt(offset_x * offset_x + offset_y * offset_y)
 					
 					if distance > r or distance <= r - 1:
@@ -77,10 +74,9 @@ func get_map_coords_in_circle(map:Map, x:int, y:int, tile_radius:int) -> void:
 	
 	for i in current_coord_offsets.size():
 		var coord_offset : Vector2i = current_coord_offsets[i]
-		var real_x : int = x + coord_offset.x
-		var real_y : int = y + coord_offset.y
-		if map.is_valid(real_x, real_y):
-			map_coords_in_circle.append(Vector2i(real_x, real_y))
+		var final := coord + coord_offset
+		if map.is_valid(final):
+			map_coords_in_circle.append(final)
 			map_distances_in_circle.append(current_distances[i])
 
 
@@ -97,7 +93,7 @@ func step_dir(coord:Vector2i, dir) -> Vector2i:
 		_:
 			@warning_ignore(assert_always_false)
 			assert(false)
-			return coord
+	return coord
 			
 func step_diagonal(coord:Vector2i, dir1, dir2) -> Vector2i:
 	if dir1 == Direction4.N && dir2 == Direction4.E || dir1 == Direction4.E && dir2 == Direction4.N:
@@ -145,33 +141,39 @@ func get_vec_from_dir(dir) -> Vector2:
 		Direction4.W:
 			return Vector2.LEFT
 		_:
-			return Vector2.ZERO
+			@warning_ignore(assert_always_false)
+			assert(false)
+	return Vector2.ZERO
 
 func get_map_islands(map: Map) -> Array[MapIsland]:
-	var seen_map := Map.new(map.width, map.height)
-	seen_map.set_all(false)
+	return get_map_islands_in_section(map, Rect2i(0, 0, map.width, map.height))
+
+func get_map_islands_in_section(map: Map, section: Rect2i) -> Array[MapIsland]:
+	var seen_map := {}
+	var coord := Vector2i.ZERO
 	
 	var map_islands := []
 	
-	for y in map.height:
-		for x in map.width:
-			if seen_map.get_item(x, y) == true:
+	for y in range(section.position.y, section.end.y):
+		for x in range(section.position.x, section.end.x):
+			coord.x = x
+			coord.y = y
+			
+			if coord in seen_map:
 				continue
 			
-			var item = map.get_item(x, y)
-			var map_island := _get_map_island(map, seen_map, x, y, item)
+			var item = map.get_item(coord)
+			var map_island := _get_map_island(map, seen_map, coord, section, item)
 			#print(str(map_island))
 			map_islands.append(map_island)
 	
 	return map_islands
 
-func _get_map_island(map: Map, seen_map: Map, x: int, y: int, item: int) -> MapIsland:
-
-	var start_coord := Vector2i(x, y)
+func _get_map_island(map: Map, seen_map: Dictionary, start_coord: Vector2i, section: Rect2i, item: int) -> MapIsland:
 	var heads := [start_coord]
 
 	var island := [start_coord]	
-	seen_map.set_item(start_coord.x, start_coord.y, true)
+	seen_map[start_coord] = true
 
 	var checks := [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]
 
@@ -181,22 +183,25 @@ func _get_map_island(map: Map, seen_map: Map, x: int, y: int, item: int) -> MapI
 		for check in checks:
 			var check_coord := coord + check
 
-			if seen_map.is_item(check_coord.x, check_coord.y, true):
+			if check_coord in seen_map:
+				continue
+			
+			if !section.has_point(check_coord):
 				continue
 				
-			if map.is_item(check_coord.x, check_coord.y, item):
+			if map.is_item(check_coord, item):
 				
 				# Prevent islands from having holes, otherwise creating outlines
 				# for occluders or such would get a lot more complicated!
 				var could_loop := false
 				for loop_check in checks:
-					if loop_check != check_coord and map.is_item(loop_check.x, loop_check.y, item) and island.has(loop_check):
+					if loop_check != check_coord and section.has_point(loop_check) and map.is_item(loop_check, item) and island.has(loop_check):
 						could_loop = true
 						break
 				
 				if !could_loop:
 					island.append(check_coord)
-					seen_map.set_item(check_coord.x, check_coord.y, true)
+					seen_map[check_coord] = true
 					heads.append(check_coord)
 
 	return MapIsland.new(item, MapCoords.new(island), start_coord)

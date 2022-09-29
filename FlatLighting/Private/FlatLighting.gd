@@ -104,10 +104,18 @@ func _ready():
 
 	if use_custom_clear_color:
 		$LightViewport.render_target_clear_mode = SubViewport.CLEAR_MODE_NEVER
-		$LightViewport/CustomClearColor.visible = true
+		$LightViewport/ClearCanvasLayer.visible = true
+		$LightViewport/ClearCanvasLayer/CustomClearColor.color = custom_clear_color
+		
+		$AreaViewport.render_target_clear_mode = SubViewport.CLEAR_MODE_NEVER
+		$AreaViewport/ClearCanvasLayer.visible = true
+		$AreaViewport/ClearCanvasLayer/CustomClearColor.color = custom_clear_color
 	else:
 		$LightViewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
-		$LightViewport/CustomClearColor.visible = false
+		$LightViewport/ClearCanvasLayer.visible = false
+		
+		$AreaViewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
+		$AreaViewport/ClearCanvasLayer.visible = false
 
 	for child in get_children():
 		if str(child.name).begins_with("ShadowViewport"):
@@ -427,7 +435,10 @@ func _process(_delta):
 		z_index = 999
 		queue_redraw()
 
-func _draw():	
+func _draw():
+	if !_debug_occluders:
+		return
+		
 	for handle in _flat_occluder_handles:
 		for i in handle.points_cw.size() - 1:
 			draw_line(handle.points_cw[i], handle.points_cw[i + 1], Color.DEEP_PINK, 3)
@@ -461,7 +472,7 @@ func update_light_radius(handle, radius: float):
 	handle.radius = radius
 	handle.update_radius = true
 
-func register_occluder(global_pos: Vector2, points_cw: Array, closed: bool, node: Node2D = null):
+func register_occluder(global_pos: Vector2, points_cw: Array, closed: bool, node: Node2D = null) -> Object:
 	var handle := FlatOccluderHandle.new()
 	
 	handle.global_pos = global_pos
@@ -470,6 +481,8 @@ func register_occluder(global_pos: Vector2, points_cw: Array, closed: bool, node
 	handle.node = node
 	
 	_register_occluder_queue.append(handle)
+	
+	return handle
 	
 func unregister_occluder(handle):
 	_unregister_occluder_queue.append(handle)

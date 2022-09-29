@@ -22,8 +22,6 @@ offset_right = 235.0
 offset_bottom = 31.0
 
 [node name="Filler" type="Control" parent="ModeToolbar"]
-layout_mode = 3
-anchors_preset = 0
 offset_bottom = 31.0
 size_flags_horizontal = 3
 
@@ -56,8 +54,6 @@ toggle_mode = true
 text = "Run"
 
 [node name="Filler2" type="Control" parent="ModeToolbar"]
-layout_mode = 3
-anchors_preset = 0
 offset_left = 235.0
 offset_right = 235.0
 offset_bottom = 31.0

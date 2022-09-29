@@ -15,49 +15,49 @@ func _ready() -> void:
 	var map := Map.new(used_rect.size.x, used_rect.size.y)
 	
 	var to_tilemap := Vector2i(used_rect.position)
+	var to_tilemap_f := Vector2(to_tilemap)
 	var to_map := -to_tilemap
-	
-	var to_tilemap_vec := Vector2(to_tilemap)
 	
 	map.set_all(0)
 	
 	var used_coords = tilemap_ceiling.get_used_cells(0)
 	for coord in used_coords:
 		var map_coord = coord + to_map
-		map.set_item(map_coord.x, map_coord.y, 1)
+		map.set_item(map_coord, 1)
 	
 	var islands: Array = Tools.get_map_islands(map)
 	
-	var tile_size := Vector2(64, 64)
+	var tile_size := Vector2i(64, 64)
+	var tile_size_f := Vector2(64, 64)
 	
 	for island in islands:
 		var windedness := 1 if island.item == 1 else -1
 		
-		var outline: Array[Vector2] = island.get_outline(windedness)
+		var outline: Array = island.get_outline(windedness)
 
 		var color := Color()
 		color = color.from_hsv(randf(), 1.0, 1.0)
 
 		for i in outline.size():
-			var from: Vector2 = outline[i]
-			var to: Vector2 = outline[i + 1] if i + 1 < outline.size() else outline[0]
+			var from = outline[i]
+			var to = outline[i + 1] if i + 1 < outline.size() else outline[0]
 
-			from = (from + to_tilemap_vec) * tile_size
-			to = (to + to_tilemap_vec) * tile_size
+			from = (from + to_tilemap_f) * tile_size_f
+			to = (to + to_tilemap_f) * tile_size_f
 			
 			debug_draw.add_line(from, to, color, 8)
 			debug_draw.add_circle(from, 8, color)
 			
 		for i in outline.size():
-			outline[i] = (outline[i] + to_tilemap_vec) * 64.0
+			outline[i] = (outline[i] + to_tilemap_f) * 64.0
 		
 		flat_lighting.register_occluder(Vector2.ZERO, outline, true)
 	
-		var start_coord := (Vector2(island.map_coords.coords[0]) + to_tilemap_vec) * tile_size
+		var start_coord = (island.map_coords.coords[0] + to_tilemap) * tile_size
 		if island.item == 1:
-			debug_draw.add_rect(Rect2(start_coord, tile_size), Color.RED)
+			debug_draw.add_rect(Rect2(start_coord, tile_size_f), Color.RED)
 		else:
-			debug_draw.add_rect(Rect2(start_coord, tile_size), Color.GRAY)
+			debug_draw.add_rect(Rect2(start_coord, tile_size_f), Color.GRAY)
 
 
 func get_outline(map: Map, x: int, y: int, windedness: int, value: int, optimize: bool) -> Array:
@@ -81,10 +81,10 @@ func get_outline(map: Map, x: int, y: int, windedness: int, value: int, optimize
 	if windedness == 1:
 		# Create clockwise outline
 	
-		if map.is_item_at_dir4(coord.x, coord.y, Direction4.E, value):
+		if map.is_item_at_dir4(coord, Direction4.E, value):
 			start_dir = Direction4.E
 			coord.x += 1
-		elif map.is_item_at_dir4(coord.x, coord.y, Direction4.S, value):
+		elif map.is_item_at_dir4(coord, Direction4.S, value):
 			start_dir = Direction4.S
 			coord.y += 1
 		else:
@@ -100,10 +100,10 @@ func get_outline(map: Map, x: int, y: int, windedness: int, value: int, optimize
 	else:
 		# Create counter-clockwise outline
 		
-		if map.is_item_at_dir4(coord.x, coord.y, Direction4.S, value):
+		if map.is_item_at_dir4(coord, Direction4.S, value):
 			start_dir = Direction4.S
 			coord.y += 1
-		elif map.is_item_at_dir4(coord.x, coord.y, Direction4.E, value):
+		elif map.is_item_at_dir4(coord, Direction4.E, value):
 			start_dir = Direction4.E
 			coord.x += 1
 		else:
@@ -124,11 +124,11 @@ func get_outline(map: Map, x: int, y: int, windedness: int, value: int, optimize
 		# Convention: We only add outline coords, which are NOT shared with the
 		# next tile!
 		
-		if map.is_item_at_dir4(coord.x, coord.y, Tools.turn(dir, -windedness), value):
+		if map.is_item_at_dir4(coord, Tools.turn(dir, -windedness), value):
 			dir = Tools.turn(dir, -windedness)
-		elif map.is_item_at_dir4(coord.x, coord.y, dir, value):
+		elif map.is_item_at_dir4(coord, dir, value):
 			outline.append(coord + corners[dir])
-		elif map.is_item_at_dir4(coord.x, coord.y, Tools.turn(dir, windedness), value):
+		elif map.is_item_at_dir4(coord, Tools.turn(dir, windedness), value):
 			outline.append(coord + corners[dir])
 			outline.append(coord + corners[Tools.turn(dir, windedness)])
 			dir = Tools.turn(dir, windedness)
@@ -182,7 +182,7 @@ func get_island(map: Map, x: int, y: int, from_value: int, to_value: int) -> Arr
 	var heads := [start_coord]
 
 	var island := [start_coord]	
-	map.set_item(start_coord.x, start_coord.y, to_value)
+	map.set_item(start_coord, to_value)
 
 	var checks := [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]
 
@@ -194,7 +194,7 @@ func get_island(map: Map, x: int, y: int, from_value: int, to_value: int) -> Arr
 
 			if map.get_item_if_valid(check_coord.x, check_coord.y) == from_value:
 				island.append(check_coord)
-				map.set_item(check_coord.x, check_coord.y, to_value)
+				map.set_item(check_coord, to_value)
 				heads.append(check_coord)
 
 	return island

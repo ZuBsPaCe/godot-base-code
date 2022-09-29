@@ -61,6 +61,8 @@ func _ready():
 		queue_redraw()
 
 func _draw():
+	if !_active:
+		return
 	
 	if _draw_grid:
 		var start := Vector2.ZERO
@@ -91,4 +93,11 @@ func _draw():
 	for debug_circle in _debug_circles:
 		draw_circle(debug_circle.center, debug_circle.radius, debug_circle.color)
 		
+	queue_redraw()
+
+func clear():
+	_debug_rects.clear()
+	_debug_lines.clear()
+	_debug_circles.clear()
+	
 	queue_redraw()

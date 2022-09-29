@@ -116,15 +116,14 @@ canvas_item_default_texture_filter = 0
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="CustomClearColor" type="ColorRect" parent="LightViewport"]
+[node name="ClearCanvasLayer" type="CanvasLayer" parent="LightViewport"]
+layer = -1
 visible = false
+
+[node name="CustomClearColor" type="ColorRect" parent="LightViewport/ClearCanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -960.0
-offset_top = -540.0
-offset_right = -960.0
-offset_bottom = -540.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
@@ -138,15 +137,13 @@ canvas_item_default_texture_filter = 0
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="CustomClearColor" type="ColorRect" parent="AreaViewport"]
+[node name="ClearCanvasLayer" type="CanvasLayer" parent="AreaViewport"]
 visible = false
+
+[node name="CustomClearColor" type="ColorRect" parent="AreaViewport/ClearCanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -960.0
-offset_top = -540.0
-offset_right = -960.0
-offset_bottom = -540.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)

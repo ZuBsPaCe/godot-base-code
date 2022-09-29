@@ -16,127 +16,164 @@ func _init(p_width : int, p_height : int) -> void:
 	_map.resize(size)
 
 
+func clone_from_map(map) -> void:
+	width = map.width
+	height = map.height
+	size = width * height
+	_map = Array(map._map)
+
+
 func set_all(item) -> void:
-	for index in size:
-		_map[index] = item
+	_map.fill(item)
 
 
-func is_valid(x: int, y: int) -> bool:
-	return x >= 0 && y >= 0 && x < width && y < height
+# Same for Map and WrapMap
+func is_inside(coord: Vector2i) -> bool:
+	return coord.x >= 0 && coord.y >= 0 && coord.x < width && coord.y < height
+
+func is_inside_xy(x: int, y: int) -> bool:
+	return is_inside(Vector2i(x, y))
+
+
+func is_offset_inside(coord: Vector2i, offset: Vector2i) -> bool:
+	var final := coord + offset
+	return is_inside(final)
+
+
+# Will be overriden by WrapMap
+func is_valid(coord: Vector2i) -> bool:
+	return coord.x >= 0 && coord.y >= 0 && coord.x < width && coord.y < height
+
+
+func is_valid_xy(x: int, y: int) -> bool:
+	return is_valid(Vector2i(x, y))
 
 
 func is_index_valid(index: int) -> bool:
 	return index >= 0 && index < size
 
 
-func get_index(x: int, y: int) -> int:
-	return y * width + x
+func get_index(coord: Vector2i) -> int:
+	return coord.y * width + coord.x
 
 
-func get_coord(index: int) -> Array:
+func get_coord(index: int) -> Vector2i:
 	@warning_ignore(integer_division)
 	var y = int(floor(index / width))
 	var x = index - y * width
-	return [x, y]
+	return Vector2i(x, y)
 
 
-func set_item(x: int, y: int, item) -> void:
-	_map[y * width + x] = item
+func posmod_coord(coord: Vector2i) -> Vector2i:
+	return Vector2i(posmod(coord.x, width), posmod(coord.y, height))
+
+
+# The coord must be valid
+func set_item(coord: Vector2i, item) -> void:
+	_map[get_index(coord)] = item
+
+func set_item_xy(x: int, y: int, item) -> void:
+	set_item(Vector2i(x, y), item)
 
 
 func set_indexed_item(index: int, item) -> void:
 	_map[index] = item
 
+# The coord must be valid
+func get_item(coord: Vector2i):
+	return _map[get_index(coord)]
 
-func get_item(x: int, y: int):
-	return _map[y * width + x]
+
+func get_item_xy(x: int, y: int):
+	return get_item(Vector2i(x, y))
 
 
-func get_item_if_valid(x: int, y: int):
-	if !is_valid(x, y):
+# Will check, if the coord is valid
+func get_item_with_offset(coord: Vector2i, offset: Vector2i):
+	var final := coord + offset
+	if !is_valid(final):
 		return null
-	return get_item(x, y)
+	return get_item(final)
 
 
 func get_indexed_item(index: int):
 	return _map[index]
 
 
-func get_indexed_item_if_valid(index: int):
-	if !is_index_valid(index):
-		return null
-	return _map[index]
+# The coord must be valid
+func is_set(coord: Vector2i) -> bool:
+	return get_item(coord) != null
 	
-
-func is_item(x: int, y: int, value) -> bool:
-	if !is_valid(x, y):
-		return false
-	return get_item(x, y) == value
 	
-
-func is_item_or_invalid(x: int, y: int, value) -> bool:
-	if !is_valid(x, y):
-		return true
-	return get_item(x, y) == value
+func is_set_xy(x: int, y: int) -> bool:
+	return is_set(Vector2i(x, y))
 
 
-func is_item_at_dir4(x: int, y: int, dir4, value) -> bool:
+# The coord must be valid
+func is_item(coord: Vector2i, value) -> bool:
+	return get_item(coord) == value
+
+
+func is_item_xy(x: int, y: int, value) -> bool:
+	return is_item(Vector2i(x, y), value)
+
+
+# Will check, if the coord is valid
+func is_item_with_offset(coord: Vector2i, offset: Vector2i, value) -> bool:
+	return get_item_with_offset(coord, offset) == value
+
+
+# Will check, if the coord is valid
+func is_item_at_dir4(coord: Vector2i, dir4, value) -> bool:
 	match dir4:
 		0:
-			y -= 1
+			return get_item_with_offset(coord, Vector2i(0, -1)) == value
 		1:
-			x += 1
+			return get_item_with_offset(coord, Vector2i(1, 0)) == value
 		2:
-			y += 1
+			return get_item_with_offset(coord, Vector2i(0, 1)) == value
 		3:
-			x -= 1
+			return get_item_with_offset(coord, Vector2i(-1, 0)) == value
 		_:
 			@warning_ignore(assert_always_false)
 			assert(false)
-	return is_item(x, y, value)
+	return false
 
 
-func is_item_at_dir4_or_invalid(x: int, y: int, dir4, value) -> bool:
-	match dir4:
-		0:
-			y -= 1
-		1:
-			x += 1
-		2:
-			y += 1
-		3:
-			x -= 1
-		_:
-			@warning_ignore(assert_always_false)
-			assert(false)
-	return is_item_or_invalid(x, y, value)
 
-
-func get_neighbour_count(x: int, y: int, value) -> int:
+func get_neighbour_count(coord: Vector2i, value) -> int:
 	var count := 0
-	for check_y in range(y-1, y+2):
-		for check_x in range(x-1, x+2):
-			if check_x == x && check_y == y:
-				continue
-			if get_item_if_valid(check_x, check_y) == value:
-				count += 1
+	
+	if is_item_with_offset(coord, Vector2i(-1, -1), value):
+		count += 1
+	if is_item_with_offset(coord, Vector2i(0, -1), value):
+		count += 1
+	if is_item_with_offset(coord, Vector2i(1, -1), value):
+		count += 1
+	if is_item_with_offset(coord, Vector2i(1, 0), value):
+		count += 1
+	if is_item_with_offset(coord, Vector2i(1, 1), value):
+		count += 1
+	if is_item_with_offset(coord, Vector2i(0, 1), value):
+		count += 1
+	if is_item_with_offset(coord, Vector2i(-1, 1), value):
+		count += 1
+	if is_item_with_offset(coord, Vector2i(-1, 0), value):
+		count += 1
 
 	return count
 
 
-func get_direct_neighbour_count(x: int, y: int, value) -> int:
+func get_direct_neighbour_count(coord: Vector2i, value) -> int:
 	var count := 0
-
-	if get_item_if_valid(x, y - 1) == value:
+	
+	if is_item_with_offset(coord, Vector2i(0, -1), value):
 		count += 1
-
-	if get_item_if_valid(x + 1, y) == value:
+	if is_item_with_offset(coord, Vector2i(1, 0), value):
 		count += 1
-
-	if get_item_if_valid(x, y + 1) == value:
+	if is_item_with_offset(coord, Vector2i(0, 1), value):
 		count += 1
-
-	if get_item_if_valid(x - 1, y) == value:
+	if is_item_with_offset(coord, Vector2i(-1, 0), value):
 		count += 1
 
 	return count
