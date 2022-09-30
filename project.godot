@@ -59,9 +59,9 @@ gdscript/warnings/return_value_discarded=false
 
 [display]
 
-window/size/width=960
-window/size/height=540
-window/vsync/use_vsync=false
+window/size/width=1920
+window/size/height=1080
+window/size/fullscreen=true
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 

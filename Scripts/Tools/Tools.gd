@@ -222,3 +222,24 @@ func raycast_to(pos:Vector2, target_pos:Vector2, to: PhysicsBody2D, collision_ma
 #
 #	debug.clear()
 
+
+func save_data(file_name: String, data: Dictionary) -> void:
+	var path := "user://" + file_name
+	var file := File.new()
+	file.open(path, File.WRITE)
+	file.store_string(to_json(data))
+	file.close()
+	
+	
+func load_data(file_name: String, data: Dictionary) -> void:
+	var path := "user://" + file_name
+	var file := File.new()
+	if not file.file_exists(path):
+		return
+
+	file.open(path, File.READ)
+	var save_data: Dictionary = parse_json(file.get_as_text())
+	
+	data.merge(save_data, true)
+
+	file.close()
