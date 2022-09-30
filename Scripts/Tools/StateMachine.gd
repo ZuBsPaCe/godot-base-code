@@ -95,11 +95,11 @@ func _perform_process():
 		await _process_callback.call()
 
 
-func _process(_delta):
+func _process(delta):
 	if _blocked:
 		return
 	
-	if _perform_wait():
+	if _perform_wait(delta):
 		return
 	
 	if !_enter_called:
@@ -153,9 +153,9 @@ func _wait_requested() -> bool:
 	return _wait_secs > 0.0
 
 
-func _perform_wait() -> bool:
+func _perform_wait(delta: float) -> bool:
 	if _wait_secs > 0.0:
-		_wait_secs -= get_process_delta_time()
+		_wait_secs -= delta
 		if _wait_secs > 0.0:
 			return true
 			

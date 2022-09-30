@@ -1,10 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://c75jhbxia5n1l"]
+[gd_scene load_steps=7 format=3 uid="uid://c75jhbxia5n1l"]
 
 [ext_resource type="Script" path="res://Scripts/Tools/Examples/ExampleGame.gd" id="1_nh4hs"]
 [ext_resource type="Script" path="res://Scripts/Tools/CameraShake.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://ke83lndodr8n" path="res://Scenes/MainMenu.tscn" id="3_kyeol"]
 [ext_resource type="Script" path="res://Scripts/Tools/StateMachine.gd" id="3_nf4ml"]
 [ext_resource type="PackedScene" path="res://Scenes/GameOverlay.tscn" id="4_kn6jl"]
+
+[sub_resource type="Environment" id="Environment_fumev"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 1.5
+glow_strength = 1.3
+glow_blend_mode = 0
+glow_hdr_threshold = 0.9
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_nh4hs")
@@ -25,3 +33,4 @@ script = ExtResource("2")
 polygon = PackedVector2Array(0, 24, 16, -24, -16, -24)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_fumev")

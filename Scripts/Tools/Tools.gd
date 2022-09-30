@@ -286,3 +286,27 @@ func raycast_to(pos:Vector2, target_pos:Vector2, to: PhysicsBody2D, collision_ma
 #
 #	debug.clear()
 
+
+func save_data(file_name: String, data: Dictionary) -> void:
+	var path := "user://" + file_name
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	file.store_string(JSON.stringify(data))
+	file = null
+	
+	
+func load_data(file_name: String, data: Dictionary) -> void:
+	var path := "user://" + file_name
+	if not FileAccess.file_exists(path):
+		return
+
+	var file = FileAccess.open(path, FileAccess.READ)
+	var save_data: Dictionary = JSON.parse_string(file.get_as_text())
+	
+	data.merge(save_data, true)
+
+	file = null
+
+
+func is_fullscreen() -> bool:
+	var mode := DisplayServer.window_get_mode()
+	return mode == DisplayServer.WINDOW_MODE_FULLSCREEN || mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
