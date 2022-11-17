@@ -16,24 +16,24 @@ func _ready():
 
 func to_coord(pos: Vector2) -> Vector2i:
 	return Vector2i(
-		int(pos.x / Global.TILE_SIZE),
-		int(pos.y / Global.TILE_SIZE))
+		int(pos.x / Globals.TILE_SIZE),
+		int(pos.y / Globals.TILE_SIZE))
 
 
 func to_pos(coord: Vector2i) -> Vector2:
 	return Vector2(
-		coord.x * Global.TILE_SIZE,
-		coord.y * Global.TILE_SIZE)
+		coord.x * Globals.TILE_SIZE,
+		coord.y * Globals.TILE_SIZE)
 
 func to_random_pos(coord: Vector2i) -> Vector2:
 	return Vector2(
-		coord.x * Global.TILE_SIZE + randf() * Global.TILE_SIZE,
-		coord.y * Global.TILE_SIZE + randf() * Global.TILE_SIZE)
+		coord.x * Globals.TILE_SIZE + randf() * Globals.TILE_SIZE,
+		coord.y * Globals.TILE_SIZE + randf() * Globals.TILE_SIZE)
 
 func to_center_pos(coord: Vector2i) -> Vector2:
 	return Vector2(
-		coord.x * Global.TILE_SIZE + Global.HALF_TILE_SIZE,
-		coord.y * Global.TILE_SIZE + Global.HALF_TILE_SIZE)
+		coord.x * Globals.TILE_SIZE + Globals.HALF_TILE_SIZE,
+		coord.y * Globals.TILE_SIZE + Globals.HALF_TILE_SIZE)
 
 
 func manhattan_distance(from: Vector2i, to: Vector2i) -> float:
