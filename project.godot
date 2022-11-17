@@ -79,6 +79,7 @@ FlatLightingLocator="*res://FlatLighting/FlatLightingLocator.gd"
 
 [debug]
 
+gdscript/warnings/return_value_discarded=0
 gdscript/warnings/assert_always_true=false
 gdscript/warnings/assert_always_false=false
 

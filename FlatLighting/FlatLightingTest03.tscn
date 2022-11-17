@@ -81,8 +81,7 @@ layer_0/tile_data = PackedInt32Array(-524304, 65536, 0, -458768, 65536, 0, -3932
 
 [node name="Camera" type="Camera2D" parent="."]
 current = true
-smoothing_enabled = true
-smoothing_speed = 0.5
+position_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
 

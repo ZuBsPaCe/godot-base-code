@@ -34,6 +34,6 @@ color = Color(0.341176, 0.905882, 0.364706, 1)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
-smoothing_enabled = true
+position_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
