@@ -310,3 +310,26 @@ func load_data(file_name: String, data: Dictionary) -> void:
 func is_fullscreen() -> bool:
 	var mode := DisplayServer.window_get_mode()
 	return mode == DisplayServer.WINDOW_MODE_FULLSCREEN || mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
+
+
+func get_visible_rect() -> Rect2i:
+	var canvas_transform := get_canvas_transform()
+	var canvas_min_pos := -canvas_transform.get_origin() / canvas_transform.get_scale()
+	var view_size := get_viewport_rect().size / canvas_transform.get_scale()
+	return Rect2i(canvas_min_pos, view_size)
+	
+
+func set_new_parent(node: Node, new_parent: Node):
+	var current_parent := node.get_parent()
+	if current_parent == new_parent:
+		return
+	
+	if current_parent != null:
+		current_parent.remove_child(node)
+	
+	if new_parent != null:
+		new_parent.add_child(node)
+
+
+func remove_from_parent(node: Node):
+	set_new_parent(node, null)

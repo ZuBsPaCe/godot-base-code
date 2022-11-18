@@ -11,7 +11,8 @@ var _requested_states := PackedInt32Array()
 var _blocked := false
 var _enter_called := false
 
-var _wait_secs: float = 0.0
+var _wait_secs := 0.0
+var _wait_a_frame := false
 
 var _leave_callback: Callable
 var _enter_callback: Callable
@@ -40,6 +41,11 @@ func setup(
 
 func set_state(p_next_state: int) -> void:
 	_requested_states.append(p_next_state)
+
+
+func set_state_after_frame(p_next_state: int) -> void:
+	set_state(p_next_state)
+	_wait_a_frame = true
 
 
 func set_state_immediate(p_next_state: int) -> void:
@@ -150,6 +156,10 @@ func _process(delta):
 
 
 func _wait_requested() -> bool:
+	if _wait_a_frame:
+		_wait_a_frame = false
+		return true
+		
 	return _wait_secs > 0.0
 
 

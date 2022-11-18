@@ -71,7 +71,7 @@ func _play(stream: AudioStream, volume: float, pos = null) -> void:
 		player.process_mode = ProcessMode.PROCESS_MODE_ALWAYS
 
 		if pos_valid:
-			player.attenuation = 6.0
+			player.attenuation = 1.0
 
 		player.bus = "Sounds"
 		add_child(player)
