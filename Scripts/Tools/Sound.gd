@@ -71,7 +71,7 @@ func _play(stream: AudioStreamSample, volume: float, pos = null) -> void:
 		player.pause_mode = PAUSE_MODE_PROCESS
 
 		if pos_valid:
-			player.attenuation = 6.0
+			player.attenuation = 1.0
 
 		player.bus = "Sounds"
 		add_child(player)
