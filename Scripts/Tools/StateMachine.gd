@@ -3,6 +3,7 @@ extends Node
 
 
 var current: int = -1
+var runner := Runner.new()
 
 var _check_valid_states := false
 var _valid_states := PackedInt32Array()
@@ -48,11 +49,20 @@ func set_state_after_frame(p_next_state: int) -> void:
 	_wait_a_frame = true
 
 
+# - Current state will not call leave callback
+# - Callbacks of current state can still be yielding. Check runner.aborted 
+#   by creating a local copy of it to abort properly.
+# - If called inside enter callback, process callback of current state won't run.
 func set_state_immediate(p_next_state: int) -> void:
 	_requested_states.resize(0)
 	_requested_states.append(p_next_state)
 	_wait_secs = 0.0
 	_check_valid_states = false
+	
+	runner.aborted = true
+	runner = Runner.new()
+	
+	_blocked = false
 
 
 func add_valid_state(p_valid_state: int):
@@ -107,10 +117,14 @@ func _process(delta):
 	
 	if _perform_wait(delta):
 		return
+		
+	var current_runner = runner
 	
 	if !_enter_called:
 		_blocked = true
 		await _perform_enter()
+		if current_runner.aborted:
+			return
 		_blocked = false
 	
 	if _wait_requested():
@@ -119,6 +133,8 @@ func _process(delta):
 	if _requested_states.size() == 0:
 		_blocked = true
 		await _perform_process()
+		if current_runner.aborted:
+			return
 		_blocked = false
 	else:
 		while _requested_states.size() > 0:
@@ -135,6 +151,8 @@ func _process(delta):
 			
 			_blocked = true
 			await _perform_leave()
+			if current_runner.aborted:
+				return
 			_blocked = false
 			
 			if _wait_requested():
@@ -142,6 +160,8 @@ func _process(delta):
 			
 			_blocked = true
 			await _perform_enter()
+			if current_runner.aborted:
+				return
 			_blocked = false
 			
 			if _wait_requested():
@@ -149,6 +169,8 @@ func _process(delta):
 			
 			_blocked = true
 			await _perform_process()
+			if current_runner.aborted:
+				return
 			_blocked = false
 			
 			if _wait_requested():

@@ -14,6 +14,10 @@ var _center_node: Node2D
 var _settings: Dictionary
 
 
+signal switch_game_state_requested(new_state)
+signal change_volume_requested(music_factor, sound_factor)
+
+
 func _ready():
 	_center_node = Node2D.new()
 	add_child(_center_node)
@@ -21,6 +25,8 @@ func _ready():
 
 func setup():
 	var screen_size := DisplayServer.screen_get_size()
+	
+	@warning_ignore(integer_division)
 	_settings = {
 		Globals.SETTING_FULLSCREEN: true,
 		Globals.SETTING_WINDOW_WIDTH: screen_size.x / 2,
@@ -32,12 +38,12 @@ func setup():
 	Tools.load_data("settings.json", _settings)
 
 
-func get_setting(name: String):
-	return _settings[name]
+func get_setting(setting: String):
+	return _settings[setting]
 
 
-func set_setting(name: String, value):
-	_settings[name] = value
+func set_setting(setting: String, value):
+	_settings[setting] = value
 
 
 func save_settings():
@@ -46,3 +52,10 @@ func save_settings():
 
 func get_global_mouse_position() -> Vector2:
 	return _center_node.get_global_mouse_position()
+
+
+func switch_game_state(new_state):
+	emit_signal("switch_game_state_requested", new_state)
+	
+func change_volume(music_factor, sound_factor):
+	emit_signal("change_volume_requested", music_factor, sound_factor)

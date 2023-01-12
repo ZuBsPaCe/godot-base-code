@@ -34,10 +34,20 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://Scripts/Tools/Mapper.gd"
 }, {
+"base": "RefCounted",
+"class": &"ModulateTween",
+"language": &"GDScript",
+"path": "res://Scripts/Tools/ModulateTween.gd"
+}, {
 "base": "Node",
 "class": &"MultiStateMachine",
 "language": &"GDScript",
 "path": "res://Scripts/Tools/MultiStateMachine.gd"
+}, {
+"base": "RefCounted",
+"class": &"Runner",
+"language": &"GDScript",
+"path": "res://Scripts/Tools/Runner.gd"
 }, {
 "base": "Node",
 "class": &"StateMachine",
@@ -55,7 +65,9 @@ _global_script_class_icons={
 "MapCoords": "",
 "MapIsland": "",
 "Mapper": "",
+"ModulateTween": "",
 "MultiStateMachine": "",
+"Runner": "",
 "StateMachine": "",
 "WrapMap": ""
 }

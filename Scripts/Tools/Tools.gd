@@ -40,6 +40,40 @@ func manhattan_distance(from: Vector2i, to: Vector2i) -> float:
 	return abs(to.x - from.x) + abs(to.y - from.y)
 
 
+# Node Helpers
+
+# Primitive: is_type(colorvar_foo, TYPE_COLOR)
+# Class    : is_type(instance_foo, "SpatialMaterial") 
+func is_type(something, type):
+	if type is String:
+		return something is Object and something.get_class() == type
+	return typeof(something) == type
+	
+
+func get_children_recursive(parent: Node, type = null, result := []) -> Array:
+	for child in parent.get_children():
+		if type == null || is_type(child, type):
+			result.append(child)
+		get_children_recursive(child, type, result)
+	return result
+
+
+# Animation Helpers
+
+func reset_animation_player(player: AnimationPlayer):
+	if player.has_animation("RESET"):
+		player.play("RESET")
+		player.advance(0.0)
+	else:
+		player.stop()
+
+
+func reset_animation_players_recursive(parent: Node):
+	assert(!is_type(parent, "AnimationPlayer"))
+	for player in get_children_recursive(parent, "AnimationPlayer"):
+		reset_animation_player(player)
+
+
 # Array of Arrays: Radius => List of coord offsets
 var _coord_offsets_in_circle := [[Vector2i()]]
 var _distances_in_circle := [[0.0]]
@@ -300,9 +334,9 @@ func load_data(file_name: String, data: Dictionary) -> void:
 		return
 
 	var file = FileAccess.open(path, FileAccess.READ)
-	var save_data: Dictionary = JSON.parse_string(file.get_as_text())
+	var file_data: Dictionary = JSON.parse_string(file.get_as_text())
 	
-	data.merge(save_data, true)
+	data.merge(file_data, true)
 
 	file = null
 
