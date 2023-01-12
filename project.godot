@@ -24,6 +24,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Tools/Map.gd"
 }, {
+"base": "Reference",
+"class": "ModulateTween",
+"language": "GDScript",
+"path": "res://Scripts/Tools/ModulateTween.gd"
+}, {
+"base": "Reference",
+"class": "Runner",
+"language": "GDScript",
+"path": "res://Scripts/Tools/Runner.gd"
+}, {
 "base": "Node",
 "class": "StateMachine",
 "language": "GDScript",
@@ -33,6 +43,8 @@ _global_script_class_icons={
 "Cooldown": "",
 "Coord": "",
 "Map": "",
+"ModulateTween": "",
+"Runner": "",
 "StateMachine": ""
 }
 

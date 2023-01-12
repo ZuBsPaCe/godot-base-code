@@ -4,10 +4,6 @@ extends CanvasLayer
 const GameState := preload("res://Scripts/Tools/Examples/ExampleGameState.gd").GameState
 
 
-signal switch_game_state(new_state)
-signal change_volume(music_factor, sound_factor)
-
-
 var _music_slider: Slider
 var _sound_slider: Slider
 
@@ -29,7 +25,7 @@ func setup(
 	
 
 func _on_StartButton_pressed():
-	emit_signal("switch_game_state", GameState.GAME)
+	Globals.switch_game_state(GameState.GAME)
 
 
 func _on_ExitButton_pressed():
@@ -37,7 +33,4 @@ func _on_ExitButton_pressed():
 
 
 func _on_Volume_changed(_value):
-	emit_signal(
-		"change_volume", 
-		_music_slider.value, 
-		_sound_slider.value)
+	Globals.change_volume(_music_slider.value, _sound_slider.value)

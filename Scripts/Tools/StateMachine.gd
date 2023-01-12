@@ -3,6 +3,7 @@ extends Node
 
 
 var current: int = -1
+var runner := Runner.new()
 
 var _check_valid_states := false
 var _valid_states := {}
@@ -49,11 +50,20 @@ func set_state_after_frame(p_next_state: int) -> void:
 	_wait_a_frame = true
 
 
+# - Current state will not call leave callback
+# - Callbacks of current state can still be yielding. Check runner.aborted 
+#   by creating a local copy of it to abort properly.
+# - If called inside enter callback, process callback of current state won't run.
 func set_state_immediate(p_next_state: int) -> void:
 	_requested_states.resize(0)
 	_requested_states.append(p_next_state)
 	_wait_secs = 0.0
 	_check_valid_states = false
+	
+	runner.aborted = true
+	runner = Runner.new()
+	
+	_blocked = false
 
 
 func add_valid_state(p_valid_state: int):
@@ -88,6 +98,8 @@ func _process(delta):
 	
 	if _perform_wait(delta):
 		return
+		
+	var current_runner = runner
 	
 	if !_enter_called:
 		# Enter Begin
@@ -98,6 +110,8 @@ func _process(delta):
 			var result = _enter_callback.call_func()
 			if result is GDScriptFunctionState and result.is_valid():
 				yield(result, "completed")
+			if current_runner.aborted:
+				return
 			_blocked = false
 		
 		_enter_called = true
@@ -115,6 +129,8 @@ func _process(delta):
 			var result = _process_callback.call_func()
 			if result is GDScriptFunctionState and result.is_valid():
 				yield(result, "completed")
+			if current_runner.aborted:
+				return
 			_blocked = false
 		# Process End
 		
@@ -139,6 +155,8 @@ func _process(delta):
 				var result = _leave_callback.call_func()
 				if result is GDScriptFunctionState and result.is_valid():
 					yield(result, "completed")
+				if current_runner.aborted:
+					return
 				_blocked = false
 			
 			_after_leave()
@@ -155,6 +173,8 @@ func _process(delta):
 				var result = _enter_callback.call_func()
 				if result is GDScriptFunctionState and result.is_valid():
 					yield(result, "completed")
+				if current_runner.aborted:
+					return
 				_blocked = false
 			_enter_called = true
 			# Enter End
@@ -170,6 +190,8 @@ func _process(delta):
 				var result = _process_callback.call_func()
 				if result is GDScriptFunctionState and result.is_valid():
 					yield(result, "completed")
+				if current_runner.aborted:
+					return
 				_blocked = false
 			# Process End
 			

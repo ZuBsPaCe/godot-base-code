@@ -1,5 +1,8 @@
 enum GameState {
 	NONE,
 	MAIN_MENU,
-	GAME
+	RESTART,
+	NEXT_LEVEL,
+	GAME,
+	PAUSE
 }

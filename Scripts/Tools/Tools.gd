@@ -40,6 +40,40 @@ func manhattan_distance(from: Coord, to: Coord) -> float:
 	return abs(to.x - from.x) + abs(to.y - from.y)
 
 
+# Node Helpers
+
+# Primitive: is_type(colorvar_foo, TYPE_COLOR)
+# Class    : is_type(instance_foo, "SpatialMaterial") 
+func is_type(something, type):
+	if type is String:
+		return something is Object and something.get_class() == type
+	return typeof(something) == type
+	
+
+func get_children_recursive(parent: Node, type = null, result := []) -> Array:
+	for child in parent.get_children():
+		if type == null || is_type(child, type):
+			result.append(child)
+		get_children_recursive(child, type, result)
+	return result
+
+
+# Animation Helpers
+
+func reset_animation_player(player: AnimationPlayer):
+	if player.has_animation("RESET"):
+		player.play("RESET")
+		player.advance(0.0)
+	else:
+		player.stop()
+
+
+func reset_animation_players_recursive(parent: Node):
+	assert(!is_type(parent, "AnimationPlayer"))
+	for player in get_children_recursive(parent, "AnimationPlayer"):
+		reset_animation_player(player)
+
+
 # Array of Arrays: Radius => List of coord offsets
 var _coord_offsets_in_circle := [[Coord.new()]]
 var _distances_in_circle := [[0.0]]

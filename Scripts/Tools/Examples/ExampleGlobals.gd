@@ -14,6 +14,10 @@ var _center_node: Node2D
 var _settings: Dictionary
 
 
+signal switch_game_state_requested(new_state)
+signal change_volume_requested(music_factor, sound_factor)
+
+
 func _ready():
 	_center_node = Node2D.new()
 	add_child(_center_node)
@@ -45,3 +49,10 @@ func save_settings():
 
 func get_global_mouse_position() -> Vector2:
 	return _center_node.get_global_mouse_position()
+
+
+func switch_game_state(new_state):
+	emit_signal("switch_game_state_requested", new_state)
+	
+func change_volume(music_factor, sound_factor):
+	emit_signal("change_volume_requested", music_factor, sound_factor)

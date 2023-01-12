@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scripts/Tools/Examples/ExampleGame.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/MainMenu.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scripts/Tools/StateMachine.gd" type="Script" id=4]
 [ext_resource path="res://Scenes/GameOverlay.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scripts/Tools/Examples/ExampleMain.gd" type="Script" id=6]
+[ext_resource path="res://Scripts/Tools/Examples/ExampleProcess.gd" type="Script" id=7]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -17,26 +19,55 @@ glow_blend_mode = 1
 glow_bicubic_upscale = true
 glow_high_quality = true
 
-[node name="Game" type="Node2D"]
-script = ExtResource( 1 )
+[node name="Main" type="Node"]
+pause_mode = 2
+script = ExtResource( 6 )
+__meta__ = {
+"_editor_description_": "Glues process.gd and game.gd together with the game state. Add pause and transition logic here."
+}
 
-[node name="GameStateMachine" type="Node" parent="."]
+[node name="GameState" type="Node" parent="."]
+pause_mode = 2
 script = ExtResource( 4 )
+__meta__ = {
+"_editor_description_": "Handles basic game state like \"Menu\", \"Game Running\", \"Paused\". Runs while the game is paused. Used in main.gd and glues progess.gd and game.gd together."
+}
 
-[node name="MainMenu" parent="." instance=ExtResource( 3 )]
+[node name="Game" type="Node2D" parent="."]
+pause_mode = 1
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": "Nodes in Game will not run while the game is paused. This affects _process(), _input() and _unhandled_input(). Add game logic, ingame ui, levels and ingame sound here."
+}
 
-[node name="GameOverlay" parent="." instance=ExtResource( 5 )]
+[node name="EntityContainer" type="Node2D" parent="Game"]
 
-[node name="EntityContainer" type="Node2D" parent="."]
-
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="Game"]
 current = true
 script = ExtResource( 2 )
 
-[node name="Dummy" type="Polygon2D" parent="."]
+[node name="Dummy" type="Polygon2D" parent="Game"]
 position = Vector2( 11.6237, 10.5366 )
 color = Color( 1, 0, 0, 1 )
 polygon = PoolVector2Array( -11.6237, -10.5366, -27.6237, 21.4634, 4.37634, 21.4634 )
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Game"]
 environment = SubResource( 1 )
+
+[node name="Process" type="Node" parent="."]
+script = ExtResource( 7 )
+__meta__ = {
+"_editor_description_": "Nodes in Process run while the game is paused. _process(), _input() and _unhandled_input() will always run. Add game state, transitions, menus, menu sounds and music in here. Handles general settings, like fullscreen switching and volume."
+}
+
+[node name="GameOverlay" parent="Process" instance=ExtResource( 5 )]
+
+[node name="TransitionOverlay" type="CanvasLayer" parent="Process"]
+
+[node name="Root" type="ColorRect" parent="Process/TransitionOverlay"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+
+[node name="MainMenu" parent="Process" instance=ExtResource( 3 )]
