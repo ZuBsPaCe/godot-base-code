@@ -22,7 +22,6 @@ func _ready():
 	_main_menu.visible = false
 	_game_overlay.visible = false
 	
-	Globals.connect("switch_game_state_requested", self, "switch_game_state")
 	Globals.connect("change_volume_requested", self, "change_volume")
 	
 	get_tree().connect("screen_resized", self, "on_screen_resized")

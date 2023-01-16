@@ -4,11 +4,6 @@ extends Node2D
 const GameState := preload("res://Scripts/Tools/Examples/ExampleGameState.gd").GameState
 
 
-export(GameState) var _initial_game_state := GameState.MAIN_MENU
-
-
-onready var _runner: Runner
-
 var game_running := false
 
 
