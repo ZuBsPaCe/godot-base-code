@@ -1,5 +1,7 @@
 extends Camera2D
 
+@export var _snap_to_pixel := false
+
 var _bounce_tween: Tween
 
 var _intensity_tween: Tween
@@ -8,6 +10,12 @@ var _intensity: float
 var _bounce_time: float
 var _direction: Vector2
 
+var shake_offset: Vector2:
+	set(value):
+		if _snap_to_pixel:
+			offset = value.round()
+		else:
+			offset = value
 
 func start_shake(direction: Vector2, intensity: float, frequency: float, duration: float):
 	if _intensity > intensity:
@@ -51,10 +59,10 @@ func _bounce(first: bool):
 		#print_debug("First duration: %s" % first_duration)
 		
 		_bounce_tween = create_tween()
-		_bounce_tween.tween_property(self, "offset", new_offset, first_duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		_bounce_tween.tween_property(self, "shake_offset", new_offset, first_duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		_bounce_tween.tween_callback(_bounce.bind(false))
 	else:
 		_bounce_tween = create_tween()
-		_bounce_tween.tween_property(self, "offset", new_offset, _bounce_time).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		_bounce_tween.tween_property(self, "shake_offset", new_offset, _bounce_time).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		_bounce_tween.tween_callback(_bounce.bind(false))
 
