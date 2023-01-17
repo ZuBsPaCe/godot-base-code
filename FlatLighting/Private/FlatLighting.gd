@@ -448,6 +448,14 @@ func _draw():
 func get_texture() -> Texture2D:
 	return $LightViewport.get_texture()
 
+func get_small_texture() -> Texture2D:
+	# Do your REALLY? need this one??
+	assert(false)
+	$SmallLightViewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
+	$SmallLightViewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	$SmallLightViewport/SmallLightViewportSprite.texture = get_texture()
+	return $SmallLightViewport.get_texture()
+
 func get_area_texture() -> Texture2D:
 	return $AreaViewport.get_texture()
 

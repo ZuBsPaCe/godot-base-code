@@ -1,8 +1,8 @@
 shader_type canvas_item;
 render_mode unshaded;
 
-uniform sampler2D light_tex;
-uniform sampler2D area_tex;
+uniform sampler2D light_tex : hint_default_white, filter_nearest;
+uniform sampler2D area_tex : hint_default_black, filter_nearest;
 
 //void fragment() {
 //	//vec4 obj_col = texture(TEXTURE, UV);

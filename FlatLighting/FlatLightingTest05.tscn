@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://cpfuqijl5qps4" path="res://FlatLighting/FlatLighting.tscn" id="2_5rpru"]
 [ext_resource type="PackedScene" uid="uid://bfpdyi6lwn52t" path="res://FlatLighting/FlatLight.tscn" id="3_1bi1o"]
 [ext_resource type="Shader" path="res://FlatLighting/Shaders/SimpleLightAndArea.gdshader" id="3_qg6ws"]
+[ext_resource type="Texture2D" uid="uid://c3owa4d2t345f" path="res://FlatLighting/LightCookies/Clouds-512.png" id="4_vwdox"]
 [ext_resource type="Texture2D" uid="uid://cmmug510i4nn4" path="res://FlatLighting/LightCookies/light_1024_normal.png" id="6_eh6jc"]
-[ext_resource type="Texture2D" uid="uid://dw72gvixcdst2" path="res://Objects/Helpers/Textures/Clouds-512.png" id="6_kgo58"]
 [ext_resource type="PackedScene" uid="uid://b0ur7bcey7kb4" path="res://FlatLighting/FlatArea.tscn" id="7_ppd52"]
 [ext_resource type="Texture2D" uid="uid://c4wj7yk3kl4q2" path="res://FlatLighting/LightCookies/light_2048_normal.png" id="8_ywxqi"]
 
@@ -22,7 +22,7 @@ _camera_path = NodePath("../Camera2D")
 modulate = Color(0.121569, 0.466667, 0.164706, 1)
 texture_filter = 2
 material = SubResource("ShaderMaterial_wb55p")
-texture = ExtResource("6_kgo58")
+texture = ExtResource("4_vwdox")
 
 [node name="FlatArea" parent="." instance=ExtResource("7_ppd52")]
 texture = ExtResource("6_eh6jc")

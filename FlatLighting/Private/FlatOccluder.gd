@@ -14,7 +14,7 @@ func _enter_tree():
 	if create_source_sprite:
 		var sprite := Sprite2D.new()
 		sprite.texture = load("res://FlatLighting/LightCookies/alpha_128.png")
-		var scale := radius / 64.0
+		var scale := radius / Globals.TILE_SIZE
 		sprite.scale = Vector2(scale, scale)
 		sprite.modulate = source_sprite_color
 		add_child(sprite)

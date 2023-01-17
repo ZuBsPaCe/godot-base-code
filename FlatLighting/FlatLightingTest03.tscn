@@ -21,7 +21,7 @@ shader = SubResource("Shader_kjsee")
 
 [sub_resource type="FastNoiseLite" id="OpenSimplexNoise_dy2ff"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture_wj114"]
+[sub_resource type="NoiseTexture" id="NoiseTexture_wj114"]
 width = 16
 height = 16
 noise = SubResource("OpenSimplexNoise_dy2ff")
@@ -81,7 +81,8 @@ layer_0/tile_data = PackedInt32Array(-524304, 65536, 0, -458768, 65536, 0, -3932
 
 [node name="Camera" type="Camera2D" parent="."]
 current = true
-position_smoothing_enabled = true
+smoothing_enabled = true
+smoothing_speed = 0.5
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
 

@@ -7,7 +7,7 @@
 
 [sub_resource type="FastNoiseLite" id="OpenSimplexNoise_438lq"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture_88gcv"]
+[sub_resource type="NoiseTexture" id="NoiseTexture_88gcv"]
 width = 16
 height = 16
 noise = SubResource("OpenSimplexNoise_438lq")
@@ -49,18 +49,16 @@ radius = 57.6
 
 [node name="Camera" type="Camera2D" parent="."]
 current = true
-position_smoothing_enabled = true
+smoothing_enabled = true
+smoothing_speed = 0.5
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_top = 50
@@ -75,8 +73,6 @@ offset_bottom = 100.0
 size_flags_vertical = 0
 
 [node name="Spacer" type="Control" parent="CanvasLayer/MarginContainer/HFlowContainer"]
-layout_mode = 3
-anchors_preset = 0
 offset_right = 1614.0
 offset_bottom = 50.0
 size_flags_horizontal = 3
