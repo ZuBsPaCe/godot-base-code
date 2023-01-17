@@ -4,7 +4,7 @@ extends Node2D
 
 @export var _draw_grid := false
 @export var _grid_tiles := Rect2i()
-@export var _grid_size := 64.0
+@export var _grid_size := Globals.TILE_SIZE
 
 var _grid_color := Color(0.5, 1.0, 0.5, 0.5)
 
