@@ -4,6 +4,6 @@
 
 [resource]
 render_priority = 0
-shader = ExtResource( "1_vlj0x" )
-shader_param/light_pos_array = PackedVector2Array()
-shader_param/light_radius_array = PackedFloat32Array()
+shader = ExtResource("1_vlj0x")
+shader_parameter/light_pos_array = PackedVector2Array()
+shader_parameter/light_radius_array = PackedFloat32Array()
